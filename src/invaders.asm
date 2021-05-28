@@ -20,6 +20,13 @@ org 0x_7C00
     rep stosb     ;; repeat cx times <- mov [ES:Di], al , ++di
       jmp game_loop
 
+  ;; delay timer - 1 tick delay(18.2 tick/second) -> 0x_046C
+  delay_timer:
+    mov ax, [0x_046C] 
+    inc ax
+    .wait:
+      cmp [0x_046C], ax
+        jl .wait
 
 ;; GAME END & reset TODO: ==============================
   game_over:
