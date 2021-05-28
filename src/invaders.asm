@@ -14,19 +14,26 @@ org 0x_7C00
 
 ;; GAME LOOP ============================================
   game_loop:
-    mov al, 0b_0000_0100
-    mov cx, 320*200
-    xor di, di
-    rep stosb     ;; repeat cx times <- mov [ES:Di], al , ++di
-      jmp game_loop
+      mov al, 0b_0000_0100 ; vga red
+      mov cx, 320*200
+      xor di, di
+      rep stosb     ;; repeat cx times <- mov [ES:Di], al , ++di
+
+      mov di, 320*100 + 160
+
+    test_loop:
+      mov ax, 0b_0000_0010
 
   ;; delay timer - 1 tick delay(18.2 tick/second) -> 0x_046C
   delay_timer:
-    mov ax, [0x_046C] 
-    inc ax
-    .wait:
-      cmp [0x_046C], ax
-        jl .wait
+      mov ax, [0x_046C] 
+      inc ax
+      .wait:
+        cmp [0x_046C], ax
+          jl .wait
+    ;; test
+    stosb
+      jmp test_loop 
 
 ;; GAME END & reset TODO: ==============================
   game_over:
