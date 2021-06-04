@@ -1,5 +1,4 @@
-*.img
-*.bin
+### cmake 
 
 CMakeLists.txt.user
 CMakeCache.txt
@@ -12,3 +11,142 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+
+##### c lang 
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+### nasm
+*.bin
+*.img
+*.dbg
+*.exe
+*.lst
+*.o
+*.o64
+*.obj
+*.obj64
+*.orig
+*.out
+*.rej
+*.xml
+*.swp
+.*swo
+*~
+\#*
+*.bak
+*.tmp
+.git-ignore
+cscope*
+tags
+TAGS
+/Makefile
+/config.h
+/config.h.in
+/config.log
+/config.status
+/configure
+/directiv.c
+/directiv.h
+/doc/*.dip
+/doc/*.hpj
+/doc/*.pdf
+/doc/*.ps
+/doc/*.rtf
+/doc/*.texi
+/doc/*.txt
+/doc/Makefile
+/doc/inslist.src
+/doc/html
+/doc/info
+/insnsa.c
+/insnsb.c
+/insnsd.c
+/insnsi.h
+/insnsn.c
+/macros.c
+/nasm
+/nasm.man
+/ndisasm
+/ndisasm.man
+/pptok.c
+/pptok.h
+/pptok.ph
+/rdoff/Makefile
+/rdoff/ldrdf
+/rdoff/rdf2bin
+/rdoff/rdf2com
+/rdoff/rdf2ihx
+/rdoff/rdf2ith
+/rdoff/rdf2srec
+/rdoff/rdfdump
+/rdoff/rdflib
+/rdoff/rdx
+/regdis.c
+/regdis.h
+/regflags.c
+/regs.c
+/regs.h
+/regvals.c
+/test/golden
+/test/perf/*.asm
+/test/testresults
+/tokens.h
+/tokhash.c
+/version.h
+/version.mac
+/version.mak
+/version.nsh
+/version.sed
+/iflag.c
+/iflaggen.h
