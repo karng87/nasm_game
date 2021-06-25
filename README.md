@@ -1,5 +1,7 @@
 # nasm 
 
+    [[shell code]](https://www.youtube.com/watch?v=8rncBCVySEw&list=PLxjFN6S-kT9-nS7THy-b3mZLDiMyi53VZ&index=1&t=15319s)
+
 ## registers
     
     | quad |  double word | word  | byte | meanning |
