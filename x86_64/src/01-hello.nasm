@@ -1,3 +1,9 @@
+;; nasm -felf64 src.asm
+;; ld -melf_x86_64 -emain src.o
+;;    gcc -no-pie src.o
+;;    clang -no-pie src.o
+;; ./a.out
+
 section .data
     msg: db "Hello, Nasm!", 0x0A
     msg_len: equ $-msg
