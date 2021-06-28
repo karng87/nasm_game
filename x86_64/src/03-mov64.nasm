@@ -3,7 +3,7 @@ section .data
     sample2: dq 0x_1122_3344_5566_7788
     sample3: times 8 db 0x00
 
-section .bss
+section .bss ;; block starting symbol
 section .text
     global main
     main:
