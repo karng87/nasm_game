@@ -5,6 +5,7 @@
 ## [[ASM]](https://www.youtube.com/watch?v=lUbPUWtmVUU&t=170s)
     https://www.youtube.com/watch?v=lUbPUWtmVUU&t=219s
 
+## [[MASM]](https://www.youtube.com/watch?v=5hikXYBOppU)
 
 ## dispalcement(base register, index register, scale)
     leaq (%rdi, %rdi,2), %rax => %rdi + %rdi x 2 = 3 x %rdi = %rax
