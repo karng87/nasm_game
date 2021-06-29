@@ -17,15 +17,18 @@
 #*       -lc
 #* ***************************************************
 #*/
-CC = clang
-CC_FLAGS = -Wall -g -fsanitize=address
+CC = gcc
+CC_S = -S
+CC_CFLAGS = -Wall -g -fsanitize=address -c
+CC_LDFLAGS = -no-pie
 
 GCC = gcc
-GCC_FLAGS = -Wall -g
-GCC_S = $(GCC) -Og -S
+GCC_S = -S
+GCC_CFLAGS = -Wall -g -c
+GCC_LDFLAGS = -no-pie
 
-NASM = nasm
-NASM_FLAGS = -felf64
+AS = nasm
+AS_CFLAGS = -f elf64
 
 LD = ld
 LDFLAGS = -melf_x86_64 -emain
@@ -39,49 +42,63 @@ LD_FLAGS = -L /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/ \
        -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
        -lc
 
-OBJS := $(patsubst %.nasm,src/build/%.o,$(notdir $(shell find src -name "*.nasm")))
-TARGETN := $(patsubst %.o,%.out,$(OBJS))
+OBJSN := $(patsubst %,src/build/%.o,$(notdir $(shell find src -name "*.nasm")))
+TARGETN := $(patsubst %,src/%.out,$(notdir $(OBJSN)))
 
-TARGETS:= $(patsubst %.S,src/build/%.out,$(notdir $(shell find src -name "*.S")))
+OBJSC := $(patsubst %,src/%.s,$(notdir $(shell find src -name "*.c")))
+TARGETC := $(patsubst %,src/%.out,$(notdir $(OBJSC)))
+
+TARGETS:= $(patsubst %,src/%.out,$(notdir $(shell find src -name "*.S")))
 
 .PHONY: all clean run
-all : $(TARGETS) $(TARGETN) out-c out-n out-s
+all : $(TARGETS) $(TARGETN) out-c out-n out-s $(TARGETC)
 
-src/build/%.out : src/build/%.o
-				$(LD) $(LDFLAGS) $< -o$@
+src/%.nasm.o.out : src/build/%.nasm.o
+				$(LD) $(LDFLAGS) $< -o $@
 				
-src/build/%.o : src/%.nasm
-				$(AS) $(AS_FLAGS) $< -o$@
+src/build/%.nasm.o : src/%.nasm
+				$(AS) $(AS_CFLAGS) $< -o $@
+
+
+
+src/%.S.o.out: src/build/%.S.o
+				$(CC) $(CC_LDFLAGS) $< -o $@
+src/build/%.S.o: src/%.S
+				$(CC) $(CC_CFLAGS) $< -o $@
+
+
+
+src/%.c.s.o.out: src/build/%.c.s.o
+				$(LD) $(CC_LDFLAGS) $< -o $@
+src/build/%.c.s.o: src/%.c.s
+				$(CC) $(CC_CFLAGS) -c $< -o $@
+src/%.c.s: src/%.c
+				$(CC) $(CC_S) $< -o $@
 
 
 
 
-src/build/out-n: src/build/nasm.o
-				$(LD) $(LDFLAGS) $< -o$@
-
-src/build/%.out: src/%.S
-				$(GCC) $< -o$@
-src/%.S: src/%.c
-				$(GCC) $(GCC_S) $< -o$@
+out-n: src/build/ntuto.nasm.o
+				$(LD) $(LDFLAGS) $< -o $@
+src/build/ntuto.nasm.o : ntuto.nasm
+				$(AS) $(AS_CFLAGS) $< -o $@
 
 
+out-c: src/build/ctuto.s.o
+				$(CC) $< -o $@
+src/build/ctuto.s.o: ctuto.s
+				$(CC) $(CC_CFLAGS) -c $< -o $@
+ctuto.s: ctuto.c
+				$(CC) $(CC_S) $< -o $@
 
-out-n: src/build/nasm.o
-				$(LD) $(LD_FLAGS) $< -o$@
-src/build/nasm.o : ntuto.nasm
-				$(NASM) $(NASM_FLAGS) $< -o$@
+out-s: src/build/stuto.S.o
+				$(CC) $(CC_LDFLAGS) $< -o $@
 
+src/build/stuto.S.o: stuto.S
+				$(CC) $(CC_CFLAGS) $< -o $@
 
-
-out-c: ctuto.S
-				$(GCC) $< -o$@
-ctuto.S: ctuto.c
-				$(GCC) $(GCC_S) $< -o$@
-
-out-s: stuto.s
-				$(GCC) $< -o$@
 clean:
-		rm out-* *.o build/*.o
+		rm out-{n,c,s} *{.o,.s} src/build/*.o src/*.out
 
 c:
 			./out-c

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-proc(){
+void proc(){
   char buffer[1024];
   printf("Hello world!");
 }
