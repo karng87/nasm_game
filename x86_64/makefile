@@ -18,15 +18,18 @@
 #* ***************************************************
 #*/
 CC = clang
-CC_FLAG = -fsanitize=address
+CC_FLAGS = -Wall -g -fsanitize=address
 
-AS = nasm
-FLAGS = -felf64
+GCC = gcc
+GCC_FLAGS = -Wall -g
+
+NASM = nasm
+NASM_FLAGS = -felf64
 
 LD = ld
-LD_FLAGS = -melf_x86_64 -emain
+LDFLAGS = -melf_x86_64 -emain
 
-LDFLAGS = -L /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/ \
+LD_FLAGS = -L /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/ \
        /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/crtbegin.o \
        /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/crtend.o \
        /lib/crt1.o \
@@ -39,7 +42,7 @@ OBJS := $(patsubst %.nasm,build/%.o,$(notdir $(shell find src -name "*.nasm")))
 TARGETS := $(patsubst %.o,%.out,$(OBJS))
 
 .PHONY: all clean run
-all : $(TARGETS)  a.out out
+all : $(TARGETS)  out-c out-n out-s
 
 build/%.out : build/%.o
 				$(LD) $(LDFLAGS) $< -o $@
@@ -48,24 +51,32 @@ build/%.out : build/%.o
 				$(LD) $(LDFLAGS) $< -o $@
 
 build/%.o : src/%.nasm
-				$(AS) $(FLAGS) $< -o $@
+				$(AS) $(AS_FLAGS) $< -o $@
 
-out: build/nasm.o
-				$(LD) $(LDFLAGS) $^ -o $@
+out-n: build/nasm.o
+				$(LD) $(LDFLAGS) $< -o $@
 
 build/nasm.o : ntuto.nasm
-				$(AS) $(FLAGS) $< -o $@
+				$(NASM) $(NASM_FLAGS) $< -o $@
 
-a.out: build/cc.o
-				$(LD) $^ $(LDFLAGS) -o $@
+out-c: build/cc.o
+				$(LD) $(LD_FLAGS) $< -o $@
 build/cc.o: ctuto.c
-				$(CC) -c $^ -o $@
+				$(GCC) -c $< -o $@
 
+out-s: build/s.o
+				$(LD) $< -o $@
+
+build/s.o: stuto.s
+				$(GCC) -c $< -o $@
 clean:
-		rm *.out build/*.o
+		rm out-* *.o build/*.o
 
-a:
-			./a.out
+c:
+			./out-c
 
 n:
-			./out
+			./out-n
+
+s:
+			./out-s
