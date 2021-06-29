@@ -33,6 +33,7 @@ AS_CFLAGS = -f elf64
 LD = ld
 LDFLAGS = -melf_x86_64 -emain
 
+# usr = User System Resources
 LD_FLAGS = -L /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/ \
        /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/crtbegin.o \
        /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/crtend.o \
@@ -51,7 +52,7 @@ TARGETC := $(patsubst %,src/%.out,$(notdir $(OBJSC)))
 TARGETS:= $(patsubst %,src/%.out,$(notdir $(shell find src -name "*.S")))
 
 .PHONY: all clean run
-all : $(TARGETS) $(TARGETN) out-c out-n out-s $(TARGETC)
+all : $(TARGETS) $(TARGETN) out-c out-n out-g $(TARGETC)
 
 src/%.nasm.o.out : src/build/%.nasm.o
 				$(LD) $(LDFLAGS) $< -o $@
@@ -62,19 +63,18 @@ src/build/%.nasm.o : src/%.nasm
 
 
 src/%.S.o.out: src/build/%.S.o
-				$(CC) $(CC_LDFLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) $< -o $@
 src/build/%.S.o: src/%.S
 				$(CC) $(CC_CFLAGS) $< -o $@
 
 
 
 src/%.c.s.o.out: src/build/%.c.s.o
-				$(LD) $(CC_LDFLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) $< -o $@
 src/build/%.c.s.o: src/%.c.s
 				$(CC) $(CC_CFLAGS) -c $< -o $@
 src/%.c.s: src/%.c
 				$(CC) $(CC_S) $< -o $@
-
 
 
 
@@ -85,20 +85,20 @@ src/build/ntuto.nasm.o : ntuto.nasm
 
 
 out-c: src/build/ctuto.s.o
-				$(CC) $< -o $@
+				$(LD) $(LD_FLAGS) $< -o $@
 src/build/ctuto.s.o: ctuto.s
-				$(CC) $(CC_CFLAGS) -c $< -o $@
+				$(CC) $(CC_CFLAGS) $< -o $@
 ctuto.s: ctuto.c
 				$(CC) $(CC_S) $< -o $@
 
-out-s: src/build/stuto.S.o
-				$(CC) $(CC_LDFLAGS) $< -o $@
+out-g: src/build/gtuto.S.o
+				$(LD) $(LD_FLAGS) $< -o $@
 
-src/build/stuto.S.o: stuto.S
+src/build/gtuto.S.o: gtuto.S
 				$(CC) $(CC_CFLAGS) $< -o $@
 
 clean:
-		rm out-{n,c,s} *{.o,.s} src/build/*.o src/*.out
+		rm out-{n,g,c} *{.o,.s} src/build/*.o src/*.out
 
 c:
 			./out-c
@@ -106,5 +106,5 @@ c:
 n:
 			./out-n
 
-s:
-			./out-s
+g:
+			./out-g
