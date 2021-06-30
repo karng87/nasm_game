@@ -1,18 +1,12 @@
 section .data
+    codes: db "hello\n"
 
 section .bss
-        buffer: resb 10
-    
 
 section .text
-        global main
-        main:
-            mov rax, 0
-            mov rdi, 0
-            mov rsi, buffer
-            mov rdx, 10
-            syscall
+    global main
+    main:
+        mov rsi, codes
+        mov rsi, [codes]
+        lea rsi, j
 
-            mov rax, 60
-            mov rdi, 0
-            syscall

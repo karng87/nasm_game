@@ -15,6 +15,11 @@
 #*       /lib/crtn.o 
 #*       -dynamic-linker /lib64/ld-linux-x86-64.so.2 
 #*       -lc
+#*----------------------------------------------------
+#* ldd : show load dynamic dependance
+#* ***************************************************
+#*----------------------------------------------------
+#* ldconfig : configure runtime dynamic library path
 #* ***************************************************
 #*/
 CC = gcc
@@ -79,7 +84,7 @@ src/%.c.s: src/%.c
 
 
 out-n: src/build/ntuto.nasm.o
-				$(LD) $(LDFLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) $< -o $@
 src/build/ntuto.nasm.o : ntuto.nasm
 				$(AS) $(AS_CFLAGS) $< -o $@
 
