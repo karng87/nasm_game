@@ -60,50 +60,49 @@ TARGETS:= $(patsubst %,src/%.out,$(notdir $(shell find src -name "*.S")))
 all : $(TARGETS) $(TARGETN) out-c out-n out-g $(TARGETC)
 
 src/%.nasm.o.out : src/build/%.nasm.o
-				$(LD) $(LDFLAGS) $< -o $@
+				$(LD) $(LDFLAGS) -o$@ $< 
 				
 src/build/%.nasm.o : src/%.nasm
-				$(AS) $(AS_CFLAGS) $< -o $@
-
+				$(AS) $(AS_CFLAGS) -o$@ $<
 
 
 src/%.S.o.out: src/build/%.S.o
-				$(LD) $(LD_FLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) -o$@ $<
 src/build/%.S.o: src/%.S
-				$(CC) $(CC_CFLAGS) $< -o $@
+				$(CC) $(CC_CFLAGS) -o$@ $<
 
 
 
 src/%.c.s.o.out: src/build/%.c.s.o
-				$(LD) $(LD_FLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) -o$@ $<
 src/build/%.c.s.o: src/%.c.s
-				$(CC) $(CC_CFLAGS) -c $< -o $@
+				$(CC) $(CC_CFLAGS) -o$@ -c $<
 src/%.c.s: src/%.c
-				$(CC) $(CC_S) $< -o $@
+				$(CC) $(CC_S) -o$@ $<
 
 
 
 out-n: src/build/ntuto.nasm.o
-				$(LD) $(LD_FLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) -o$@ $<
 src/build/ntuto.nasm.o : ntuto.nasm
-				$(AS) $(AS_CFLAGS) $< -o $@
+				$(AS) $(AS_CFLAGS) -o$@ $<
 
 
 out-c: src/build/ctuto.s.o
-				$(LD) $(LD_FLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) -o$@ $<
 src/build/ctuto.s.o: ctuto.s
-				$(CC) $(CC_CFLAGS) $< -o $@
+				$(CC) $(CC_CFLAGS) -o$@ $<
 ctuto.s: ctuto.c
-				$(CC) $(CC_S) $< -o $@
+				$(CC) $(CC_S) -o$@ $<
 
 out-g: src/build/gtuto.S.o
-				$(LD) $(LD_FLAGS) $< -o $@
+				$(LD) $(LD_FLAGS) -o$@ $<
 
 src/build/gtuto.S.o: gtuto.S
-				$(CC) $(CC_CFLAGS) $< -o $@
+				$(CC) $(CC_CFLAGS) -o$@ $<
 
 clean:
-		rm out-{n,g,c} *{.o,.s} src/build/*.o src/*.out
+		rm out-{n,g,c} *{.o,.s} src/build/*.o src/*.out compile_commands.json
 
 c:
 			./out-c
@@ -113,3 +112,9 @@ n:
 
 g:
 			./out-g
+
+compile_commands.json:
+			make --no-print-directory --always-make --dry-run | \
+				awk '/\.c$$/' | \
+				jq -nR '[inputs|{directory:".", command:., file:match(" [^ ]+$$").string[1:]}]' \
+				> compile_commands.json
