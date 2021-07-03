@@ -6,7 +6,7 @@ section .data
 
 section .bss
         fd: resq 1
-        buffer: resb 30, 0
+        buffer: resb 30
     
 section .text
         global main
