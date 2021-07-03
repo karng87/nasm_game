@@ -17,19 +17,19 @@ section .text
             mov rdx, 0b_110_000_000
             syscall
 
-            mov rdi, 0x_ffff_aaaa_bbbb_5678
+            mov rdi, 0x_ffff_aaaa_1111_2222
+            xor rcx, rcx
             mov rcx, 64
         iterator:
             push rdi
             sub rcx, 4
-            push rcx
             sar rdi, cl
             and rdi, 0x0f
             cmp rdi, 0x_0A
-              ja print_a
+              jge print_a
 
         print_i:
-            add dil, '0'
+            add rdi, '0'
             jmp print
 
         print_a:
@@ -38,17 +38,20 @@ section .text
             add dil, al
 
         print:
-            sub rsp, 1
-            mov byte[rsp], dil
+            pop r10
+            sub rsp, 8
+            mov [rsp], rdi 
             mov rax, 1
             mov rdi, 1
-            mov rsi, rsp 
-            mov rdx, 1
+            lea rsi, [rsp]
+            mov rdx, 8
+            push r10
+            push rcx
             syscall
             pop rcx 
             pop rdi
-              test rcx, rcx
-              jnz iterator
+              cmp rcx, 0
+              jg iterator
             
 
 
