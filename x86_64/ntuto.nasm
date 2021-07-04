@@ -1,4 +1,6 @@
 ;; /usr/include/asm-generic/fcntl.h
+%include "inc/print_hex.inc"
+
 section .data
       fname: db "tmp.txt", 0
       msg: dq 0x48, 0x45, 0x4c, 0x4c,0xA
@@ -17,43 +19,11 @@ section .text
             mov rdx, 0b_110_000_000
             syscall
 
+            mov rdi, rax
+            call print_hex
+
             mov rdi, 0x_ffff_aaaa_1111_2222
-            xor rcx, rcx
-            mov rcx, 64
-        iterator:
-            push rdi
-            sub rcx, 4
-            sar rdi, cl
-            and rdi, 0x0f
-            cmp rdi, 0x_0A
-              jge print_a
-
-        print_i:
-            add rdi, '0'
-            jmp print
-
-        print_a:
-            mov al, 'A' 
-            sub al, 0x0a
-            add dil, al
-
-        print:
-            pop r10
-            sub rsp, 8
-            mov [rsp], rdi 
-            mov rax, 1
-            mov rdi, 1
-            lea rsi, [rsp]
-            mov rdx, 8
-            push r10
-            push rcx
-            syscall
-            pop rcx 
-            pop rdi
-              cmp rcx, 0
-              jg iterator
-            
-
+            call print_hex
 
         end:
             mov rax, 60
