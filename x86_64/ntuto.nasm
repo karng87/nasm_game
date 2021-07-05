@@ -13,13 +13,16 @@ section .bss
 section .text
   global main
       main:
-            mov rax, 1
-            mov rdi, 1
-            mov rsi, msg
-            mov rdx, msg_len
+            mov rax, 2
+            mov rdi, fname
+            mov rsi, 0b_010_001_000_010 ;; O_CREAT:100o O_TRUNC:1000o
+            mov rdx, 0b_110_000_000
             syscall
 
             mov rdi, rax
+            call print_hex
+
+            mov rdi, 0x_ffff_aaaa_1111_2222
             call print_hex
 
         end:
