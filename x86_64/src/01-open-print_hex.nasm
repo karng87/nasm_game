@@ -16,7 +16,7 @@ section .text
       main:
             mov rax, 2
             mov rdi, fname
-            mov rsi, 0b_010_000_000_010 ;; O_CREAT:100o O_TRUNC:1000o
+            mov rsi, 0b_010_000_000_010 ;;O_TRUNC==02000 ;;O_CREAT=0100 ;;RDWR==02
             mov rdx, 0b_110_000_000
             syscall
 
