@@ -3,6 +3,7 @@
 *.out
 *.ytdl
 *.pat
+tmp*
 out-*
 mov/
 ### cmake 

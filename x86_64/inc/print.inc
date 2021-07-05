@@ -1,9 +1,71 @@
-print_hex:
+print_decimal:
+        .prolog:
             push rbp
             mov rbp, rsp
-            mov rcx, 64
 
-        .iterator:
+        .body:
+            xor r10, r10
+            mov rcx, 64
+            push rdi
+            sar rdi, 63
+              cmp rdi, 1
+                jz .negative
+          .positive:
+            mov rdi, "+"
+            push rcx
+            call print_char
+            pop rcx
+          .lp_p:
+            pop rdi
+            push rdi
+            sub rcx, 4
+            sar rdi, cl
+            and rdi, 0xf
+              cmp dil, 9
+                jg .over9
+            add dil, "0"
+            add rdi, r10
+            xor r10, r10
+            push rcx
+            call print_char
+            pop rcx
+            jmp .testshift
+
+          .over9:
+            sub dil, 0xa
+            add rdi, r10
+            xor r10, r10
+            mov r10, 1
+            push rcx
+              call print_char
+            pop rcx
+          .testshift:
+              test rcx, rcx
+                jne .lp_p
+            jmp .epilog
+
+          .negative:
+              mov r11, "-"
+            
+        .epilog:
+            mov rsp, rbp
+            pop rbp
+            ret
+
+print_hex:
+        .prolog:
+            push rbp
+            mov rbp, rsp
+
+        .bdoy:
+            push rdi
+
+            mov rdi, "0x"
+            call print_char
+
+            pop rdi
+            mov rcx, 64
+          .iterator:
             push rdi
             sub rcx, 4
             push rcx
@@ -13,16 +75,16 @@ print_hex:
             cmp rdi, 0x_0A
               jge .print_a
 
-        .print_i:
+          .print_i:
             add rdi, '0'
             jmp .print
 
-        .print_a:
+          .print_a:
             mov al, 'A' 
             sub al, 0x0a
             add dil, al
 
-        .print:
+          .print:
             call print_char
             pop rcx
             pop rdi
@@ -39,21 +101,22 @@ print_hex:
             ret
 
 print_char:
-        push rbp
-        mov rbp, rsp
+      .prolog:
+          push rbp
+          mov rbp, rsp
+      .body:
+          push rdi
 
-        push rdi
+          mov rax, 1
+          mov rdi, 1
 
-        mov rax, 1
-        mov rdi, 1
+          lea rsi, [rsp]
+          mov rdx, 8
+          syscall
+          pop rdi
 
-        lea rsi, [rsp]
-        mov rdx, 8
-        syscall
-        pop rdi
-
-    epilog:
-        mov rsp, rbp
-        pop rbp
-        ret
+      epilog:
+          mov rsp, rbp
+          pop rbp
+          ret
         
