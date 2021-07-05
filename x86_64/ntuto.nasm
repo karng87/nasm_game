@@ -1,5 +1,5 @@
 ;; /usr/include/asm-generic/fcntl.h
-%include "inc/print_hex.inc"
+%include "inc/print.inc"
 
 section .data
       fname: db "tmp.txt", 0
@@ -22,7 +22,7 @@ section .text
             mov rdi, rax
             call print_hex
 
-            mov rdi, 0x_ffff_aaaa_1111_2222
+            mov rdi, 0x_ffff_abcd_ef12_3456
             call print_hex
 
         end:

@@ -1,6 +1,6 @@
 ;; /usr/include/asm-generic/fcntl.h
 
-%include "inc/print_hex.inc"
+%include "inc/print.inc"
 
 section .data
       fname: db "tmp.txt", 0
