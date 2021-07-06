@@ -1,3 +1,9 @@
+;; argument
+;;    rdi, rsi, rdx, rcx, r8, r9, stack
+;;    r10:: used for passing a function's static chain pointer
+;;    r11:: temporary resister
+;; callee saved register
+;;    rbx, rbp, rsp, r12 ~ r15
 print_decimal:
         .prolog:
             push rbp
@@ -24,6 +30,7 @@ print_decimal:
               cmp dil, 9
                 jg .over9
             add dil, "0"
+            ;; 0x_1234_5678_90ab_cdef
             add rdi, r10
             xor r10, r10
             push rcx
