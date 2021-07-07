@@ -12,7 +12,7 @@ section .bss
 section .text
   global main
   main:
-            mov rdi, 0x_ffff_eeee_dddd_baf8
+            mov rdi, 0x_0000_0000_0000_baf8
             mov [arg], rdi 
             xor rcx, rcx
             xor r8, r8
