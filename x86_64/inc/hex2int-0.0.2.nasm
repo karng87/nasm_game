@@ -25,8 +25,8 @@ section .text
             jmp .check_num
           .negative:
             mov byte[sign], "-"
-            not qword[decimal]
-            add qword[decimal],  1
+            not qword[arg]
+            add qword[arg],  1
 
           .check_num:
             inc byte[cnt]

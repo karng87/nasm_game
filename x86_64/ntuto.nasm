@@ -12,7 +12,7 @@ section .bss
 section .text
   global main
   main:
-            mov rdi, 0x_ffff_eeee_dddd_baf8
+            mov rdi, 0x_ffff_ffff_ffff_ffff
             mov [arg], rdi 
             xor rcx, rcx
             xor r8, r8
@@ -25,8 +25,8 @@ section .text
             jmp .check_num
           .negative:
             mov byte[sign], "-"
-            not qword[decimal]
-            add qword[decimal],  1
+            not qword[arg]
+            add qword[arg],  1
 
           .check_num:
             inc byte[cnt]
