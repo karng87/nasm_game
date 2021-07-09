@@ -5,11 +5,11 @@ section .data
 
 section .bss
     sign: resb 1
-    mum: resb 16
+    num: resb 16
 section .text
   global main
   main:
-            mov rdi, 0x_ffff_ffff_ffff_ffff
+            mov rdi, 0x_ffff_aaaa_ffff_ffff
             ;mov rdi, 0x_ffff_ffff
             lea rsi, [p_num]
             call hex2int_stack

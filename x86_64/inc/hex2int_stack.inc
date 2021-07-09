@@ -27,28 +27,71 @@ section .text
       push r15
 
             
-           push rdi ;; arg
-           push rsi ;; p_num sign, deciaml
+           mov r8, rdi ;; arg
+           mov rbx, [rsi];; p_num sign, deciaml
 
-           mov rbx, [rsp]
-           mov rbx, [rbx]
        .chekck_sign:
-           sar rdi, 63
-           cmp dil, 0xff
+           push r8
+           sar r8, 63
+           cmp r8b, 0xff
              je .negative
           .positive:
 
            mov byte[rbx], "+"
-           jmp .check_num
+           jmp .for_i
           .negative:
            mov byte[rbx], "-"
+           pop r8
+           not r8
+           add r8, 1
+           push r8
 
-       .mod_num:
-          
-          
-          
+       .for_i:
 
-    .epilog:
+          pop r8
+          mov r10, 1 ;; div
+          mov r11, 1
+          mov r13, 1
+
+          xor rdi, rdi
+       .iterator:
+          test r13, r13
+          jz .return
+          
+          mov r11, r10
+          mov rax, r11
+
+          mov rcx, 10
+          xor rdx, rdx
+              mul rcx
+          mov r10, rax
+
+          mov rax, r8
+          xor rdx, rdx
+              div r10
+                test rax, rax
+                  jnz .con
+                mov r13, 0
+
+       .con:
+          mov rax, rdx
+          xor rdx, rdx
+              div r11
+          mov rsi, rax
+            cmp sil, "9"
+              jg .over_a
+          add rsi, '0'
+          jmp .mcopy
+        .over_a:
+          add rsi, 'A'
+        .mcopy:
+          inc rdi
+          mov [rbx+rdi], sil
+          jmp .iterator
+        .return:
+          mov rax, 17
+
+      .epilog:
       pop r15
       pop r14
       pop r13
@@ -59,3 +102,4 @@ section .text
       mov rsp, rbp
       pop rbp
       ret
+
