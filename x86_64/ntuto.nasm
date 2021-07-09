@@ -9,7 +9,7 @@ section .bss
 section .text
   global main
   main:
-            mov rdi, 0x_ffff_aaaa_ffff_ffff
+            mov rdi, 0xafff_ffff_ffff_ffff
             ;mov rdi, 0x_ffff_ffff
             lea rsi, [p_num]
             call hex2int_stack

@@ -5,15 +5,6 @@
 ;; callee saved register
 ;;    rbx, rbp, rsp, r12 ~ r15
 
-section .data
-      cnt: db 0
-      position: db 16
-      weight: dq 1
-section .bss
-      tmp: resq 1
-
-section .text
-
  hex2int_stack:
     .prolog:
       push rbp
@@ -29,6 +20,7 @@ section .text
             
            mov r8, rdi ;; arg
            mov rbx, [rsi];; p_num sign, deciaml
+           xor r9, r9
 
        .chekck_sign:
            push r8
@@ -53,10 +45,8 @@ section .text
           mov r11, 1
           mov r13, 1
 
-          xor rdi, rdi
+          mov rdi, 18
        .iterator:
-          test r13, r13
-          jz .return
           
           mov r11, r10
           mov rax, r11
@@ -85,11 +75,14 @@ section .text
         .over_a:
           add rsi, 'A'
         .mcopy:
-          inc rdi
-          mov [rbx+rdi], sil
+          mov r9b, sil
+
+            test r13, r13
+              jz .return
+          sal r9, 8
           jmp .iterator
         .return:
-          mov rax, 17
+          mov qword[rbx+1], r9
 
       .epilog:
       pop r15
