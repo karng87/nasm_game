@@ -4,6 +4,8 @@
 ;;    r11:: temporary resister
 ;; callee saved register
 ;;    rbx, rbp, rsp, r12 ~ r15
+;; python:
+          ;; hex(), int(), bin()
 
 section .data
       cnt: db 0
