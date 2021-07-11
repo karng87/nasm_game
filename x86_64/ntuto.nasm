@@ -1,23 +1,25 @@
-%include "inc/print.inc"
+%include "inc/hex2int_stack.inc"
 section .data
   msg: db "hello world",0xa, 0
 section .bss
-  ptr_1: resb 1
-
+  arg: resq 1
+  argc: resq 1
+  argv: resq 1
 
 section .text
   global main
   main:
-    push rbp
-    mov rbp, rsp
-        
-        call print_decimal
+        mov [argc], rdi
+        mov [argv], rsi
+        call hex2int_stack
 
-        push rsi
-        mov rcx, rsi
-        mov rsi, [rcx]
-        mov [ptr_1], rsi
-        mov rbx, 0
+      .while:
+        mov rax, [argv]
+        mov rsi, [rax]
+        mov [arg], rsi
+          inc qword[argv]
+          dec qword[argc]
+            mov rbx, 0
 
       .iterator:
         mov cl, [rsi]
@@ -31,40 +33,17 @@ section .text
 
         mov rax, 1
         mov rdi, 1
-        mov rsi, [ptr_1]
+        mov rsi, [arg]
         mov rdx, rbx
         syscall
+        
+        ;call print_newline
 
-        mov rdi, 0xa
-        call print_char
+          cmp qword[argc], 0
+          je .end
+        jmp .while
 
-        mov rax, msg
-        mov [ptr_1], rax
-        mov rbx, 0
-
-      .iterator1:
-        mov cl, [rax]
-          test cl, cl
-            jz .print1
-        inc rbx
-        inc rax
-          jmp .iterator1
-
-      .print1:
-
-        mov rax, 1
-        mov rdi, 1
-        mov rsi, [ptr_1]
-        mov rdx, rbx
-        syscall
-
-        jmp .exit
-
-      .exit:
-    pop rsi
-    mov rsp, rbp
-    pop rbp
-    ret
-            mov rax, 60
-            xor rdi, rdi
-            syscall
+      .end:
+         mov rax, 60
+         xor rdi, rdi
+         syscall

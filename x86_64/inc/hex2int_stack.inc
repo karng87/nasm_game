@@ -12,9 +12,16 @@ section .data
       position: db 16
       weight: dq 1
 section .bss
+      int_num: resb 20
       tmp: resq 1
 
 section .text
+  global main
+  main:
+    mov rsi, 0x_8fff_ffff_ffff_ffff
+    call hex2int_stack
+    mov rax, 60
+    syscall
 
  hex2int_stack:
     .prolog:
@@ -28,68 +35,45 @@ section .text
       push r14
       push r15
 
-            
-           mov r8, rdi ;; arg
-           mov rbx, [rsi];; p_num sign, deciaml
-
-       .chekck_sign:
-           push r8
-           sar r8, 63
-           cmp r8b, 0xff
-             je .negative
-          .positive:
-
-           mov byte[rbx], "+"
-           jmp .for_i
-          .negative:
-           mov byte[rbx], "-"
-           pop r8
-           not r8
-           add r8, 1
-           push r8
+       .check_sign:
+          call print_sign
+          push rax
 
        .for_i:
+       ;; 0x_0123_4567_89ab_cdef
 
           pop r8
-          mov r10, 1 ;; div
-          mov r11, 1
-          mov r13, 1
+          mov r9, 1
+          mov r10, 1000000000000000000 ;; e18
 
-          mov rdi, 21
        .iterator:
-          test r13, r13
-          jz .return
           
-          mov r11, r10
-          mov rax, r11
-
-          mov rcx, 10
-          xor rdx, rdx
-              mul rcx
-          mov r10, rax
-
           mov rax, r8
           xor rdx, rdx
               div r10
-                test rax, rax
-                  jnz .con
-                mov r13, 0
-
-       .con:
-          mov rax, rdx
           xor rdx, rdx
-              div r11
+            div r9
+              cmp rax, 0
+                je .skip
           mov rsi, rax
-            cmp sil, "9"
-              jg .over_a
           add rsi, '0'
-          jmp .mcopy
-        .over_a:
-          add rsi, 'A'
-        .mcopy:
-          mov [rbx+rdi], sil
-          dec rdi
+            call print_hex
+
+        .skip:
+          mov rax, r10
+          xor rbx, rbx
+          mov cl, 10
+            div cl
+          mov r10, rax
+          mov rax, r9
+          xor rbx, rbx
+          mov cl, 10
+          mul cl
+          mov r9, rax
+            test r10, r10
+              jz .return
           jmp .iterator
+
         .return:
           mov rax, 17
 
@@ -104,4 +88,64 @@ section .text
       mov rsp, rbp
       pop rbp
       ret
+
+print_sign:
+      push rdi
+      sar rdi, 63
+      cmp r8b, 0xff
+      je .negative
+   .positive:
+      mov rdi, "+"
+      jmp .print
+   .negative:
+      mov rdi, "-"
+      pop rax
+      not rax
+      inc rax
+      push rax
+   .print:
+      push rdi
+      mov rax, 1
+      mov rdi, 1
+      mov rsi, rsp
+      mov rdx, 1
+      pop rdi
+      pop rax
+    .end 
+      ret
+
+      
+print_hex:
+        cmp dil, 0xa
+          jge .over_a
+        add dil, '0'
+        jmp .print
+    .over_a:
+        add dil, 55
+    .print:
+        push dil
+        mov rax,1
+        mov rdi,1
+        mov rsi, rsp
+        mov rdx, 1
+        syscall
+        pop rax
+    ret
+
+
+print_char:
+      push rdi
+      mov rax, 1
+      mov rdi, 1
+      mov rsi, rsp
+      mov rdx, 1
+      syscall
+      pop rax
+      ret
+
+print_newline:
+      mov rdi, 0xa
+      call print_char
+      ret
+    
 
