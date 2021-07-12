@@ -1,43 +1,29 @@
 ;; rbx, r12 ~ r15
-section .bss
-
-section .data
-section .text
-;;%include "inc/x64_print.inc"
-global main
-  main:
-    mov rdi, 0xffff_ffff_ffff_ffff
-    call p_xd2s
-    call exit
-
-
-exit:
-    mov rax, 60
-    mov rdi, 0
-    syscall
-    ret
-
 p_xd2s:
     .prologue:
         push rbp
         mov rbp, rsp
 
     .body:
-        mov r10,rdi 
+        push rdi
+        mov rdi, '0x_'
+          call p_char
+
+        pop rdi
+        push rdi
         call p_x2s
         call p_newline
 
-        mov rdi, r10
+        pop rdi
+        push rdi
         call is_negative
-        mov rdi, r10
+        pop rdi
           test rax, rax
             jz .positive
         call g_2complement
           push rax
-
           mov rdi, '-'
           call p_char
-
           pop rdi
 
       .positive:
@@ -47,6 +33,13 @@ p_xd2s:
         mov rsp, rbp
         pop rbp
         ret
+
+exit:
+    mov rax, 60
+    mov rdi, 0
+    syscall
+    ret
+
 g_trim:
       mov rax, rdi
       xor rcx, rcx
