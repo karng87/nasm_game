@@ -1,4 +1,5 @@
-%include "inc/hex2int_stack.inc"
+%include "inc/x64_print.inc"
+
 section .data
   msg: db "hello world",0xa, 0
 section .bss
@@ -9,41 +10,13 @@ section .bss
 section .text
   global main
   main:
-        mov [argc], rdi
-        mov [argv], rsi
-        call hex2int_stack
+      push rdi
+      push rsi
 
-      .while:
-        mov rax, [argv]
-        mov rsi, [rax]
-        mov [arg], rsi
-          inc qword[argv]
-          dec qword[argc]
-            mov rbx, 0
+        call p_d2s
+        call p_newline
 
-      .iterator:
-        mov cl, [rsi]
-          test cl, cl
-            jz .print
-        inc rbx
-        inc rsi
-          jmp .iterator
+        pop rdi
+        call p_x2s
 
-      .print:
-
-        mov rax, 1
-        mov rdi, 1
-        mov rsi, [arg]
-        mov rdx, rbx
-        syscall
-        
-        ;call print_newline
-
-          cmp qword[argc], 0
-          je .end
-        jmp .while
-
-      .end:
-         mov rax, 60
-         xor rdi, rdi
-         syscall
+        call exit

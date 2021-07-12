@@ -10,7 +10,7 @@ abs:
     leaq  (%rdi, %rdx), %rax
     xorq  %rdx, %rax
 
-    mvoq  %rbp, %rsp
+    movq  %rbp, %rsp
     popq  %rbp
     ret
 

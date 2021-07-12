@@ -33,7 +33,7 @@ GCC_CFLAGS = -Wall -g -c
 GCC_LDFLAGS = -no-pie
 
 AS = nasm
-AS_CFLAGS = -f elf64
+AS_CFLAGS = -f elf64 -g -Fdwarf
 
 LD = ld
 LDFLAGS = -melf_x86_64 -emain
@@ -48,70 +48,73 @@ LD_FLAGS = -L /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/ \
        -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
        -lc
 
-OBJSN := $(patsubst %,src/build/%.o,$(notdir $(shell find src -name "*.nasm")))
-TARGETN := $(patsubst %,src/%.out,$(notdir $(OBJSN)))
+#OBJSN := $(patsubst %,src/build/%.o,$(notdir $(shell find src -name "*.nasm")))
+#TARGETN := $(patsubst %,src/%.out,$(notdir $(OBJSN)))
+TARGETN := $(patsubst %,src/%.o.out,$(notdir $(shell find src -name "*.nasm")))
 
-OBJSC := $(patsubst %,src/%.s,$(notdir $(shell find src -name "*.c")))
-TARGETC := $(patsubst %,src/%.out,$(notdir $(OBJSC)))
+#OBJSC := $(patsubst %,src/%.s,$(notdir $(shell find src -name "*.c")))
+#TARGETC := $(patsubst %,src/%.out,$(notdir $(OBJSC)))
+TARGETC := $(patsubst %,src/%.s.out,$(notdir $(shell find src -name "*.c")))
 
-TARGETS:= $(patsubst %,src/%.out,$(notdir $(shell find src -name "*.S")))
+TARGETS:= $(patsubst %,src/%.o.out,$(notdir $(shell find src -name "*.S")))
+TARGET := ntuto.nasm.o.out gtuto.S.o.out ctuto.c.s.o.out
+.PHONY: all clean run compile_commands.json
+#MAKEFLAGS += --silent
+#.PRECIOUS:
+#.INTERMEDIATE:
 
-.PHONY: all clean run
-all : $(TARGETS) $(TARGETN) out-c out-n out-g $(TARGETC)
+all : $(TARGET) $(TARGETN) $(TARGETC) $(TARGETS)
 
+src/build/%.nasm.o : src/%.nasm
+				$(AS) $(AS_CFLAGS) -o$@ $<
 src/%.nasm.o.out : src/build/%.nasm.o
 				$(LD) $(LDFLAGS) -o$@ $< 
 				
-src/build/%.nasm.o : src/%.nasm
-				$(AS) $(AS_CFLAGS) -o$@ $<
 
-
-src/%.S.o.out: src/build/%.S.o
-				$(LD) $(LD_FLAGS) -o$@ $<
 src/build/%.S.o: src/%.S
 				$(CC) $(CC_CFLAGS) -o$@ $<
-
-
-
-src/%.c.s.o.out: src/build/%.c.s.o
+src/%.S.o.out: src/build/%.S.o
 				$(LD) $(LD_FLAGS) -o$@ $<
-src/build/%.c.s.o: src/%.c.s
-				$(CC) $(CC_CFLAGS) -o$@ -c $<
+
+
 src/%.c.s: src/%.c
 				$(CC) $(CC_S) -o$@ $<
-
-
-
-out-n: src/build/ntuto.nasm.o
+src/build/%.c.s.o: src/%.c.s
+				$(CC) $(CC_CFLAGS) -o$@ -c $<
+src/%.c.s.o.out: src/build/%.c.s.o
 				$(LD) $(LD_FLAGS) -o$@ $<
+
+
 src/build/ntuto.nasm.o : ntuto.nasm
 				$(AS) $(AS_CFLAGS) -o$@ $<
-
-
-out-c: src/build/ctuto.s.o
+ntuto.nasm.o.out: src/build/ntuto.nasm.o
 				$(LD) $(LD_FLAGS) -o$@ $<
-src/build/ctuto.s.o: ctuto.s
-				$(CC) $(CC_CFLAGS) -o$@ $<
-ctuto.s: ctuto.c
+
+
+ctuto.c.s: ctuto.c
 				$(CC) $(CC_S) -o$@ $<
-
-out-g: src/build/gtuto.S.o
+src/build/ctuto.c.s.o: ctuto.c.s
+				$(CC) $(CC_CFLAGS) -o$@ $<
+ctuto.c.s.o.out: src/build/ctuto.c.s.o
 				$(LD) $(LD_FLAGS) -o$@ $<
+
 
 src/build/gtuto.S.o: gtuto.S
 				$(CC) $(CC_CFLAGS) -o$@ $<
+gtuto.S.o.out: src/build/gtuto.S.o
+				$(LD) $(LD_FLAGS) -o$@ $<
 
 clean:
-		rm out-{n,g,c} *{.o,.s} src/build/*.o src/*.out compile_commands.json
+		rm *.{s,out} src/*.out src/build/*.o compile_commands.json
 
 c:
-			./out-c
+			./ctuto.c.s.o.out
 
 n:
-			./out-n
+			./ntuto.nasm.o.out
 
 g:
-			./out-g
+			./gtuto.S.o.out
 
 compile_commands.json:
 			make --no-print-directory --always-make --dry-run | \
