@@ -1,38 +1,45 @@
 ;; rbx, r12 ~ r15
-section .bss
-section .data
-section .text
-global main
-  main:
+p_test:
+    .prologue:
+        push rbp
+        mov rbp, rsp
 
-      mov rdi, '0x_'
-      call print_char
+    .body
+        push rdi
+        mov rdi, '0x_'
+          call p_char
 
-    mov rdi, 0xffff
-    push rdi
-    call int2hexastr
-    call print_newline
+        pop rdi
+        push rdi
+        call p_hexa2str
+        call p_newline
 
-    pop rdi
-    push rdi
-    call is_negative
-    pop rdi
-      test rax, rax
-        jz .positive
-    call get_2complement
-      push rax
-      mov rdi, '-'
-      call print_char
-      pop rdi
+        pop rdi
+        push rdi
+        call is_negative
+        pop rdi
+          test rax, rax
+            jz .positive
+        call g_2complement
+          push rax
+          mov rdi, '-'
+          call p_char
+          pop rdi
 
-    .positive:
-    call int2decimalstr
+      .positive:
+        call p_decimal2str 
 
-      mov rax, 60
-      mov rdi, 0
-      syscall
+    .epilogue:
+        mov rsp, rbp
+        pop rbp
+        ret
 
-trim:
+exit:
+    mov rax, 60
+    mov rdi, 0
+    syscall
+
+g_trim:
       mov rax, rdi
       xor rcx, rcx
     .for:
@@ -58,19 +65,19 @@ is_negative:
     .end:
       ret
 
-get_2complement:
+g_2complement:
     mov rax, rdi
     not rax
     add rax, 1
     ret
 
-int2decimalstr:
+p_decimal2str:
     push rbp
     mov rbp, rsp
 
     mov r8, rdi
     mov rsi, 10
-    call trim
+    call g_trim
     sub rsp, rax ;;max 21
     mov r9, rax
     mov rdi, rax
@@ -106,7 +113,7 @@ int2decimalstr:
     ret
       
 
-int2hexastr:
+p_hex2str:
     .prologue:
         push rbp
         mov rbp, rsp
@@ -114,13 +121,11 @@ int2hexastr:
         .body:
             mov r8, rdi
             mov rsi, 16
-            call trim
+            call g_trim
             sub rsp, rax
             mov r9, rax
             mov rdi, rax
             dec rdi
-
-
 
             .for:
               mov rsi, r8
@@ -152,7 +157,7 @@ int2hexastr:
         pop rbp
         ret
 
-print_str:
+p_str:
     push rbp
     mov rbp, rsp
 
@@ -167,7 +172,7 @@ print_str:
     ret
 
 
-print_num:
+p_num:
     push rbp
     mov rbp, rsp
 
@@ -192,7 +197,7 @@ print_num:
     pop rbp
     ret
 
-print_char:
+p_char:
     push rbp
     mov rbp, rsp
 
@@ -207,7 +212,7 @@ print_char:
     pop rbp
     ret
 
-print_newline:
+p_newline:
     push rbp
     mov rbp, rsp
 

@@ -1,25 +1,27 @@
+
 AS = nasm
-AS_FLAGS = -felf64 -g -FDWARF
+ASFLAGS = -felf64 -g -Fdwarf
 
 LD = ld
-#LD_FLAGS 
+LDFLAGS = -emain
 
 SRC = test.asm
 OBJ = test.o
-TARGET = test
+TARGET = test.out
 
-.PHONY: all run clean
+.PHONY: all clean
+MAKEFLAGS += --silent
+.INTERMEDIATE:
+.PRECIOUS:
 
 all: $(TARGET)
-
-%: %.o
-		$(LD) $(LD_FLAGS) $< -o$@
+		./$(TARGET)
 
 %.o: %.asm
-		$(AS) $(AS_FLAGS) $< -o$@
+		$(AS) $(ASFLAGS) $< -o$@
+
+%.out: %.o
+		$(LD) $(LDFLAGS) $< -o$@
 
 clean:
-		rm $(OBJ) $(TARGET)
-
-run:
-		./$(TARGET)
+		-rm $(TARGET)
