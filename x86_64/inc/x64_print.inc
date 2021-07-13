@@ -1,43 +1,35 @@
 ;; rbx, r12 ~ r15
-p_xd2s:
-    .prologue:
-        push rbp
-        mov rbp, rsp
+section .text
+global main
+main:
+    mov rdi, 0xffff_ffff_ffff_ffff
+    mov rsi, 2
+    mov rdx, "fd.txt"
 
-    .body:
-        push rdi
-        mov rdi, '0x_'
-          call p_char
-
-        pop rdi
-        push rdi
-        call p_x2s
-        call p_newline
-
-        pop rdi
-        push rdi
-        call is_negative
-        pop rdi
-          test rax, rax
-            jz .positive
-        call g_2complement
-          push rax
-          mov rdi, '-'
-          call p_char
-          pop rdi
-
-      .positive:
-        call p_d2s 
-
-    .epilogue:
-        mov rsp, rbp
-        pop rbp
-        ret
+    call io_d2s
 
 exit:
     mov rax, 60
     mov rdi, 0
     syscall
+    ret
+
+g_fd:
+    push rdi
+    mov rax, 2
+    mov rdi, rsp
+    mov rsi, 0b_010_001_000_010
+    mov rdx, 0b_110_000_000
+    syscall
+      cmp rax, 0
+        jl .err
+    jmp .end
+    .err:
+      mov rdi, "E:g_fd"
+      mov rsi, 1
+      call io_char
+      call exit
+    .end:
     ret
 
 g_trim:
@@ -72,46 +64,89 @@ g_2complement:
     add rax, 1
     ret
 
-p_d2s:
-    push rbp
-    mov rbp, rsp
+io_d2s:
+    .prologue:
+        push rbp
+        mov rbp, rsp
 
-    mov r8, rdi
-    mov rsi, 10
-    call g_trim
-    sub rsp, rax ;;max 21
-    mov r9, rax
-    mov rdi, rax
-    dec rdi
+    .body:
+        mov r8, rdi   ;; data
+        mov r9, rsi   ;; fd
+        ;mov r11, rdx
 
-    mov rax, r8
-    mov rcx, 10
-    .for:
-      xor rdx, rdx
-      div rcx
-          cmp rdx, 0xa
-            jge .over_a
-        add rdx, '0'
-          jmp .next
-     .over_a:
-          add rdx, 55
-    .next:
-        mov [rsp + rdi], dl
-        dec rdi
-          test rax, rax
-            jz .print
-      jmp .for
+        cmp rsi, 1
+          je .ns1
+        cmp rsi, 2
+          jge .fileio
+        mov rdi, "E:io_d2s"
+        mov rsi, 1
+        call io_char
+        call exit
+          ;jmp .epilogue
 
-    .print:
-      mov rax, 1
-      mov rdi, 1
-      mov rsi, rsp
-      mov rdx, r9
-      syscall
+      .fileio:
+        test rdi, rdi
+          jnz .g_fd
+        mov rdi, "E:fname"
+        mov rsi, 1
+        call io_char
+        call exit
+          ;jmp .epologue
 
-    mov rsp, rbp
-    pop rbp
-    ret
+      .g_fd:
+        mov rdi, rdx
+        call g_fd
+        mov r9, rax
+        
+      .ns1:
+        mov rdi, r8
+        call is_negative
+          cmp rax, 1
+            jne .ns2
+        mov rdi, r8
+        call g_2complement
+        mov r8, rax
+          mov rdi, '-'
+          mov rsi, r9
+            call io_char
+
+      .ns2:
+          mov rdi, 10
+          call g_trim
+          sub rsp, rax ;;max 21
+          mov r10, rax
+          mov rdi, rax
+          dec rdi
+
+          mov rax, r8
+          mov rcx, 10
+          .for:
+            xor rdx, rdx
+            div rcx
+                cmp rdx, 0xa
+                  jge .over_a
+              add rdx, '0'
+                jmp .next
+           .over_a:
+                add rdx, 55
+          .next:
+              mov [rsp + rdi], dl
+              dec rdi
+                test rax, rax
+                  jz .print
+            jmp .for
+
+          .print:
+            mov rax, 1
+            mov rdi, r9
+            mov rsi, rsp
+            mov rdx, r10
+            syscall
+
+    .epilogue:
+        mov rsp, rbp
+        pop rbp
+        ret
 
 p_x2s:
     .prologue:
@@ -122,7 +157,8 @@ p_x2s:
             mov r8, rdi
 
             mov rdi, '0x_'
-            call p_char
+            mov rsi, 1
+            call io_char
 
             mov rdi, r8
             mov rsi, 16
@@ -163,7 +199,7 @@ p_x2s:
         pop rbp
         ret
 
-p_str:
+p_ptr:
     push rbp
     mov rbp, rsp
 
@@ -203,16 +239,17 @@ p_num:
     pop rbp
     ret
 
-p_char:
+io_char:
     push rbp
     mov rbp, rsp
 
-    push rdi
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, rsp
-    mov rdx, 8
-    syscall
+      push rdi
+      mov rax, 1
+      mov rdi, rsi
+      mov rsi, rsp
+      mov rdx, 8
+      syscall
+      pop rax
 
     mov rsp, rbp
     pop rbp
