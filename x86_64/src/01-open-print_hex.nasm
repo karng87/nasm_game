@@ -21,10 +21,10 @@ section .text
             syscall
 
             mov rdi, rax
-            call p_hexa2str
+            call p_x2s
 
             mov rdi, 0x_ffff_aaaa_1111_2222
-            call p_hexa2str
+            call p_x2s
 
         end:
             mov rax, 60
