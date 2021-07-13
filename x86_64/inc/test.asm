@@ -2,9 +2,9 @@
 section .text
 global main
 main:
-    mov rdi, 2
+    mov rdi, 1
     mov rsi, "fd.txt"
-    mov rdx, 0xffff_ffff_ffff_ffff
+    mov rdx, 0x7fff_ffff_ffff_ffff
 
     call io_d2s
 
@@ -66,34 +66,43 @@ io_char:
       ret
 
 g_fd:
-  
-    push rdi  ;; fine name
-    mov rax, 2
-    mov rdi, rsp
-    mov rsi, 0b_010_001_000_010
-    mov rdx, 0b_110_000_000
-    syscall
-    pop rdi
-      cmp rax, 0
-        jg .end
-    .err:
-      mov rdi, 1
-      mov rsi, "E:g_fd"
-      call io_char
-      call exit
+    .prologue:
+      push rbp
+      mov rbp, rsp
 
-  .end:
-   ret 
+    .body:
+        push rdi  ;; fine name
+        mov rax, 2
+        mov rdi, rsp
+        mov rsi, 0b_010_001_000_010
+        mov rdx, 0b_110_000_000
+        syscall
+        pop rdi
+          cmp rax, 0
+            jg .end
+        .err:
+          mov rdi, 1
+          mov rsi, "E:g_fd"
+          call io_char
+          call exit
+    .end:
+      mov rsp, rbp
+      pop rbp
+      ret 
 
+;;; io_d2s ( rdi, rsi, rdx )
+;;          rdi:: fd num
+;;          rsi:: file name
+;;          rdx:: to write a number
 io_d2s:
     .prologue:
         push rbp
         mov rbp, rsp
 
     .body:
-        mov r9, rdi   ;; fd
-        mov r10, rsi  ;; file name
-        mov r8, rdx   ;; data
+        mov r8, rdi   ;; fd
+        ;mov r9, rsi  ;; file name
+        mov r10, rdx   ;; data
 
         cmp rdi, 1
           je .stdout
@@ -113,22 +122,22 @@ io_d2s:
       .filename:
         mov rdi, rsi
         call g_fd
-        mov r9, rax
+        mov r8, rax
         
       .stdout:
-        mov rdi, r8
+        mov rdi, r10
         call is_negative
           cmp rax, 1
             jne .not_negative
-        mov rdi, r8
+        mov rdi, r10
         call g_2complement
-        mov r8, rax
-          mov rdi, r9
+        mov r10, rax
+          mov rdi, r8
           mov rsi, '-'
             call io_char
 
       .not_negative:
-          mov rdi, r8
+          mov rdi, r10
           mov rsi, 10
             call g_trim
               sub rsp, rax ;;max 21
@@ -136,7 +145,7 @@ io_d2s:
               mov rdi, rax
               dec rdi
       .init:
-          mov rax, r8
+          mov rax, r10
           mov rcx, 10
       .for:
           xor rdx, rdx
@@ -156,7 +165,7 @@ io_d2s:
 
       .print:
           mov rax, 1
-          mov rdi, r9
+          mov rdi, r8
           mov rsi, rsp
           mov rdx, r11
           syscall
