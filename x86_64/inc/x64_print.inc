@@ -1,36 +1,20 @@
 ;; rbx, r12 ~ r15
-section .text
-global main
-main:
-    mov rdi, 0xffff_ffff_ffff_ffff
-    mov rsi, 2
-    mov rdx, "fd.txt"
-
+test:
+    mov rdi, 2
+    mov rsi, "fd.txt"
+    mov rdx, 0x7fff_ffff_ffff_ffff
     call io_d2s
+
+    mov rdi, 2
+    mov rsi, "fd.txt"
+    mov rdx, 0x7fff_ffff_ffff_ffff
+
+    call io_x2s
 
 exit:
     mov rax, 60
     mov rdi, 0
     syscall
-    ret
-
-g_fd:
-    push rdi
-    mov rax, 2
-    mov rdi, rsp
-    mov rsi, 0b_010_001_000_010
-    mov rdx, 0b_110_000_000
-    syscall
-      cmp rax, 0
-        jl .err
-    jmp .end
-    .err:
-      mov rdi, "E:g_fd"
-      mov rsi, 1
-      call io_char
-      call exit
-    .end:
-    ret
 
 g_trim:
       mov rax, rdi
@@ -64,208 +48,234 @@ g_2complement:
     add rax, 1
     ret
 
+io_char:
+    .prologue:
+      push rbp
+      mov rbp, rsp
+
+    .body:
+      push rsi
+      mov rax, 1
+      ;mov rdi, rdi
+      mov rsi, rsp
+      mov rdx, 8
+      syscall
+
+    .epilogue:
+      mov rsp, rbp
+      pop rbp
+      ret
+
+check_fd:
+      cmp rdi, 1
+        je .stdout
+      cmp rdi, 2
+        je .io_file
+           mov rdi, 1
+           mov rsi, "E:io_d2s"
+           call io_char
+           call exit
+      .io_file:
+        test rsi, rsi
+          jnz .filename
+              mov rdi, 1
+              mov rsi, "E:fname"
+              call io_char
+              call exit
+      .filename:
+        push rsi  ;; fine name
+        mov rax, 2
+        mov rdi, rsp
+        mov rsi, 0b_010_001_000_010
+        mov rdx, 0b_110_000_000
+        syscall
+        pop rdi
+          cmp rax, 0
+            jg .end
+
+        mov rdi, 1
+        mov rsi, "E:g_fd"
+        call io_char
+        call exit
+      .stdout:
+        mov rax, 1
+      .end:
+        ret
+
+check_negative:
+        push r8
+        push r10
+
+        mov r8, rdi
+        mov r10, rsi
+
+        mov rdi, r10
+        call is_negative
+          cmp rax, 1
+            jne .end
+        mov rdi, r10
+        call g_2complement
+        mov r10, rax
+
+        mov rdi, r8
+        mov rsi, '-'
+          call io_char
+      .end:
+          mov rax, r10
+          pop r10
+          pop r8
+          ret
+
+;;; io_d2s ( rdi, rsi, rdx )
+;;          rdi:: fd num
+;;          rsi:: file name
+;;          rdx:: to write a number
 io_d2s:
     .prologue:
         push rbp
         mov rbp, rsp
 
     .body:
-        mov r8, rdi   ;; data
-        mov r9, rsi   ;; fd
-        ;mov r11, rdx
+        mov r8, rdi   ;; fd
+        ;mov r9, rsi  ;; file name
+        mov r10, rdx   ;; data
 
-        cmp rsi, 1
-          je .ns1
-        cmp rsi, 2
-          jge .fileio
-        mov rdi, "E:io_d2s"
-        mov rsi, 1
-        call io_char
-        call exit
-          ;jmp .epilogue
-
-      .fileio:
-        test rdi, rdi
-          jnz .g_fd
-        mov rdi, "E:fname"
-        mov rsi, 1
-        call io_char
-        call exit
-          ;jmp .epologue
-
-      .g_fd:
-        mov rdi, rdx
-        call g_fd
-        mov r9, rax
-        
-      .ns1:
-        mov rdi, r8
-        call is_negative
-          cmp rax, 1
-            jne .ns2
-        mov rdi, r8
-        call g_2complement
+        call check_fd
         mov r8, rax
-          mov rdi, '-'
-          mov rsi, r9
-            call io_char
 
-      .ns2:
-          mov rdi, 10
+        mov rdi, r8
+        mov rsi, r10
+        call check_negative
+        mov r10, rax
+
+    .get_count:
+        mov rdi, r10
+        mov rsi, 10
           call g_trim
-          sub rsp, rax ;;max 21
-          mov r10, rax
-          mov rdi, rax
-          dec rdi
+            sub rsp, rax ;;max 21
+            mov r11, rax
+            mov rdi, rax
+            dec rdi
 
-          mov rax, r8
+      .init:
+          mov rax, r10
           mov rcx, 10
-          .for:
-            xor rdx, rdx
-            div rcx
-                cmp rdx, 0xa
-                  jge .over_a
-              add rdx, '0'
-                jmp .next
-           .over_a:
-                add rdx, 55
-          .next:
-              mov [rsp + rdi], dl
-              dec rdi
-                test rax, rax
-                  jz .print
-            jmp .for
+      .for:
+          xor rdx, rdx
+          div rcx
+            cmp rdx, 0xa
+              jge .over_a
+          add rdx, '0'
+          jmp .next
+      .over_a:
+          add rdx, 87
+      .next:
+          mov [rsp + rdi], dl
+          dec rdi
+            test rax, rax
+              jz .print
+          jmp .for
 
-          .print:
-            mov rax, 1
-            mov rdi, r9
-            mov rsi, rsp
-            mov rdx, r10
-            syscall
+      .print:
+          mov rax, 1
+          mov rdi, r8
+          mov rsi, rsp
+          mov rdx, r11
+          syscall
 
     .epilogue:
         mov rsp, rbp
         pop rbp
         ret
 
-p_x2s:
+io_x2s:
     .prologue:
         push rbp
         mov rbp, rsp
 
-        .body:
-            mov r8, rdi
+    .body:
+        mov r8, rdi   ;; fd
+        ;mov r9, rsi  ;; file name
+        mov r10, rdx   ;; data
 
-            mov rdi, '0x_'
-            mov rsi, 1
-            call io_char
+        call check_fd
+        mov r8, rax
 
-            mov rdi, r8
-            mov rsi, 16
-            call g_trim
-            sub rsp, rax
-            mov r9, rax
+        mov rdi, r8
+        mov rsi, '0x_'
+        call io_char
+
+    .get_count:
+        mov rdi, r10
+        mov rsi, 16
+          call g_trim
+            sub rsp, rax ;;max 21
+            mov r11, rax
             mov rdi, rax
             dec rdi
-            
 
-            .for:
-              mov rsi, r8
-                  and rsi, 0xf
-                    cmp rsi, 0xa
-                      jge .over_a
-                add rsi, '0'
-                jmp .next
-            .over_a:
-                add rsi, 87
-            .next:
-                mov [rsp + rdi], sil
-                  sar r8, 4
+     .for:
+       mov rsi, r10
+           and rsi, 0xf
+             cmp rsi, 0xa
+               jge .over_a
+         add rsi, '0'
+         jmp .next
+     .over_a:
+         add rsi, 87
+     .next:
+         mov [rsp + rdi], sil
+           sar r10, 4
+              test rdi, rdi
+                jz .print
+         dec rdi
+         jmp .for
 
-                test rdi, rdi
-                  jz .print
-                dec rdi
-                jmp .for
-
-            .print:
-                mov rax, 1
-                mov rdi, 1
-                mov rsi, rsp
-                mov rdx, r9
-                syscall
+     .print:
+         mov rax, 1
+         mov rdi, r8
+         mov rsi, rsp
+         mov rdx, r11
+         syscall
 
     .epilogue:
         mov rsp, rbp
         pop rbp
         ret
 
-p_ptr:
-    push rbp
-    mov rbp, rsp
-
-    mov rdx, rsi
-    mov rsi, rdi
+io_ptr:
     mov rax, 1
-    mov rdi, 1
+    ;mov rdi, rdi
+    ;mov rsi, rsi
+    ;mov rdx, rdx
     syscall
-
-    mov rsp, rbp
-    pop rbp
     ret
 
-
-p_num:
-    push rbp
-    mov rbp, rsp
-
-    cmp rdi, 0xa
+io_num:
+    cmp rsi, 0xa
       jge .over_a
 
-    add rdi, '0'
+    add rsi, '0'
       jmp .print
       
     .over_a:
-      add rdi, 55
+      add rsi, 87
 
     .print:
-      push rdi
+      push rsi
       mov rax, 1
-      mov rdi, 1
-      mov rsi, rsp
-      mov rdx, 8
-      syscall
-
-    mov rsp, rbp
-    pop rbp
-    ret
-
-io_char:
-    push rbp
-    mov rbp, rsp
-
-      push rdi
-      mov rax, 1
-      mov rdi, rsi
+      ;mov rdi, rdi
       mov rsi, rsp
       mov rdx, 8
       syscall
       pop rax
-
-    mov rsp, rbp
-    pop rbp
     ret
 
-p_newline:
-    push rbp
-    mov rbp, rsp
-
+io_newline:
     push 0xa
     mov rax, 1
-    mov rdi, 1
+    ;mov rdi, rdi
     mov rsi, rsp
     mov rdx, 8
     syscall
-
-    mov rsp, rbp
-    pop rbp
     ret
