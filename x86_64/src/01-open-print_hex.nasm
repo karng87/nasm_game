@@ -1,6 +1,6 @@
 ;; /usr/include/asm-generic/fcntl.h
 
-%include "inc/x64_print.inc"
+%include "inc/x64_io.inc"
 
 section .data
       fname: db "tmp.txt", 0
@@ -21,10 +21,10 @@ section .text
             syscall
 
             mov rdi, rax
-            call p_x2s
+            call fp_hexadecimal
 
             mov rdi, 0x_ffff_aaaa_1111_2222
-            call p_x2s
+            call p_hexadecimal
 
         end:
             mov rax, 60

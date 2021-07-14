@@ -1,22 +1,28 @@
-%include "inc/x64_print.inc"
-
-section .data
-  msg: db "hello world",0xa, 0
-section .bss
-  arg: resq 1
-  argc: resq 1
-  argv: resq 1
-
+%include "inc/x64_io.inc"
 section .text
   global main
   main:
+
+      mov rbx, rsp
+      mov rdi, [rbx]
       push rdi
-      push rsi
+      call p_hexadecimal
+      call p_newline
 
-        call p_d2s
-        call p_newline
+      xor r12, r12
+      inc r12
+      pop r13
 
-        pop rdi
-        call p_x2s
+      .for:
+          mov rdi, [rbx+r12*8]
+            cmp r12, r13
+              je .out
+          inc r12
+            call p_mem
+            call p_newline
+          jmp .for
+      .out:
+          call p_mem
+          call p_newline
 
-        call exit
+      call exit

@@ -1,5 +1,5 @@
 ;; rbx, r12 ~ r15
-%include "x64_print.inc"
+%include "x64_io.inc"
 section .data
     var1: dq 0.2
     var2: dq 0.3

@@ -1,30 +1,28 @@
-;; rbx, r12 ~ r15
-%include "x64_print.inc"
+%include "x64_io.inc"
 section .text
-global main
-main:
+  global main
+  main:
 
-    mov rbx, [rsp+8]
-    xor rcx, rcx
+      mov rbx, rsp
+      mov rdi, [rbx]
+      push rdi
+      call p_hexadecimal
+      call p_newline
 
-    mov rdx, [rsp]
+      xor r12, r12
+      inc r12
+      pop r13
 
-    .for:
-    cmp byte[rbx+rcx], 0x00
-        jz .out
-    inc rcx
-    jmp .for
+      .for:
+          mov rdi, [rbx+r12*8]
+            cmp r12, r13
+              je .out
+          inc r12
+            call p_mem
+            call p_newline
+          jmp .for
+      .out:
+          call p_mem
+          call p_newline
 
-    .out:
-    push rcx
-    mov rdi, 1
-    mov rdx, rcx
-    call io_x2s
-
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, rbx
-    pop rdx
-    syscall
-
-    call exit
+      call exit

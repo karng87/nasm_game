@@ -74,7 +74,7 @@ src/%.nasm.o.out : src/build/%.nasm.o
 src/build/%.S.o: src/%.S
 				$(CC) $(CC_CFLAGS) -o$@ $<
 src/%.S.o.out: src/build/%.S.o
-				$(LD) $(LD_FLAGS) -o$@ $<
+				$(LD) $(LDFLAGS) -o$@ $<
 
 
 src/%.c.s: src/%.c
@@ -82,13 +82,13 @@ src/%.c.s: src/%.c
 src/build/%.c.s.o: src/%.c.s
 				$(CC) $(CC_CFLAGS) -o$@ -c $<
 src/%.c.s.o.out: src/build/%.c.s.o
-				$(LD) $(LD_FLAGS) -o$@ $<
+				$(LD) $(LDFLAGS) -o$@ $<
 
 
 src/build/ntuto.nasm.o : ntuto.nasm
 				$(AS) $(AS_CFLAGS) -o$@ $<
 ntuto.nasm.o.out: src/build/ntuto.nasm.o
-				$(LD) $(LD_FLAGS) -o$@ $<
+				$(LD) $(LDFLAGS) -o$@ $<
 
 
 ctuto.c.s: ctuto.c
@@ -102,7 +102,7 @@ ctuto.c.s.o.out: src/build/ctuto.c.s.o
 src/build/gtuto.S.o: gtuto.S
 				$(CC) $(CC_CFLAGS) -o$@ $<
 gtuto.S.o.out: src/build/gtuto.S.o
-				$(LD) $(LD_FLAGS) -o$@ $<
+				$(LD) $(LDFLAGS) -o$@ $<
 
 clean:
 		rm *.{s,out} src/*.out src/build/*.o compile_commands.json
