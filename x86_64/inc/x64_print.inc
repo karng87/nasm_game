@@ -278,4 +278,6 @@ io_newline:
     mov rsi, rsp
     mov rdx, 8
     syscall
+  
+    pop rax
     ret

@@ -10,7 +10,8 @@ OBJ = test.o
 TARGET = test.out
 
 .PHONY: all clean
-MAKEFLAGS += --silent
+#MAKEFLAGS += --silent
+MAKEFLAGS += --always-make
 .INTERMEDIATE:
 .PRECIOUS:
 
