@@ -1,14 +1,21 @@
 ;; rbx, r12 ~ r15
 %include "x64_io.inc"
 section .data
-    var1: dq 0.2
-    var2: dq 0.3
+    a: dq 3
+    b: dq 4
+section .bss
+    h: resq 1
 section .text
 global main
 main:
     finit
-    fld qword[var1]
-    fld qword[var2]
-    fadd st0, st1
+    fld qword [a]
+    fmul qword [a]
+    fld qword [b]
+    fmul qword [b]
+    fadd
+    fsqrt
+    fst qword[h]
+    fwait
 
     call exit
