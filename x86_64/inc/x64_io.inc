@@ -27,6 +27,8 @@ get_nullIndex:
             push rax
             mov rdi, rax
             call p_hexadecimal
+            mov rdi, ":"
+            call p_char 
             pop rax
         ret
 
@@ -43,6 +45,17 @@ p_mem:
     pop rbx
     ret
 
+fp_mem:
+    push rbx
+      mov rbx, rdi
+      call get_nullIndex
+          mov rdx, rax
+          mov rax, 1
+          mov rdi, rsi
+          mov rsi, rbx
+          syscall
+    pop rbx
+    ret
 
 
 get_trimIndex:
@@ -294,7 +307,7 @@ p_hexadecimal:
     .body:
         mov r10, rdi   ;; data
 
-          mov rdi, '0x_'
+          mov rdi, '0x'
           call p_char
 
     .get_count:
@@ -345,7 +358,7 @@ fp_hexadecimal:
         mov r10, rsi   ;; data
 
           mov rdi, r8
-          mov rsi, '0x_'
+          mov rsi, '0x'
           call fp_char
     .get_count:
         mov rdi, r10

@@ -2,9 +2,11 @@
 section .text
   global main
   main:
+    push rbp ;; rbp - return address - argc -- argv
+    mov rbp, rsp
 
-      mov rbx, rsp
-      mov rdi, [rbx]
+      mov rbx, rbp
+      mov rdi, [rbx + 8]
       push rdi
       call p_hexadecimal
       call p_newline
@@ -14,7 +16,7 @@ section .text
       pop r13
 
       .for:
-          mov rdi, [rbx+r12*8]
+          mov rdi, [rbx + 8 + r12 * 8]
             cmp r12, r13
               je .out
           inc r12
