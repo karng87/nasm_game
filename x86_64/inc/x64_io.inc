@@ -1,4 +1,24 @@
 ;; rbx, r12 ~ r15
+global p_newline
+global p_mem
+global p_char
+global p_negative
+global p_decimal
+global p_hexadecimal
+
+global fp_newline
+global fp_char
+global fp_men
+global fp_negative
+global fp_deciaml
+global fp_hexadecimal
+
+global get_nullIndex
+global get_trimIndex
+global get_fd
+
+global is_negative
+
 test:
     mov rdi, "fd.txt"
     call get_fd
@@ -32,7 +52,40 @@ get_nullIndex:
             pop rax
         ret
 
+get_trimIndex:
+      mov rax, rdi
+      xor rcx, rcx
+    .for:
+      xor rdx, rdx
+        div rsi
+        inc rcx
+          test rax, rax
+          jz .end
+      jmp .for
+    .end:
+      mov rax, rcx
+    ret
     
+p_newline:
+    push 0xa
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, rsp
+    mov rdx, 8
+    syscall
+    pop rax
+    ret
+
+fp_newline:
+    push 0xa
+    mov rax, 1
+    ;mov rdi, rdi
+    mov rsi, rsp
+    mov rdx, 8
+    syscall
+    pop rax
+    ret
+
 p_mem:
     push rbx
       mov rbx, rdi
@@ -58,38 +111,6 @@ fp_mem:
     ret
 
 
-get_trimIndex:
-      mov rax, rdi
-      xor rcx, rcx
-    .for:
-      xor rdx, rdx
-        div rsi
-        inc rcx
-          test rax, rax
-          jz .end
-      jmp .for
-    .end:
-      mov rax, rcx
-
-    ret
-
-is_negative:
-      sar rdi, 63
-        cmp dil, 0xff
-          je .negative
-      xor rax, rax
-        jmp .end
-    .negative:
-        mov rax, 1
-    .end:
-      ret
-
-get_2complement:
-    mov rax, rdi
-    not rax
-    add rax, 1
-    ret
-
 p_char:
     push rdi
     mov rax, 1
@@ -100,6 +121,17 @@ p_char:
     pop rax
     .end:
       ret
+
+fp_char:
+    push rsi
+    ;mov rdi, rdi
+    mov rax, 1
+    mov rsi, rsp 
+    mov rdx, 8
+    syscall
+
+    pop rax
+    ret
 
 get_fd:
     push rdi
@@ -112,16 +144,6 @@ get_fd:
     pop rdi
     ret
 
-fp_char:
-    push rsi
-    ;mov rdi, rdi
-    mov rax, 1
-    mov rsi, rsp 
-    mov rdx, 8
-    syscall
-
-    pop rax
-    ret
 
 check_fd:
       cmp rdi, 1
@@ -156,7 +178,24 @@ check_fd:
       .end:
         ret
 
-check_negative:
+
+get_2complement:
+    mov rax, rdi
+    not rax
+    add rax, 1
+    ret
+
+is_negative:
+      sar rdi, 63
+        cmp dil, 0xff
+          je .negative
+      xor rax, rax
+        jmp .end
+    .negative:
+        mov rax, 1
+    .end:
+      ret
+p_negative:
         push r8
         push r10
 
@@ -202,7 +241,7 @@ p_decimal:
 
         mov rdi, 1
         mov rsi, r10
-        call check_negative
+        call p_negative
         mov r10, rax
 
     .get_count:
@@ -256,7 +295,7 @@ fp_decimal:
 
         mov rdi, r8
         mov rsi, r10
-        call check_negative
+        call p_negative
         mov r10, rax
 
     .get_count:
@@ -398,23 +437,4 @@ fp_hexadecimal:
         pop rbp
         ret
 
-fp_newline:
-    push 0xa
-    mov rax, 1
-    ;mov rdi, rdi
-    mov rsi, rsp
-    mov rdx, 8
-    syscall
-    pop rax
-    ret
-
-p_newline:
-    push 0xa
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, rsp
-    mov rdx, 8
-    syscall
-    pop rax
-    ret
 

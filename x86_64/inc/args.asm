@@ -1,4 +1,8 @@
-%include "x64_io.inc"
+;%include "x64_io.inc"
+extern p_hexadecimal
+extern p_newline
+extern p_men
+
 section .text
   global main
   main:

@@ -43,7 +43,7 @@ void mulCpp(void){
   printf("\nResults for IMul\n");
   printf("a: %" PRId8  " b: %" PRId16 " c: %" PRId32 " d: %" PRId64 "\n", a,b,c,d);
   printf("e: %" PRId8  " f: %" PRId16 " g: %" PRId32 " h: %" PRId64 "\n", e,f,g,h);
-  printf("result: %" PRId64 "\n", result);
+  printf("result: %" PRId32 "\n", result);
 }
 
 void divCpp(void){

@@ -1,5 +1,11 @@
 AS = nasm
+ASFLAGS = -felf64 -Fdwarf -g
 LD = ld
+LDFLAGS = -lmyasmprint
+CC = gcc
+CCFLAGS = -g -gdwarf-2 -Wall -Werror -Wextra
+CCLDFLAGS = -lmyasmprint -fsanitize=address
+CCSHARED = -shared
 
 TARGETS = test.out elf_i386-float_print.out args.out
 TARGET_T = test.out
@@ -24,7 +30,7 @@ args.o: args.asm
 		$(AS) -f elf64 -g -F dwarf $< -o $@
 
 args.out: args.o
-		$(LD) -m elf_x86_64 -e main $< -o $@
+		$(CC) $(CCFLAGS) $< -o $@
 		rm $<
 
 elf_i386-float_print.o: elf_i386-float_print.asm
