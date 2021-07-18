@@ -3,7 +3,7 @@ ASFLAGS = -f elf64 -g -F dwarf
 
 CXX = clang++
 CXXFLAGS = -c -g -Wall -Werror -Wextra -gdwarf-2 -DDEBUG
-CXXLDFLAGS = -L. -lmyasmprint -fsanitize=address
+CXXLDFLAGS = -lmyasm -fsanitize=address
 
 BASIS = $(shell find -name "*.c" -o -name "*.cpp" -o -name "*.asm" | awk 'BEGIN{FS="[./]"}{print $$3}')
 
@@ -16,7 +16,7 @@ $(TARGET): $(OBJS)
 			$(CXX) $(CXXLDFLAGS) $^
 
 %.o: %.cpp
-			$(CXX) $(CXXFLAGS) $<  -o $@
+			$(CXX) $(CXXFLAGS) $< -o $@
 
 %.o: %.asm
 			$(AS) $(ASFLAGS) $<  -o $@

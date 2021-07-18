@@ -1,4 +1,4 @@
-;; nasm -felf64
+; nasm -felf64
 ;; gcc -shared -o libmyasmprint.so x64_io.o
 
 ;; rbx, r12 ~ r15
