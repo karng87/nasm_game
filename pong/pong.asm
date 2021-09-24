@@ -2,59 +2,102 @@ bits 16
 org 0x7c00
 section .text
 
-; 80 x 25
-ball_x db 1
-ball_y db 1
-ball_x_acc db 1
-ball_y_acc db 1
+player_x  equ 2
+player_length equ 5
+player_y  dw 10
+player_fbl  dw 0b_1010_0000_0000_0000
 
+cpu_x     equ 78
+cpu_length equ 5
+cpu_y     dw 10
+cpu_fbl   dw 0b_1001_0000_0000_0000
 
-set_cs:
+ball_x dw 1
+ball_y dw 1
+ball_x_acc dw 1
+ball_y_acc dw 1
+ball_fbl dw 0b_1100_0000_0000_0000 ; RGB
+
+get_vga_address:
     mov ax, 0xb800
     mov es, ax
-  call game_init
+
+call game_init
 
 game_loop:
   call screen_clear
   call draw_midline
 
-  ; left paddle
-      mov di, 160 * 10 + 2 
-      mov si, 5
-      mov dx, 0b_0000_1111_0000_0000
+  ; cpu 
+      mov di, cpu_x
+      mov si, [cpu_y]
+      mov dx, cpu_length
+      mov cx, [cpu_fbl]
   call draw_paddle
 
-  ; right paddle
-      mov di, 160 * 10 + 156
-      mov si, 5
-      mov dx, 0b_0000_1111_0000_0000
+  ; player 
+      mov di, player_x
+      mov si, [player_y]
+      mov dx, player_length
+      mov cx, [player_fbl]
   call draw_paddle
   ;
-draw_ball:
-    .init:
-        mov ax, 0b_1001_1111_0000_0000
-        add di, [ball_x], 
-        add di, 2
-        imul si, [ball_y],160
-        mov [es:di],ax
-        mov al, [ball_x_acc]
-        add [ball_x], al
-        mov al, [ball_y_acc]
-        add [ball_y], al
+
+move_ball:
+    .check_top:
+        cmp word[ball_y], 0
+        jle .reflect_y
+
+    .check_bottom:
+        cmp word[ball_y], 24
+        jge .reflect_y
+        jmp .check_left
+
+      .reflect_y:
+        not word[ball_y_acc]
+        inc word[ball_y_acc]
+
+    .check_left:
+        cmp word[ball_x], 0
+        jle .reflect_x
+
+    .check_right:
+        cmp word[ball_x], 79
+        jge .reflect_x
+        jmp .check_end
+        
+      .reflect_x:
+        not word[ball_x_acc]
+        inc word[ball_x_acc]
+
+    .check_end:
+        mov ax, word[ball_x_acc]
+        add word[ball_x], ax
+        mov ax, word[ball_y_acc]
+        add word[ball_y], ax
+        
+    .draw_ball:
+        imul di, word[ball_x], 2
+        imul si, word[ball_y],160
+        add di, si
+        mov ax, [ball_fbl]
+        mov word[es:di], ax
 
 call delay
+
 jmp game_loop
+
+;;===========================
 
 delay:
     mov bx, [0x_046c]
-    add bx, 10 
+    add bx, 5
     .lp:
       cmp bx, [0x046c]
       jle .timeout
       jmp .lp
     .timeout:
     ret
-
 
 game_init:
     mov ah, 0       ; select vga mode
@@ -107,23 +150,19 @@ draw_midline:
     .done:
     ret
 
-draw_paddle:  ;; di: position si: length dx: char
+draw_paddle:  ;; di:x si:y dx:length cx:char
     .init:
-        ;mov di, 160 * 10 + 2
-        ;mov si, 5
-        mov si, si
-        mov ax, dx
-
+        imul di, di, 2
+        imul si, si, 160
+        add di, si
     .check:
-        test si, si 
+        test dx, dx 
         je .done
     .do:
-        mov al, 0
-        mov ah, 0b_0000_1111
-        mov [es:di], ax
+        mov [es:di], cx
     .step:
         add di, 160
-        dec si
+        dec dx
         jmp .check
     .done:
     ret
