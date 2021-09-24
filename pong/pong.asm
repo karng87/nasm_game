@@ -2,6 +2,13 @@ bits 16
 org 0x7c00
 section .text
 
+; 80 x 25
+ball_x db 1
+ball_y db 1
+ball_x_acc db 1
+ball_y_acc db 1
+
+
 set_cs:
     mov ax, 0xb800
     mov es, ax
@@ -22,22 +29,25 @@ game_loop:
       mov si, 5
       mov dx, 0b_0000_1111_0000_0000
   call draw_paddle
-  
   ;
 draw_ball:
     .init:
         mov ax, 0b_1001_1111_0000_0000
-        mov di, 160*10 + 30 * 2
+        add di, [ball_x], 
+        add di, 2
+        imul si, [ball_y],160
         mov [es:di],ax
-        add di, 160
+        mov al, [ball_x_acc]
+        add [ball_x], al
+        mov al, [ball_y_acc]
+        add [ball_y], al
 
 call delay
 jmp game_loop
 
 delay:
     mov bx, [0x_046c]
-    inc bx
-    inc bx
+    add bx, 10 
     .lp:
       cmp bx, [0x046c]
       jle .timeout
