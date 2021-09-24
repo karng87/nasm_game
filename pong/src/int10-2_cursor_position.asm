@@ -10,16 +10,14 @@ _start:
     mov es, ax
     xor di, di
 
-    mov ah, 0       ; select vga mode
-    mov al, 0x12    ; 16 color mode 640 x 480
-    int 0x10
-    
-    mov ah, 0       ; select vga mode
-    mov al, 0x13    ; 256 color mode 320 x 200
+    mov ah, 2       ; cursor position
+    mov dh, 0       ; dh = rows
+    mov dl, 0       ; dl = columns
     int 0x10
 
-    mov ah, 0       ; select vga mode
-    mov al, 3       ; 16 color text mode 25 x 80
+    mov ah, 2       ; cursor position
+    mov dh, 24      ; dh = rows
+    mov dl, 79      ; dl = columns
     int 0x10
 
     mov ah, 1       ; cursor shape
@@ -27,10 +25,7 @@ _start:
     mov cx, 0x07    ; end scanline
     int 0x10        ; box
 
-    mov ah, 2       ; cursor position
-    mov dh, 24      ; dh = rows
-    mov dl, 79      ; dl = columns
-    int 0x10
+
 
   .clear:
     mov byte[es:di], 0
