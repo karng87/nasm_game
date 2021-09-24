@@ -8,31 +8,19 @@ set_cs:
   call game_init
 
 game_loop:
-  call screen_clear
-  call draw_midline
-
+    call screen_clear
+    call draw_midline
   ; left paddle
       mov di, 160 * 10 + 2 
       mov si, 5
       mov dx, 0b_0000_1111_0000_0000
-  call draw_paddle
-
+    call draw_paddle
   ; right paddle
       mov di, 160 * 10 + 156
       mov si, 5
       mov dx, 0b_0000_1111_0000_0000
-  call draw_paddle
-  
-  ;
-draw_ball:
-    .init:
-        mov ax, 0b_1001_1111_0000_0000
-        mov di, 160*10 + 30 * 2
-        mov [es:di],ax
-        add di, 160
-
-call delay
-jmp game_loop
+    call draw_paddle
+    call draw_ball
 
 delay:
     mov bx, [0x_046c]
@@ -45,6 +33,14 @@ delay:
     .timeout:
     ret
 
+jmp game_loop
+
+draw_ball:
+        mov ax, 0b_1001_1111_0000_0000
+        mov di, 160*10 + 30 * 2
+        mov [es:di],ax
+        add di, 160
+     ret
 
 game_init:
     mov ah, 0       ; select vga mode

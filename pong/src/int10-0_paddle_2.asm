@@ -1,50 +1,26 @@
 bits 16
 org 0x7c00
 section .text
-
-set_cs:
+_start:
     mov ax, 0xb800
     mov es, ax
-  call game_init
 
-game_loop:
+  call game_init
   call screen_clear
   call draw_midline
-
-  ; left paddle
       mov di, 160 * 10 + 2 
       mov si, 5
       mov dx, 0b_0000_1111_0000_0000
   call draw_paddle
-
-  ; right paddle
       mov di, 160 * 10 + 156
       mov si, 5
       mov dx, 0b_0000_1111_0000_0000
   call draw_paddle
-  
-  ;
-draw_ball:
-    .init:
-        mov ax, 0b_1001_1111_0000_0000
-        mov di, 160*10 + 30 * 2
-        mov [es:di],ax
-        add di, 160
 
-call delay
-jmp game_loop
 
-delay:
-    mov bx, [0x_046c]
-    inc bx
-    inc bx
-    .lp:
-      cmp bx, [0x046c]
-      jle .timeout
-      jmp .lp
-    .timeout:
-    ret
 
+
+  jmp $
 
 game_init:
     mov ah, 0       ; select vga mode

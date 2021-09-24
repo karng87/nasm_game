@@ -1,50 +1,35 @@
 bits 16
 org 0x7c00
 section .text
-
-set_cs:
+_start:
     mov ax, 0xb800
     mov es, ax
-  call game_init
 
-game_loop:
+  call game_init
   call screen_clear
   call draw_midline
 
-  ; left paddle
-      mov di, 160 * 10 + 2 
-      mov si, 5
-      mov dx, 0b_0000_1111_0000_0000
-  call draw_paddle
-
-  ; right paddle
-      mov di, 160 * 10 + 156
-      mov si, 5
-      mov dx, 0b_0000_1111_0000_0000
-  call draw_paddle
-  
-  ;
-draw_ball:
+draw_paddle:
     .init:
-        mov ax, 0b_1001_1111_0000_0000
-        mov di, 160*10 + 30 * 2
-        mov [es:di],ax
+        mov di, 160 * 10+ 2
+        mov cx, 5
+
+    .check:
+        test cx, cx
+        je .done
+    .do:
+        mov al, 0
+        mov ah, 0b_0000_1111
+        mov [es:di], ax
+    .step:
         add di, 160
+        dec cx
+        jmp .check
+    .done:
 
-call delay
-jmp game_loop
 
-delay:
-    mov bx, [0x_046c]
-    inc bx
-    inc bx
-    .lp:
-      cmp bx, [0x046c]
-      jle .timeout
-      jmp .lp
-    .timeout:
-    ret
 
+  jmp $
 
 game_init:
     mov ah, 0       ; select vga mode
@@ -94,27 +79,6 @@ draw_midline:
     .step_mid:
         add di, 160 * 2
         jmp .check_mid
-    .done:
-    ret
-
-draw_paddle:  ;; di: position si: length dx: char
-    .init:
-        ;mov di, 160 * 10 + 2
-        ;mov si, 5
-        mov si, si
-        mov ax, dx
-
-    .check:
-        test si, si 
-        je .done
-    .do:
-        mov al, 0
-        mov ah, 0b_0000_1111
-        mov [es:di], ax
-    .step:
-        add di, 160
-        dec si
-        jmp .check
     .done:
     ret
 
