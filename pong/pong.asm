@@ -22,6 +22,11 @@ get_vga_address:
     mov ax, 0xb800
     mov es, ax
 
+      mov ah, 03h 
+      mov al, 05h ;set typematic rate/delay
+      mov bh, 00h ;repeat delay: 250ms <-- this has to be 0
+      mov bl, 00h ;typematic rate: 30
+      int 16h
 call game_init
 
 game_loop:
@@ -34,14 +39,42 @@ game_loop:
       mov dx, cpu_length
       mov cx, [cpu_fbl]
   call draw_paddle
+  call move_ball
+key_event:
+    mov ah, 1
+    int 0x16
+        jz .draw_player
+    xor ah, ah
+    int 0x16
+        .jump:
+        cmp al, 'j'
+            jne .kick
+          cmp word[player_y], 24 - player_length
+            jg .draw_player
+          inc word[player_y]
+          jmp .draw_player
 
-  ; player 
+        .kick:
+        cmp al, 'k'
+            jne .draw_player
+          cmp word[player_y], 0
+            jle .draw_player
+          dec word[player_y]
+          jmp .draw_player
+
+    .draw_player:
       mov di, player_x
       mov si, [player_y]
       mov dx, player_length
       mov cx, [player_fbl]
   call draw_paddle
   ;
+
+call delay
+
+jmp game_loop
+
+;-----------------------------
 
 move_ball:
     .check_top:
@@ -82,12 +115,7 @@ move_ball:
         add di, si
         mov ax, [ball_fbl]
         mov word[es:di], ax
-
-call delay
-
-jmp game_loop
-
-;;===========================
+    ret
 
 delay:
     mov bx, [0x_046c]
