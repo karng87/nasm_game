@@ -29,3 +29,11 @@
      w = w
 
     3z = -4w - x -2y
+
+# line integrals
+    \int_{c} \vec{F}(\vec{r(t)}) \cdot \vec{dr}
+    
+    \vec{dr}
+        = ( dx, dy, dz )
+
+
