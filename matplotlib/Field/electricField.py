@@ -25,5 +25,15 @@ ax.text(Qx[2],Qy[2],Qz[2],'$Q_{i}$')
 ax.plot(np.hstack([Qx,[Qx[0]]]),np.hstack([Qy,[Qy[0]]]),np.hstack([Qz,[Qz[0]]]),'r:')
 ax.plot(np.hstack([Qx,[Qx[0]]]),np.hstack([Qy,[Qy[0]]]),np.hstack([Qz,[Qz[0]]]),'r:')
 
-ax.text(6,6,6,'q')
+## q
+q = np.array([6])
+qx = np.hstack([[Qx[0]],q])
+qy = np.hstack([[Qy[0]],q])
+qz = np.hstack([[Qz[0]],q])
+ax.plot(np.hstack([[Qx[0]],q]),np.hstack([[Qy[0]],q]),np.hstack([[Qz[0]],q]),'r:')
+ax.plot(np.hstack([[Qx[1]],q]),np.hstack([[Qy[1]],q]),np.hstack([[Qz[1]],q]),'r:')
+ax.plot(np.hstack([[Qx[2]],q]),np.hstack([[Qy[2]],q]),np.hstack([[Qz[2]],q]),'r:')
+ax.text(q[0],q[0],q[0],'q')
+
+
 plt.show()
