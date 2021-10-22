@@ -16,7 +16,7 @@ Qz = np.array([0,0,2])
 O = np.zeros_like(Qx)
 ax.plot([0],[0],[0],'ro')
 ax.text(0.1,0.1,0.1,'O')
-ax.quiver(O,O,O,Qx,Qy,Qz)
+ax.quiver(O,O,O,Qx,Qy,Qz, arrow_length_ratio=0.1)
 
 ax.text(Qx[0],Qy[0],Qz[0],'$Q_{1}$')
 ax.text(Qx[1],Qy[1],Qz[1],'$Q_{2}$')
@@ -26,7 +26,9 @@ ax.plot(np.hstack([Qx,[Qx[0]]]),np.hstack([Qy,[Qy[0]]]),np.hstack([Qz,[Qz[0]]]),
 ax.plot(np.hstack([Qx,[Qx[0]]]),np.hstack([Qy,[Qy[0]]]),np.hstack([Qz,[Qz[0]]]),'r:')
 
 ## q
-q = np.array([6])
+q1 = 6
+q = np.array([q1])
+v_q = q/np.sqrt(q1**2 + q1**2)
 qx = np.hstack([[Qx[0]],q])
 qy = np.hstack([[Qy[0]],q])
 qz = np.hstack([[Qz[0]],q])
@@ -34,6 +36,7 @@ ax.plot(np.hstack([[Qx[0]],q]),np.hstack([[Qy[0]],q]),np.hstack([[Qz[0]],q]),'r:
 ax.plot(np.hstack([[Qx[1]],q]),np.hstack([[Qy[1]],q]),np.hstack([[Qz[1]],q]),'r:')
 ax.plot(np.hstack([[Qx[2]],q]),np.hstack([[Qy[2]],q]),np.hstack([[Qz[2]],q]),'r:')
 ax.text(q[0],q[0],q[0],'q')
-
+#ax.quiver([0],[0],[0],q,q,q, normalize=True)
+ax.quiver([0],[0],[0],q,q,q, arrow_length_ratio=0.05)
 
 plt.show()
