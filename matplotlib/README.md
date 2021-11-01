@@ -1,3 +1,12 @@
+# manim
+> ### sudo pacman -S pango pkg-config
+> ### pip install manimgl
+> ### manimgl
+>> #### termnal window with black screen
+> ### pip install -e .
+>> #### manimgl example_scenes.py OpeningManimExample
+>> #### or, manim-render example_scenes.py OpenManimExample
+
 # pip install jupyterlab_vim
 # pip install jupyterlab_latex
 
