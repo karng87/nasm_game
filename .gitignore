@@ -494,6 +494,7 @@ TSWLatexianTemp*
 ##############
 # etc
 ##############
+media/
 *.mp4
 *.mkv
 *.out
