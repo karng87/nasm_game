@@ -1,3 +1,18 @@
+# shortcuts
+```javascript
+{
+    "shortcuts": [
+        {
+            "command": "runmenu:run-all",
+            "keys": [
+                "R",
+                "R"
+            ],
+            "selector": "[data-jp-kernel-user]:focus"
+        }
+    ]
+}
+```
 # manim
 > ### sudo pacman -S pango pkg-config
 > ### pip install manimgl
