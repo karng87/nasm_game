@@ -31,3 +31,15 @@
     
 # class (meta set)
     a set of sets
+
+# 약어
+> ## i.e.
+>> ### id est
+>>> ### in other word
+>>> ### that is
+
+> ## e.g.
+>> ### exempli gratia
+>>> ### for example
+
+
