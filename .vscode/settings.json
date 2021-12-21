@@ -1,0 +1,5 @@
+{
+    "cmake.configureOnOpen": false,
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+    "vscode-neovim.neovimInitVimPaths.linux": "/home/jkarng/.config/nvim/init.lua"
+}
