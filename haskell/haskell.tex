@@ -1,15 +1,97 @@
-\documentclass{article}
+\documentclass[a4paper,12pt]{article}
+% latin modern
+%\usepackage{lmodern}
+%\usepackage[fontsize=16]{fontsize}
+
+\usepackage{listings}
 \usepackage{amsmath, amsfonts, amsthm, xcolor, kotex}
-\usepackage[fontsize=24]{fontsize}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
-\title{Haskell}
+
+\usepackage{indentfirst}
+  \setlength\parindent{2em}
+
+
 \begin{document}
-\maketitle
+\section{Cardinality} Element numbers
+  \begin{equation}
+    ^{Enum}_{Read}{\color{red}{C}}^{Num}_{Char}
+  \end{equation}
 
-\section{Cardinality}
-  Element numbers
-  $^{Enum}_{Read}{\huge \color{red}{C}}^{Num}_{Char}$
+\section{Type} A type is a name for a collection of related values. For example, in Haskell the basic type
 
-\subsection{한글}
+\subsection{Type inference} Every welled formed expression has a type, which can be automatically calculated at compile time using a process called type inference.
+
+\subsection*{Type Errors} Applying a function to arguments of the wrong type is called a type error. 
+\lstinline!1 + False!
+
+\subsection{Basic Type}
+\begin{lstlisting}
+  Bool  - logical values 
+  Char  - single characters 
+  String 
+  Num Int Float Double
+  List  - A list is sequence of values of the same type
+  Tuple - A tuple is a sequence of values of different types
+    (False, True) :: (Bool, Bool)
+    (False, 'a', True) :: (Bool, Char, Bool)
+    ('a', (False, 'b')) :: (Char, (Bool, Char)
+    (True, ['a', 'b']) :: (Bool, [Char]) 
+  Function Types  - mapping from values of one type to values of another type
+    not :: Bool -> Bool
+    eve :: Int -> Bool
+  ->  - is typed at the keyboard as ->.
+\end{lstlisting}
+
+\subsection{:Type} \lstinline!:type! This command calculates the types of an expression, without evaluating it
+\begin{lstlisting}
+  not False 
+  >True 
+  :type not False 
+  >not False :: Bool
+\end{lstlisting}
+
+\section{List} [ ], :, [x|x<-xs,..]
+
+\subsection{[ ]} empty list 
+
+\subsection*{:} cons(construct)
+
+\subsection*{++} get the nth element of a list 
+
+\subsection*{!!}
+
+append two lists
+
+\subsection*{` `}
+
+infix 
+$x$ `$f$` $y$ is just syntactic sugar for $f x y$. 
+
+\subsection*{$\mid$} comprehension(list comprehension) 
+$[a \mid a \leftarrow xs, a \leq x] \\ \{ a \mid a \in xs, a \leq x\}$
+
+\subsection*{head} get the first element of a list
+
+\subsection*{init} remove the last element of a list
+
+\subsection*{tail} get the rest of a list except first element
+
+\subsection*{take n} get the first n elements of a list 
+
+\subsection*{drop n} get nth the last elements of a list 
+
+\subsection*{length} get the length of a list 
+
+\subsection*{sum} get the sum of a list of numbers
+
+\subsection*{product} get the product of a list of numbers
+
+\subsection*{reverse} get the reverse of a list of numbers
+
+\section{Curried Function} Functions with multiple arguments are also possible by returning functions as result:
+  \begin{lstlisting}
+    add' :: Int -> (Int -> Int)
+    add' x y = x+y
+  \end{lstlisting}
 \end{document}
