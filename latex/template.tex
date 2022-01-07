@@ -1,0 +1,47 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{kotex}
+\usepackage{blindtext}
+\usepackage[top=1cm,bottom=1cm,left=1cm,right=1cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{acronym}
+\author{Haskell}
+\title{Lee}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Acronyms}
+\begin{acronym}
+  \acro{i.e}[i.e]{in other word}
+  \acro{superposition}{중첩원리}(Interference of same physical quantities without influencing each other (net response eqal to sum of individual components)
+\end{acronym}
+\section{Table}\label{sec:first}
+\begin{table}
+  \begin{center}
+    \begin{tabular}{|p{0.3\textwidth}|p{0.3\textwidth}|p{0.3\textwidth}|}
+      \hline
+    \textbf{First Col} & \textbf{Second Col} & \textbf{Third col} \\
+    \hline
+    \hline
+    \multirow{2}{*}{First Entry} & \multicolumn{2}{c|}{Second Entry} \\
+    & Fith & sixth \\
+    \hline
+  \end{tabular}
+    \caption{My first Table}
+    \label{tab:table}
+  \end{center}
+\end{table}
+
+\section{Cardinality}\label{sec:first}
+\subsection{Type}
+{\Large
+  \begin{equation}
+    ^{Enum}_{Read}{\color{red}C}^{Num}_{Char}
+  \end{equation}
+}
+
+\listoffigures
+\listoftables
+\end{document}

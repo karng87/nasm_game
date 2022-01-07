@@ -1,4 +1,6 @@
 \documentclass[a4paper,12pt]{article}
+\usepackage[top=1cm,bottom=1cm,left=1cm,right=1cm]{geometry}
+\usepackage[utf8]{inputenc}
 % latin modern
 %\usepackage{lmodern}
 %\usepackage[fontsize=16]{fontsize}
@@ -14,15 +16,17 @@
 
 \begin{document}
 \section{Cardinality} Element numbers
+{\Large
   \begin{equation}
-    ^{Enum}_{Read}{\color{red}{C}}^{Num}_{Char}
+    ^{Enum}_{Read}{\color{red}C}^{Num}_{Char}
   \end{equation}
+}
 
 \section{Type} A type is a name for a collection of related values. For example, in Haskell the basic type
 
 \subsection{Type inference} Every welled formed expression has a type, which can be automatically calculated at compile time using a process called type inference.
 
-\subsection*{Type Errors} Applying a function to arguments of the wrong type is called a type error. 
+\subsection{Type Errors} Applying a function to arguments of the wrong type is called a type error. 
 \lstinline!1 + False!
 
 \subsection{Basic Type}
@@ -55,39 +59,39 @@
 
 \subsection{[ ]} empty list 
 
-\subsection*{:} cons(construct)
+\subsection{:} cons(construct)
 
-\subsection*{++} get the nth element of a list 
+\subsection{++} get the nth element of a list 
 
-\subsection*{!!}
+\subsection{!!}
 
 append two lists
 
-\subsection*{` `}
+\subsection{` `}
 
 infix 
 $x$ `$f$` $y$ is just syntactic sugar for $f x y$. 
 
-\subsection*{$\mid$} comprehension(list comprehension) 
+\subsection{$\mid$} comprehension(list comprehension) 
 $[a \mid a \leftarrow xs, a \leq x] \\ \{ a \mid a \in xs, a \leq x\}$
 
-\subsection*{head} get the first element of a list
+\subsection{head} get the first element of a list
 
-\subsection*{init} remove the last element of a list
+\subsection{init} remove the last element of a list
 
-\subsection*{tail} get the rest of a list except first element
+\subsection{tail} get the rest of a list except first element
 
-\subsection*{take n} get the first n elements of a list 
+\subsection{take n} get the first n elements of a list 
 
-\subsection*{drop n} get nth the last elements of a list 
+\subsection{drop n} get nth the last elements of a list 
 
-\subsection*{length} get the length of a list 
+\subsection{length} get the length of a list 
 
-\subsection*{sum} get the sum of a list of numbers
+\subsection{sum} get the sum of a list of numbers
 
-\subsection*{product} get the product of a list of numbers
+\subsection{product} get the product of a list of numbers
 
-\subsection*{reverse} get the reverse of a list of numbers
+\subsection{reverse} get the reverse of a list of numbers
 
 \section{Curried Function} Functions with multiple arguments are also possible by returning functions as result:
   \begin{lstlisting}
