@@ -1,17 +1,18 @@
 \documentclass[a4paper]{moderncv}
 \usepackage[scale=0.9]{geometry}
 \usepackage{blindtext}
+\usepackage{amsmath, kotex}
 \moderncvtheme[blue]{classic}
-\firstname{Karng}
-\familyname{Lee}
+\firstname{Haskell}
+\familyname{Type}
 \title{Haskell}
-\address{Seoul Korea}
-\mobile{010-3201}
-\email{karng@gmail.com}
-\photo{haskell.png}
-\recipient{Max Mustermann}{Garden Street 1\\432 Big-City\\German}
-\opening{Dear sir/madam.}
-\closing{Kind regard.}
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+\photo{logo.png}
+\recipient{수령지}{Garden Street 1\\432 Big-City\\German}
+\opening{ooo 에게}
+\closing{안녕~}
 
 \begin{document}
 %\makelettertitle
@@ -21,10 +22,94 @@
 
 \maketitle
 
-\section{Type}
-\cvitem{List}{:}
-\cvitem{Tuple}{fst}
-\section{Function}
-\cvitem{List}{:}
-\cvitem{Tuple}{fst}
+\section{Generator}
+\cvitem{generator}{$x \gets xs $}
+\cvitem{}{x for in xs}
+\subsection{$multiple\; Generator$}
+\cvitem{multiple generators}{$[\;(x,y) | x \gets [1..5], y \gets [4,5]\;]$}
+\subsection{Comma Separated}
+\cvitem{,}{seperated by comma, like nested loops}
+\cvitem{}{$[\;(x,y) | y \gets [4,5], x \gets [1,2,3]\;]$}
+\cvitem{}{$\iff [\;(1,4),(2,4),(3,4),(1,5),(2,5),(3,5)\;]$}
+
+\section{Guard}
+\cvitem{$\mid$}{if ... then ...}
+\cvitem{$\mid$ x==y =True}{if x==y then True}
+\section{List Comprehension}
+\cvitem{$[\;x\mid ...]$}{such that $x \in ...$}
+
+\section{List}
+\cvitem{$[\;x_1, x_2, x_3\;]$}{$(\;x_1 : (\;x_2 : (\;x_3 :[\;]\;)))$}
+\subsection{$sum$}
+\cvitem{$sum \; [\;]$}{$=\; 0$}
+\cvitem{$sum \; (x:xs)$}{$=\; x + \;sum\; xs$}
+\subsection{$product$}
+\cvitem{$product \; [\;]$}{$=\; 1$}
+\cvitem{$product \; (x:xs)$}{$=\; x \star \;product\; xs$}
+\subsection{$length$}
+\cvitem{$length\; [\;]$}{$=\; 0$}
+\cvitem{$length\; (_:xs)$}{$=\; 1 + \;length\; xs$}
+\subsection{$reverse$}
+\cvitem{$reverse\ [\;]$}{$=[\;]$}
+\cvitem{$reverse\; (x:xs)$}{$= \;reverse\; xs \; ++ [x]$}
+\subsection{$drop$}
+\cvitem{$drop\; 0\; xs$}{$=xs$}
+\cvitem{$drop\; \_\; [\;]$}{$= [\;]$}
+\cvitem{$drop\; n\; (\_:xs)$}{$=\; drop\; (n-1)\; xs$}
+\subsection{$append$}
+\cvitem{$[\;]; ++ ys$}{$=ys$}
+\cvitem{$(x:xs) ++  (ys)$}{$=\; x:(xs ++ ys$}
+\subsection{$concat$}
+\cvitem{$concat$}{$:: [[a]] \to [a]$}
+\cvitem{$concat\; xss$}{$= [x \mid xs \gets xss,\; x \gets xs]$}
+\subsection{$factors$}
+\cvitem{factors}{$factors\; :: Int \to [Int]$}
+\cvitem{$factors\; x$}{$= [ n | n \gets [1..x], x \;`mod`\; n == 0]$}
+\subsection{$primeP$}
+\cvitem{$primeP$}{$:: Int \to \;Bool\;$}
+\cvitem{$primeP\; x$}{$ = \;factors\;  x == [1,x]$}
+\subsection{$primes$}
+\cvitem{$primes$}{$:: Int \to \;[Int]\;$}
+\cvitem{$primes\; x$}{$= [n | n \to [2..x], \;primeP\; n]$}
+\subsection{$\vec{xs} \; \cdot \; \vec{ys} \; = \; \sum_{i}^{n-1}(xs)_i (ys)_i$}
+\cvitem{$dot\; product$}{$:: [Int] \to [Int] \to \;Int$}
+\cvitem{$dot\; xs\; ys$}{$sum\;[\;xs\; !!\;i \star ys\; !!\ i \; |\; i \gets [0..n-1]\;] \; where \; n \; = \; length \; xs$}
+\cvitem{$dot\; xs\; ys$}{$sum\;[\;x \star \; y \; |\; (x,y) \; \gets zip\; xs\; ys\;]$}
+
+\section{sieve}
+\cvitem{$\infty$}{lazy evaluation}
+\cvitem{$sieve$}{$sieve\; :: [Int] \to [Int]$}
+\cvitem{}{$sieve\; (p:xs) = p: sieve [x | x \gets xs, x \;`mod`\; p \neq 0]$}
+\cvitem{sieve [2..10]}{error but sieve $[2..] \to \infty$ is no error with $\infty$}
+\cvitem{take 10 sieve \$ [2..]}{good}
+
+\section{Tuple}
+\subsection{$zip$}
+\cvitem{$zip\; [\;]\; \_$}{$=[\;]$}
+\cvitem{$zip\; \_\; [\;]$}{$=[\;]$}
+\cvitem{$zip\; (x:xs)\; (y:ys)$}{$=(x,y): \; zip\; xs\; ys\;$}
+\cvitem{}{$zip [1,2,3] [4,5] \to [(1,4),(2,5)]$}
+\subsection{$pairs$}
+\cvitem{$pairs$}{$:: [a] \to [(a,a)]$}
+\cvitem{$pairs\; xs$}{$=\;zip\; xs\; \$\; tail\; xs$}
+\subsection{$sortedP$}
+\cvitem{$sorted$}{$:: Ord\; a \implies [a] \to \;Bool\;$}
+\cvitem{$sorted\; xs$}{$= and [x \leq y | (x,y) \gets pairs\; xs]$}
+\subsection{$positions$}
+\cvitem{$positions$}{$:: Eq\; a \implies a \to [a] \to [Int]$}
+\cvitem{$positions\; x\; xs$}{$= [i | (y,i) \gets \;zip\;xs \;[0..], x == y]$}
+
+\section{String}
+\cvitem{$[Char]$}{``hello world!"}
+\subsection{$count$}
+\cvitem{$count$}{$:: \;Char\; \to \;String\; \to \;Int$}
+\cvitem{$count\; x\; xs$}{$= \;length[x | y \gets xs,\; y == x]$}
+
+
+\section{Terms}
+\subsection{Perfect number}
+\cvitem{Perfect number}{a positive integer is perfect if it equals the sum of all of its factors, excluding the number itself}
+\cvitem{induction}{귀납, 유도}
+
 \end{document}
+

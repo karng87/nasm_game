@@ -38,3 +38,13 @@ values (App _ l r) = values l ++ values r
 eval :: Expr -> [Int]
 eval (Val n) = [n | n >0]
 eval (App o l r) = [apply o x y | x <- eval l, y <- eval r, valid o x y]
+
+-- guard ==> if ~ then ~ ==> |~ = ~
+delta :: Int -> Int -> Int
+delta x y | x == y  = 1
+          | otherwise = 0
+
+alternate :: Int -> Int -> Int -> Int
+alternate i j k | i == j || j == k || k == i  = 0
+                | i == j+1 && j == k+1  = 1
+
