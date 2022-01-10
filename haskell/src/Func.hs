@@ -87,3 +87,37 @@ index' (_:xs) n = index' xs (n-1)
 elem' :: Eq a => a -> [a] -> Bool
 elem' _ [] = False
 elem' x (y:ys) = (x == y) || elem' x ys
+
+-- higher order function
+-- map
+map' :: (a -> b) -> [a] -> [b]
+map'  f [] = []
+map' f (x:xs) = f x : map' f xs
+
+-- filter
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' f [] = []
+filter' f (x:xs) = [x | x <- xs, f x]
+
+filterR :: (a -> Bool) -> [a] -> [a]
+filterR f [] = []
+filterR f (x:xs) 
+            | f x = x : filterR f xs
+            | otherwise = filterR f xs
+
+-- foldr
+foldr' :: (a -> b -> b) -> b -> [a] -> b
+foldr' f r [] = r
+foldr' f r (y:ys) = f y (foldr' f r ys) 
+
+-- foldl
+foldl' :: (b -> a -> b) -> b -> [a] -> b
+foldl' f l [] = l
+foldl' f l (x:xs) = foldl' f (f l x) xs
+
+freverse :: [a] -> [a]
+freverse [] = []
+freverse xs = foldl' (\l x -> [x] ++ l) [] xs
+
+fappend :: [a] -> [a] -> [a]
+fappend xs ys = foldl' (\xs y -> l : [x]) xs ys

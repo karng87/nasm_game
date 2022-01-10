@@ -1,6 +1,9 @@
 \documentclass[a4paper]{moderncv}
 \usepackage[scale=0.9]{geometry}
 \usepackage{amsmath, kotex}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
 \moderncvtheme[blue]{classic}
 \firstname{Functional}
 \familyname{Programming}
@@ -21,8 +24,8 @@
 
 \maketitle
 
-\section{Factors}
-\cvitem{factors}{$factors\; :: Int \to [Int]$}
+\section{Factor}
+\cvitem{factor}{$factor\; :: Int \to [Int]$}
 \cvitem{$factors\; x$}{$= [ n | n \gets [1..x], x \;`mod`\; n == 0]$}
 
 \section{Sieve}
@@ -38,7 +41,7 @@
 \cvitem{generator}{$x \gets xs $}
 \cvlistitem{x for in xs}
 \cvitem{multiple generators}{$[\;(x,y) | x \gets [1..5], y \gets [4,5]\;]$}
-\cvlistitem{seperated by comma, like nested loops}
+\cvlistitem{separated by comma, like nested loops}
 \cvitem{}{$[\;(x,y) | y \gets [4,5], x \gets [1,2,3]\;] \iff [\;(1,4),(2,4),(3,4),(1,5),(2,5),(3,5)\;]$}
 
 \section{Guard}
@@ -50,9 +53,11 @@
 
 \section{Higher order function}
 \cvitem{a function}{is called higher-order,}
-\cvitem{}{if it takes a function as an argument or return a function a fucntion as a result.}
-\cvlistitem{${twice}\; :: (a \to a) \to a \to a$}
-\cvlistitem{${twice}\; f\; x\; = f\; (\;f \; x\;)$}
+\cvitem{}{if it takes a function as an argument or return a function as a result.}
+\cvlistitem{${twice}\; :: (a \to a) \to a \to a \quad {twice}\; f\; x\; = f\; (\;f \; x\;)$}
+\cvlistitem{${map}\; :: (a \to b) \to [a] \to [b]$}
+\cvlistitem{${filter}\; :: (a \to Bool) \to [a] \to [a]$}
+\cvlistitem{${foldr}\; :: (a \to b \to b) \to b \to [a] \to b$}
 
 \section{Quick Sorting}
 \cvitem{$qsort$}{$::\; Ord\; a \implies [a] \to [a]$}
