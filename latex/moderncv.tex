@@ -1,17 +1,22 @@
 \documentclass[a4paper]{moderncv}
 \usepackage[scale=0.9]{geometry}
 \usepackage{blindtext}
+\usepackage{amsmath, kotex}
+
 \moderncvtheme[blue]{classic}
-\firstname{Karng}
-\familyname{Lee}
-\title{Haskell}
-\address{Seoul Korea}
-\mobile{010-3201}
-\email{karng@gmail.com}
-\photo{haskell.png}
-\recipient{Max Mustermann}{Garden Street 1\\432 Big-City\\German}
-\opening{Dear sir/madam.}
-\closing{Kind regard.}
+
+\firstname{Latex}
+\familyname{Tutorial}
+\title{amsmath}
+
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+\photo{logo.png}
+
+\recipient{수령지}{Songpa ku\\Seoul\\Korea}
+\opening{latex 에게}
+\closing{안녕~}
 
 \begin{document}
 %\makelettertitle
@@ -21,10 +26,21 @@
 
 \maketitle
 
-\section{Type}
-\cvitem{List}{:}
-\cvitem{Tuple}{fst}
-\section{Function}
-\cvitem{List}{:}
-\cvitem{Tuple}{fst}
+\section{item}
+\cvitem{Birth}{$x \gets xs $}
+\subsection{listitem}
+\cvitem{Birth}{$x \gets xs $}
+
+\section{listitem - acronym}
+\cvlistitem{Reading Books}
+\cvlistitem{Program language: C++, Python, Haskell}
+  
+\section{entry}
+\cventry{1999--2002}{Reserch}{Research}{Research}{Research}{Research}
+\cventry{entry}{Entry}{}{}{}{}
+
+\section{language}
+\cvlanguage{English}{little}{educcation}
+
 \end{document}
+

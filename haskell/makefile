@@ -1,20 +1,18 @@
-#OBJ = haskell
-#OBJ = template
-OBJ = moderncv
-#OBJ = beamer
-DIR = build
-SRC = ${OBJ}.tex
-TARGET = ${DIR}/${OBJ}.pdf
+SRCS = $(notdir $(shell find -name "*.tex"))
 
-.phoney: all clean run
+TARGETS = $(patsubst %.tex, build/%.pdf, $(SRCS))
 
-all: ${TARGET}
+TEX =	pdflatex
+TEXJ =	pdflatex --jobname=
 
-${TARGET}: ${SRC}
-	pdflatex --jobname=${DIR}/${OBJ} $< 
+.PHONEY: all clean run
 
+all: $(TARGETS)
+
+
+build/%.pdf: %.tex
+	$(TEXJ)$(patsubst %.tex,build/%,$<) $<
+	
 clean:
-	rm ${DIR}/${OBJ}.aux ${DIR}/${OBJ}.out ${DIR}/${OBJ}.log ${DIR}/${OBJ}.pdf
-
-run:
-	zathura ${TARGET}
+	#rm $(DIR)/$(OBJ).aux $(DIR)/$(OBJ).out $(DIR)/$(OBJ).log $(DIR)/$(OBJ).pdf
+	rm build/*

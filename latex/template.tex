@@ -1,40 +1,67 @@
 \documentclass[a4paper,12pt]{article}
-\usepackage{kotex}
-\usepackage{blindtext}
 \usepackage[top=1cm,bottom=1cm,left=1cm,right=1cm]{geometry}
 \usepackage[utf8]{inputenc}
-\usepackage{xcolor}
-\usepackage{multirow}
-\usepackage{acronym}
+
+\usepackage{amsmath, kotex, xcolor, multirow, acronym}
+\usepackage{graphicx,float,subcaption}
+\usepackage{blindtext}
+
 \author{Haskell}
 \title{Lee}
+
 \begin{document}
 \maketitle
+
 \tableofcontents
+
 \newpage
+
 \section{Acronyms}
-\begin{acronym}
-  \acro{i.e}[i.e]{in other word}
-  \acro{superposition}{중첩원리}(Interference of same physical quantities without influencing each other (net response eqal to sum of individual components)
-\end{acronym}
-\section{Table}\label{sec:first}
-\begin{table}
+  \begin{acronym}
+    \acro{i.e}[i.e]{in other word}
+    \acro{superposition}{중첩원리}(Interference of same physical quantities without influencing each other (net response eqal to sum of individual components)
+  \end{acronym}
+
+  \begin{table}
   \begin{center}
     \begin{tabular}{|p{0.3\textwidth}|p{0.3\textwidth}|p{0.3\textwidth}|}
+        \hline
+      \textbf{First Col} & \textbf{Second Col} & \textbf{Third col} \\
       \hline
-    \textbf{First Col} & \textbf{Second Col} & \textbf{Third col} \\
-    \hline
-    \hline
-    \multirow{2}{*}{First Entry} & \multicolumn{2}{c|}{Second Entry} \\
-    & Fith & sixth \\
-    \hline
-  \end{tabular}
+      \hline
+      \multirow{2}{*}{First Entry} & \multicolumn{2}{c|}{Second Entry} \\
+      & Fith & sixth \\
+      \hline
+    \end{tabular}
     \caption{My first Table}
     \label{tab:table}
   \end{center}
-\end{table}
+  \end{table}
 
 \section{Cardinality}\label{sec:first}
+  \blindtext[1]
+  % the figure is flotting environment
+  \begin{figure}[hbt]
+    \begin{center}
+      \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{logo.png}
+        \caption{SubFigure 1}
+        \label{subfig:logo1}
+      \end{subfigure}
+      \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{logo.png}
+        \caption{SubFigure 2}
+        \label{subfig:logo2}
+      \end{subfigure}
+      \caption{My first Figure}
+      \label{fig:logo}
+    \end{center}
+  \end{figure}
+  \blindtext[1]
+  This logo is shown in Figure \ref{fig:logo}
+  This logo is shown in Figure \ref{subfig:logo2}
+  This table is shown in Table \ref{tab:table}
+ 
 \subsection{Type}
 {\Large
   \begin{equation}

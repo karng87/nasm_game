@@ -1,0 +1,13 @@
+\documentclass{standalone}
+\usepackage{tikz,pgfplots}
+\usepgfplotslibrary{fillbetween}
+\begin{document}
+\begin{tikzpicture}
+  \begin{axis}
+    \addplot[mark=none,domain=-0.5:4,samples=201, name path=l]{x};
+    \addplot[mark=none,domain=-0.5:4,samples=201, name path=e]{e^x};
+    \addplot fill between[of=e and l, 
+      soft clip={ (axis cs:1,0) rectangle (axis cs:3,e^3) }];
+  \end{axis}
+\end{tikzpicture}
+\end{document} 
