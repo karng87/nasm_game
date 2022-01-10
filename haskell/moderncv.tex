@@ -82,9 +82,73 @@
 \cvitem{}{$\qquad {ys}\; =\; {take}\; {hl}\; xs$}
 \cvitem{}{$\qquad {ys}\; =\; {drop}\; {hl}\; xs$}
 
+\section{type}
+\cvitem{type TypeSymbol}{= Type Constructor(using Built in type values)}
+\cvlistitem{type declaration $\cong$ type Symbol} 
+\cvitem{type declaration}{a new name for an existing type can be defined usging a type declaration.}
+\cvitem{}{can be used to make other types easier to read.}
+\cvlistitem{type parameter}
+\cvitem{type parameter}{Like function definitions, type declarations can also have parameters.}
+\cvitem{}{type Pair a = (a,a)}
+\cvitem{a}{is a type parameter}
+\cvitem{}{mult :: Pair Int $\to$ Int}
+\cvitem{Int}{is a type argument of Pair a}
+\cvitem{}{mult (m,n) = n*n}
+\cvlistitem{can be nested:}
+\cvitem{nested}{type Pos = (Int, Int)}
+\cvitem{}{type Trans = Pos $\to$ Pos}
+\cvlistitem{type define}
+\cvitem{define}{origin :: Pos}
+\cvitem{}{origin = (0,0)}
+\cvitem{define}{left :: Pos $\to$ Pos}
+\cvitem{}{left (x,y) = (x-1, y)}
+
+\cvlistitem{can not be recursive:}
+\cvitem{!!wrong}{type Tree = (Int, [Tree])}
+
+\section{data $\iff$ new type}
+\cvitem{data DataSymbol}{= Data Constructor(using New type values)}
+\cvlistitem{data declaration $\cong$ data Symbols}
+\cvitem{data declaration}{A completely new type can be defined by specifying its values using a data declaration.}
+\cvitem{data Symbol}{can also have parameters}
+\cvitem{data Maybe a}{Nothing | Just a}
+\cvitem{}{data Typename = new type values}
+\cvitem{data Bool}{= False | True}
+\cvitem{Bool}{is a new type, with two new values False and True.}
+\cvlistitem{Data Constructor}
+\cvitem{Data Constructor}{can also have parameters}
+\cvitem{data Shape}{= Circle Float | Rect Float Float}
+\cvitem{True, False}{is a data constructors for the type Bool.}
+\cvitem{Type and constructor names}{must always begin with an upper-case letter.}
+\cvlistitem{can be recursive:}
+\cvitem{data Nat}{Zero | Succ Nat}
+\cvitem{Nat}{is a new type}
+\cvitem{Zero}{:: Nat}
+\cvitem{Succ}{:: Nat -> Nat }
+\cvitem{}{Succ (Succ (Succ Zero))}
+\cvitem{naturla number(Nat)}{1 + (1 +  (1 +  0)) = 3}
+\cvitem{nat2int}{:: Nat $\to$ Int}
+\cvitem{nat2int Zero}{= 0}
+\cvitem{nat2int (Succ n)}{1+ nat2int (n-1)}
+\cvitem{int2nat}{:: Int $\to$ Nat}
+\cvitem{int2nat 0}{= Zero}
+\cvitem{int2nat n}{= Succ (int2nat (n-1))}
+\cvitem{add}{:: Nat $\to$ Nat $\to$ Nat}
+\cvitem{add Zero n}{= n}
+\cvitem{add (Succ m) n}{= Succ (add m n)}
+
+\section{::}
+\cvitem{kind}{$* \to *$}
+
 \section{Terms}
 \cvitem{Perfect number}{a positive integer is perfect if it equals the sum of all of its factors, excluding the number itself}
 \cvitem{induction}{귀납, 유도}
+\cvitem{congruence}{합동}
+\cvitem{conjugate}{켤레}
+\cvitem{Terminal}{grammer에 종속되는 symbol}
+\cvitem{Token}{= Terminal symbol}
+\cvitem{Nonterminal}{grammer에 독립적인 symbol}
+\cvitem{Start Symbol}{Nonterminal symbol로 시작해야 한다.}
 
 \end{document}
 
