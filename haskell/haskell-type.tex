@@ -1,0 +1,55 @@
+\documentclass[a4paper]{moderncv}
+\usepackage[scale=0.9]{geometry}
+\usepackage{amsmath, kotex}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\moderncvtheme[blue]{classic}
+\firstname{Type}
+\familyname{Haskell}
+\title{functional progrmming}
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+\photo{logo.png}
+\recipient{수령지}{Building Type\\SongPaku\\Seoul\\Korea}
+\opening{Type 에게}
+\closing{안녕~}
+
+\begin{document}
+%\makelettertitle
+%\blindtext
+%\makeletterclosing
+%\newpage
+
+\maketitle
+
+\section{type, constructor}
+\cvitem{type}{반드시 정해진 규격으로 만들어서 분류 할 수 있게 하는 개념}
+\cvitem{}{set}
+\cvitem{}{data}
+
+\cvitem{constructor}{타입 규격을 정해주고 하나의 규격을 선택 하는 방법을 제공}
+\cvitem{}{elements}
+
+\section{class, instance}
+\cvitem{class}{규격화된 타입을 모아서 통합 할 수 있게 하는 개념}
+\cvitem{}{isomorphism}
+\cvitem{instance}{실제로 통합시켜야 하는 구체적인 타입을 모아놓고 규현하는 개념}
+
+\section{parameter, argument}
+\cvitem{parameter}{부속 건물- 재료를 제공해주는 역할}
+\cvitem{argument}{실제 사용되는 곳에서 parameter가 구체적으로 확정 되는 경우}
+
+\cvlistitem{types are how you describe the data your program will work with.}
+\cvitem{$data [contex \implies]$}{$
+  \underbrace{type}_{name}\; 
+  \underbrace{tv_1 \cdots tv_i}_{parameters} 
+  = \underbrace{cons_1}_{constructor} \; 
+  \underbrace{cons_1^{p_1} \cdots cons_1^{p_n}}_{consructor\; parameter} 
+  \mid \cdots \mid con_m \; c_mt_1 \cdots c_mt_q \; 
+  [deriving]$}
+
+\cvitem{[contex $\implies$]}{optional context}
+\end{document}
+

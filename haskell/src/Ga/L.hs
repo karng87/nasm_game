@@ -1,11 +1,12 @@
+module Ga.L where
 -- length
 length' :: [a] -> Int
 length' [] = 0
 length' (_:xs) = 1 + length' xs
 
 -- TODO : cons
---cons' :: a -> [a]
---cons' x = [x] 
+--cons :: a -> [a]
+--cons x = [x] 
 
 -- ++ append
 append' :: [a] -> [a] -> [a]
@@ -49,8 +50,8 @@ isort' (x:xs) = insert' x $ isort' xs
 qsort' :: Ord a => [a] -> [a]
 qsort' [] = []
 qsort' (x:xs) = qsort' lhs ++ [x] ++ qsort' rhs where 
-                      lhs = [ x' | x' <- xs, x' < x]
-                      rhs = [ x' | x' <- xs, x' >= x]
+                      lhs = [ x | x <- xs, x < x]
+                      rhs = [ x | x <- xs, x >= x]
 
 -- merge [] [] append with sorting
 merge' :: Ord a => [a] -> [a] -> [a]
@@ -103,11 +104,11 @@ filter' :: (a -> Bool) -> [a] -> [a]
 filter' f [] = []
 filter' f (x:xs) = [x | x <- xs, f x]
 
-filterR :: (a -> Bool) -> [a] -> [a]
-filterR f [] = []
-filterR f (x:xs) 
-            | f x = x : filterR f xs
-            | otherwise = filterR f xs
+filterR' :: (a -> Bool) -> [a] -> [a]
+filterR' f [] = []
+filterR' f (x:xs) 
+            | f x = x : filterR' f xs
+            | otherwise = filterR' f xs
 
 -- foldr
 foldr' :: (a -> b -> b) -> b -> [a] -> b
@@ -119,15 +120,15 @@ foldl' :: (a -> b -> b) -> b -> [a] -> b
 foldl' f l [] = l
 foldl' f l (x:xs) = foldl' f (f x l) xs
 
-flreverse :: [a] -> [a]
-flreverse [] = []
-flreverse xs = foldl' (\x l -> x : l) [] xs
+flreverse' :: [a] -> [a]
+flreverse' [] = []
+flreverse' xs = foldl' (\x l -> x : l) [] xs
 
-flappend :: [a] -> [a] -> [a]
-flappend = foldl' (:)
+flappend' :: [a] -> [a] -> [a]
+flappend' xs ys = foldl' (:) xs ys
 
-frappend :: [a] -> [a] -> [a]
-frappend = foldr' (:)
+frappend' :: [a] -> [a] -> [a]
+frappend' = foldr' (:)
 
 -- Nat
 ---- Nat = a new type symbol

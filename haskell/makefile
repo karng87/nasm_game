@@ -12,7 +12,12 @@ all: $(TARGETS)
 
 build/%.pdf: %.tex
 	$(TEXJ)$(patsubst %.tex,build/%,$<) $<
-	
+
+
+hs: src
+	$(MAKE) -C $^
+
+
 clean:
 	#rm $(DIR)/$(OBJ).aux $(DIR)/$(OBJ).out $(DIR)/$(OBJ).log $(DIR)/$(OBJ).pdf
 	rm build/*
