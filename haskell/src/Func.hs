@@ -3,7 +3,11 @@ length' :: [a] -> Int
 length' [] = 0
 length' (_:xs) = 1 + length' xs
 
--- ++
+-- TODO : cons
+--cons' :: a -> [a]
+--cons' x = [x] 
+
+-- ++ append
 append' :: [a] -> [a] -> [a]
 append' [] ys = ys
 append' xs [] = xs
@@ -108,16 +112,26 @@ filterR f (x:xs)
 -- foldr
 foldr' :: (a -> b -> b) -> b -> [a] -> b
 foldr' f r [] = r
-foldr' f r (y:ys) = f y (foldr' f r ys) 
+foldr' f r (x:xs) = f x (foldr' f r xs) 
 
 -- foldl
-foldl' :: (b -> a -> b) -> b -> [a] -> b
+foldl' :: (a -> b -> b) -> b -> [a] -> b
 foldl' f l [] = l
-foldl' f l (x:xs) = foldl' f (f l x) xs
+foldl' f l (x:xs) = foldl' f (f x l) xs
 
-freverse :: [a] -> [a]
-freverse [] = []
-freverse xs = foldl' (\l x -> [x] ++ l) [] xs
+flreverse :: [a] -> [a]
+flreverse [] = []
+flreverse xs = foldl' (\x l -> x : l) [] xs
 
-fappend :: [a] -> [a] -> [a]
-fappend xs ys = foldl' (\xs y -> l : [x]) xs ys
+flappend :: [a] -> [a] -> [a]
+flappend = foldl' (:)
+
+frappend :: [a] -> [a] -> [a]
+frappend = foldr' (:)
+
+-- Nat
+---- Nat = a new type symbol
+---- Zero = a type of Nat
+---- Succ (Succ Zero) = a type of Nat
+data Nat = Zero | Succ Nat
+

@@ -83,6 +83,7 @@
 \cvitem{}{$\qquad {ys}\; =\; {drop}\; {hl}\; xs$}
 
 \section{type}
+\cvlistitem{how one introduces an alias for an algebraic data type into Haskell}
 \cvitem{type TypeSymbol}{= Type Constructor(using Built in type values)}
 \cvlistitem{type declaration $\cong$ type Symbol} 
 \cvitem{type declaration}{a new name for an existing type can be defined usging a type declaration.}
@@ -107,6 +108,7 @@
 \cvitem{!!wrong}{type Tree = (Int, [Tree])}
 
 \section{data $\iff$ new type}
+\cvlistitem{how one introduces new algebraic data type into Haskell}
 \cvitem{data DataSymbol}{= Data Constructor(using New type values)}
 \cvlistitem{data declaration $\cong$ data Symbols}
 \cvitem{data declaration}{A completely new type can be defined by specifying its values using a data declaration.}
@@ -122,13 +124,13 @@
 \cvitem{Type and constructor names}{must always begin with an upper-case letter.}
 \cvlistitem{can be recursive:}
 \cvitem{data Nat}{Zero | Succ Nat}
-\cvitem{Nat}{is a new type}
-\cvitem{Zero}{:: Nat}
-\cvitem{Succ}{:: Nat -> Nat }
+\cvitem{}{Nat is a new type}
+\cvitem{}{Zero :: Nat}
+\cvitem{}{Succ :: Nat -> Nat }
 \cvitem{}{Succ (Succ (Succ Zero))}
-\cvitem{naturla number(Nat)}{1 + (1 +  (1 +  0)) = 3}
-\cvitem{nat2int}{:: Nat $\to$ Int}
-\cvitem{nat2int Zero}{= 0}
+\cvitem{Nat-ural number}{$\iff$ 1 + (1 +  (1 +  0)) = 3}
+\cvitem{}{nat2int :: Nat $\to$ Int}
+\cvitem{}{nat2int Zero = 0}
 \cvitem{nat2int (Succ n)}{1+ nat2int (n-1)}
 \cvitem{int2nat}{:: Int $\to$ Nat}
 \cvitem{int2nat 0}{= Zero}
@@ -141,6 +143,21 @@
 \cvitem{kind}{$* \to *$}
 
 \section{Terms}
+\cvlistitem{https://wiki.haskell.org/Keywords}
+\cvitem{::}{Read as ``has type"}
+\cvitem{;}{Statement separator}
+\cvitem{,}{Separator in lists, tuples, records.}
+\cvitem{=}{Used in definitions}
+\cvitem{=>}{Used to indicate instance contexts.}
+\cvitem{kind}{In type theory, a kind is the type of a type constructor,}
+\cvitem{}{or the type of a higher-order type operator.}
+\cvitem{}{* $\iff$ the kind of any data type - called type.}
+\cvitem{\_}{wild card}
+\cvitem{infix function}{x + y}
+\cvitem{}{to prefix $\iff$ (+) x  y}
+\cvitem{prefix function}{add x y}
+\cvitem{}{to infix $\iff$ x \`{}add\`{} y}
+
 \cvitem{Perfect number}{a positive integer is perfect if it equals the sum of all of its factors, excluding the number itself}
 \cvitem{induction}{귀납, 유도}
 \cvitem{congruence}{합동}
