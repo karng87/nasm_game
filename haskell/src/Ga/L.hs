@@ -50,8 +50,8 @@ isort' (x:xs) = insert' x $ isort' xs
 qsort' :: Ord a => [a] -> [a]
 qsort' [] = []
 qsort' (x:xs) = qsort' lhs ++ [x] ++ qsort' rhs where 
-                      lhs = [ x | x <- xs, x < x]
-                      rhs = [ x | x <- xs, x >= x]
+                      lhs = [ x' | x' <- xs, x' < x]
+                      rhs = [ x' | x' <- xs, x' >= x]
 
 -- merge [] [] append with sorting
 merge' :: Ord a => [a] -> [a] -> [a]

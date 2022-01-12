@@ -1,3 +1,4 @@
+.PHONEY: all clean
 all: build/Main
 	@echo ""
 	@echo ""
@@ -10,4 +11,4 @@ build/Main: Main.hs
 
 clean:
 	#rm $(DIR)/$(OBJ).aux $(DIR)/$(OBJ).out $(DIR)/$(OBJ).log $(DIR)/$(OBJ).pdf
-	rm *.{hi,o} Ga/*.{hi,o} build/* 
+	rm *.{hi,o} Ga/*.{hi,o} build/*

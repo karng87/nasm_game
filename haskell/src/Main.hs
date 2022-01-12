@@ -1,4 +1,6 @@
 module Main where
-import Ga.L
+import qualified Ga.L as L
+import qualified Ga.Peano as N
+import qualified Ga.Expr as E
 
-main = putStrLn (qsort' "Hello, World!")
+main = putStrLn (L.qsort' "Hello, World!")

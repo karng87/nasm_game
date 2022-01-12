@@ -8,7 +8,7 @@ TEXJ =	pdflatex --jobname=
 
 .PHONEY: all clean hs vihs
 
-all: $(TARGETS)
+all: $(TARGETS) h
 
 
 build/%.pdf: %.tex
@@ -25,5 +25,5 @@ vl:
 	nvim haskell-type.tex
 
 clean:
-	#rm $(DIR)/$(OBJ).aux $(DIR)/$(OBJ).out $(DIR)/$(OBJ).log $(DIR)/$(OBJ).pdf
-	rm build/*
+	rm build/*.{aux,out,log,toc,nav,snm,lot,lof}	
+	$(MAKE) -C src clean
