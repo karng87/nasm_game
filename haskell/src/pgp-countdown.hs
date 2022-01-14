@@ -5,6 +5,7 @@
 import System.IO
 import System.CPUTime
 import Numeric
+import Data.List -- delete
 
 -- Arithmetic operators
 
@@ -50,23 +51,25 @@ eval (App o l r) = [apply o x y | x <- eval l,
                                   valid o x y]
 
 -- Combinatorial functions
-
--- nPr = permutation $ _nP_r = \frac{n!}{(n-r)!}$
-permutation :: [a] -> Int -> [[a]]
-permutation xs 0 = [[]]
-
--- nCr = Combination $ _nC_r = \frac{_nP_r}{r!}$
--- $ /sum_{r=n}^{n} {n}_C_{n-r} = nCn + n_C_{n-1} + ... +  n_C{n-r} +... + n_C_{n-n}$
 subs :: [a] -> [[a]]
 subs []     = [[]]
-subs (x:xs) = (subs xs) ++ map (x:) (subs xs) -- = yss ++ map (x:) yss where yss = subs xs
+subs (x:xs) = subs xs ++ map (x:) (subs xs) -- = yss ++ map (x:) yss where yss = subs xs
 
--- subs [1,2]
---      subs 2 ++ map (1:) subs 2
---      ([[]] ++ map(2:) [[]]) ++ map (1:) ([[]] ++ map(2:) [[]])
--- subs [1,2,3]
---      (subs [2,3]) ++ map (1:) (subs [2,3])
---      (subs[3] ++ map(2:) subs [3]) ++ map (1:) (subs [3] ++ map (2:) subs [3])
+-- nPr = permutation $ _nP_r = \frac{n!}{(n-r)!}$
+permutation :: Eq a => [a] -> Int -> [[a]]
+permutation ns 0 = [[]]
+permutation ns r = ns >>= (\x -> (x:) <$> permutation (delete x ns) (r-1))
+
+-- power set 2^{n}
+powerset :: [a] -> [[a]]
+powerset [] = [[]]
+powerset (n:ns) =  powerset ns  ++  ((n:) <$> powerset ns)
+
+-- nCr = Combination $ _nC_r = \frac{_nP_r}{r!}$
+combination :: [a] -> Int -> [[a]]
+combination _ 0 = [[]] 
+combination n r = take r $ powerset n 
+
 
 interleave :: a -> [a] -> [[a]]
 interleave x []     = [[x]]

@@ -18,12 +18,10 @@ build/%.pdf: %.tex
 h: src
 	$(MAKE) -C $^
 
-vh:
-	nvim src/Main.hs
 
-vl:
-	nvim haskell-type.tex
+run:
+	nohup zathura $(TARGETS) &
 
 clean:
-	rm build/*.{aux,out,log,toc,nav,snm,lot,lof}	
+	rm nohup.out build/*.{aux,out,log,toc,nav,snm,lot,lof}	
 	$(MAKE) -C src clean
