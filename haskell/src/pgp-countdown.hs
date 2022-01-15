@@ -10,6 +10,9 @@ import Data.List -- delete
 -- Arithmetic operators
 
 data Op = Add | Sub | Mul | Div
+op1 = Div 
+data Expr = Val Int | App Op Expr Expr
+expr1 = App Add (App Mul (App Div (Val 6)(Val 3))(App Sub (Val 8)(Val 2)))(App Sub (Val 9)(Val 3))
 
 instance Show Op where
    show Add = "+"
@@ -17,38 +20,41 @@ instance Show Op where
    show Mul = "*"
    show Div = "/"
 
+-- all Expr > 0 && natural number
 valid :: Op -> Int -> Int -> Bool
 valid Add _ _ = True
 valid Sub x y = x > y
 valid Mul _ _ = True
 valid Div x y = x `mod` y == 0
 
+
+-- Numeric expressions
+--- evaluate Expr result in Val Int
+
+
+instance Show Expr where
+   show (Val n)     = show n
+   --show (App o l r) = "(" ++ show l ++ ")" ++ "[" ++ show o ++ "]" ++ "(" ++ show r ++ ")"
+   show (App o l r) = wh l ++ show o ++ wh r where
+                      wh (Val n) = show n
+                      wh expr = "(" ++ show expr ++ ")"
+
+values :: Expr -> [Int]
+values (Val n)     = [n]
+values (App _ l r) = values l ++ values r
+
+-- div \iff all args \in \mathbb N
 apply :: Op -> Int -> Int -> Int
 apply Add x y = x + y
 apply Sub x y = x - y
 apply Mul x y = x * y
 apply Div x y = x `div` y
 
--- Numeric expressions
-
-data Expr = Val Int | App Op Expr Expr
-
-instance Show Expr where
-   show (Val n)     = show n
-   show (App o l r) = brak l ++ show o ++ brak r
-                      where
-                         brak (Val n) = show n
-                         brak e       = "(" ++ show e ++ ")"
-
-values :: Expr -> [Int]
-values (Val n)     = [n]
-values (App _ l r) = values l ++ values r
-
 eval :: Expr -> [Int]
 eval (Val n)     = [n | n > 0]
-eval (App o l r) = [apply o x y | x <- eval l,
-                                  y <- eval r,
-                                  valid o x y]
+eval (App op l r) = [apply op l' r' | l' <- eval l,
+                                      r' <- eval r,
+                                      valid op l' r']
 
 -- Combinatorial functions
 subs :: [a] -> [[a]]
@@ -57,20 +63,21 @@ subs (x:xs) = subs xs ++ map (x:) (subs xs) -- = yss ++ map (x:) yss where yss =
 
 -- nPr = permutation $ _nP_r = \frac{n!}{(n-r)!}$
 permutation :: Eq a => [a] -> Int -> [[a]]
-permutation ns 0 = [[]]
-permutation ns r = ns >>= (\x -> (x:) <$> permutation (delete x ns) (r-1))
+permutation np 0 = [[]]
+permutation np r = np >>= (\x -> (x:) <$> permutation (delete x np) (r-1))
 
 -- power set 2^{n}
 powerset :: [a] -> [[a]]
 powerset [] = [[]]
-powerset (n:ns) =  powerset ns  ++  ((n:) <$> powerset ns)
+powerset (n:ns) =  powerset ns  ++  map (n:) (powerset ns)
+-- powerset (n:ns) =  powerset ns  ++  ((n:) <$> powerset ns)
 
 -- nCr = Combination $ _nC_r = \frac{_nP_r}{r!}$
 combination :: [a] -> Int -> [[a]]
 combination _ 0 = [[]] 
 combination n r = take r $ powerset n 
 
-
+-- 사이 사이 끼워넣기
 interleave :: a -> [a] -> [[a]]
 interleave x []     = [[x]]
 interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
@@ -78,9 +85,11 @@ interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
 perms :: [a] -> [[a]]
 perms []     = [[]]
 perms (x:xs) = concat (map (interleave x) (perms xs))
+-- perms (x:xs) = perms xs >>= interleave x
 
 choices :: [a] -> [[a]]
-choices = concat . map perms . subs
+choices = concat . map perms . powerset 
+-- choices = concat . map perms . subs
 
 -- Formalising the problem
 
@@ -88,7 +97,8 @@ solution :: Expr -> [Int] -> Int -> Bool
 solution e ns n = elem (values e) (choices ns) && eval e == [n]
 
 -- Brute force solution
-
+--    (x,y) : [] => [(x,y)]
+--    map (\(x,y) -> (3:x , y)) [] => []
 split :: [a] -> [([a],[a])]
 split []     = []
 split [_]    = []

@@ -14,4 +14,4 @@ type Level = Int
 
 tprint :: Show a => ParentDir -> [ParentPos] -> Level -> Btree a -> [String]
 tprint _ _ _ Empty = []
-tprint pd pp level (Node a l r) = tprint PRight
+tprint pd pp level (Node a l r) = undefined 
