@@ -1,27 +1,26 @@
 SHELL := /bin/bash
-SRCS := $(notdir $(shell find -name "*.tex"))
 
-TARGETS := $(patsubst %.tex, build/%.pdf, $(SRCS))
+hss = $(notdir $(shell find app -name "*.hs"))
+texs := $(notdir $(shell find -maxdepth 1 -name "*.tex"))
 
-TEX =	pdflatex
-TEXJ =	pdflatex --jobname=
+.PHONEY: all pdf lean recursive, run, echo
 
-.PHONEY: all clean hs vihs
-
-all: $(TARGETS) h
-
+all: $(patsubst %.tex, build/%.pdf, $(texs)) $(patsubst %.hs, build/%, $(hss))
 
 build/%.pdf: %.tex
-	$(TEXJ)$(patsubst %.tex,build/%,$<) $<
+		@pdflatex --jobname=$(patsubst %.tex,build/%, $<) $<
 
+build/%: app/%.hs
+		ghc -isrc -o $@ $<
 
-h: src
-	$(MAKE) -C $^
+run : $(patsubst %.hs, build/%, $(hss))
+		./$<
 
-
-run:
-	nohup zathura $(TARGETS) &
+pdf : $(patsubst %.tex, build/%.pdf, $(texs))
+		@nohup zathura $< &
 
 clean:
-	rm nohup.out build/*.{aux,out,log,toc,nav,snm,lot,lof}	
-	$(MAKE) -C src clean
+		@rm -rf {.,build,app,src}/*.{$(patsubst %.tex, %,$(hss)),nohup.out,hi,o,aux,out,log,toc,nav,snm,lot,lof}
+
+echo:
+		@echo "This is haskell dir"
