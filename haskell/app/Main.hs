@@ -1,6 +1,9 @@
 module Main where
 
 import qualified Lib
-
+import Data.Char
 main :: IO ()
-main = putStrLn (show $ Lib.pset [1..3]) 
+main = do  
+      print "put numbers:"
+      arr <- getLine
+      print (Lib.pset $ map (\x->read [x]::Int) (filter isDigit arr)) 

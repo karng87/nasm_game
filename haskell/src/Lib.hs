@@ -51,3 +51,10 @@ perm (x:xs) = concat $ map (interleave x) (perm xs)
 --                [1:4:3:2]:[1:4:2:3]:[1:3:4:2]:[1:3:2:4]:[1:2:4:3]:[1:2:3:4]]
 ---- 3:2:1:[] = 4 :: [[3:2:1]: [3:1:2]:[2:3:1]:[2:1:3]:[1:3:2]:[1:2:3]]]
 
+ncr :: [a] -> Int -> [[a]]
+ncr _ 0 = [[]]
+ncr xs n = filter (\x -> length x == n) $ pset xs
+
+npr :: [a] -> Int -> [[a]]
+npr _ 0 = [[]]
+npr (xs) n = concat $ map  perm $ filter (\x -> length  x == n) $ pset (xs)
