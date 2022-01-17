@@ -84,12 +84,19 @@ interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
 
 perms :: [a] -> [[a]]
 perms []     = [[]]
-perms (x:xs) = concat (map (interleave x) (perms xs))
+perms (x:xs) = concat $ map (interleave x) (perms xs)
 -- perms (x:xs) = perms xs >>= interleave x
 
 choices :: [a] -> [[a]]
 choices = concat . map perms . powerset 
--- choices = concat . map perms . subs
+-- concat . map perms . subs
+-- concat . map perms . subs $ xs
+-- (.) concat ((.) (map perms) powerset) xs
+-- .      => infix function
+-- (.)    => prefix function
+-- map    => prefix fucntion
+-- `map`  => infic function
+
 
 -- Formalising the problem
 
@@ -103,6 +110,7 @@ split :: [a] -> [([a],[a])]
 split []     = []
 split [_]    = []
 split (x:xs) = ([x],xs) : [(x:ls,rs) | (ls,rs) <- split xs]
+-- [(3:x,y) | (x,y) <- []] == []
 
 exprs :: [Int] -> [Expr]
 exprs []  = []

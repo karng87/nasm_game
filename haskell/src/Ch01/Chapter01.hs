@@ -1,4 +1,4 @@
-module Ch01.Chapter01 where
+module Chapter01 where
 data Void
 -- data () = ()
 data Bool = False | True

@@ -1,5 +1,5 @@
-module Lib (pset) where
-import Data.ByteString (intercalate)
+module Ga.Lib where
+--import Data.ByteString (intercalate)
 
 pset' :: [Int] -> [[Int]]
 pset' [] = [[]]
@@ -58,3 +58,4 @@ ncr xs n = filter (\x -> length x == n) $ pset xs
 npr :: [a] -> Int -> [[a]]
 npr _ 0 = [[]]
 npr (xs) n = concat $ map  perm $ filter (\x -> length  x == n) $ pset (xs)
+

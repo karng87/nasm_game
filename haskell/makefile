@@ -2,6 +2,7 @@ SHELL := /bin/bash
 
 hss = $(notdir $(shell find app -name "*.hs"))
 texs := $(notdir $(shell find -maxdepth 1 -name "*.tex"))
+tmp = $(shell find -type f -regex '.*\(hi\|o\|out\|nohup\|aux\|log\|toc\|nav\|snm\|lot\|lof\)$$')
 
 .PHONEY: all pdf lean recursive, run, echo
 
@@ -20,7 +21,7 @@ pdf : $(patsubst %.tex, build/%.pdf, $(texs))
 		@nohup zathura $< &
 
 clean:
-		@rm -rf {.,build,app,src}/*.{$(patsubst %.tex, %,$(hss)),nohup.out,hi,o,aux,out,log,toc,nav,snm,lot,lof}
+		rm -rf $(tmp)
 
 echo:
 		@echo "This is haskell dir"
