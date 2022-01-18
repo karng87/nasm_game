@@ -4,6 +4,10 @@ import qualified Ga.Lib as L
 import Data.Char
 main :: IO ()
 main = do  
-      print "put numbers:"
-      arr <- getLine
-      print (L.pset $ map (\x->read [x]::Int) (filter isDigit arr)) 
+      return ()
+      return "hahaha"
+      line <- getLine
+      return "blah blah"
+      return 4
+      putStrLn line
+      putStrLn "put numbers:"
