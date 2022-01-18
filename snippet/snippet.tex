@@ -1,0 +1,49 @@
+\documentclass[a4paper]{moderncv}
+\usepackage[scale=0.9]{geometry}
+\usepackage{blindtext}
+\usepackage{amsmath, kotex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\moderncvtheme[blue]{classic}
+
+\firstname{Snippet}
+\familyname{Terms}
+\title{amsmath}
+
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+%\photo{logo.png}
+
+\recipient{수령지}{Songpa ku\\Seoul\\Korea}
+\opening{latex 에게}
+\closing{안녕~}
+
+\begin{document}
+%\makelettertitle
+%\blindtext
+%\makeletterclosing
+%\newpage
+
+\maketitle
+
+\section{Cursor}
+\subsection{tab}
+\cvlistitem{tab postion}
+\cvitem{\$0}{end postion after snippet}
+\cvitem{\$1}{fist tab postion after snippet}
+\cvlistitem{\$TM\_SELECTED\_TEXT}
+\cvitem{}{The currently selected text, or the empty string}
+\cvlistitem{\$TM\_CURRENT\_LINE}
+\cvitem{}{The contents of the current line.}
+\cvlistitem{\$TM\_CURRENT\_WORD}
+\cvitem{}{The contents of the word under cursor, or the empty string}
+\cvlistitem{\$TM\_FILE\_NAME}
+\cvitem{}{The filename}
+\cvlistitem{\$CLIPBOARD}
+\cvitem{}{The contents of the clipboard}
+\cvlistitem{\$BLOCK\_COMMENT\_START}
+\cvlistitem{\$BLOCK\_COMMENT\_END}
+\cvlistitem{\$LINE\_COMMENT}
+\end{document}
