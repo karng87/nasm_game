@@ -78,6 +78,8 @@
 \section{Function}
 \cvlistitem{the only thing a function can do in Haskell}
 \cvlistitem{is give us back some result basesd on the parameters we gave it.}
+\cventry{function of}{Category}{apply the difference category sets}{}{}{}
+\cventry{function of}{Expression}{apply the difference category sets}{}{}{}
 
 \subsection{<< pure >>}
 \cvlistitem{laziness, robustness, modularity}
@@ -94,10 +96,11 @@
 \cvlistitem{IO Action}
 \cvitem{IO action}{will carry out an action with a side effect}
 \cvitem{}{also contain some kind of return value inside it}
-\cvitem{IO ()}{Doesn't really have any kind of meaningfull return value}
+\cvitem{IO ()}{Doesn't really have any kind of meaningful return value}
 \cvlistitem{when will an IO action be performed?}
 \cvitem{main}{An IO action will be performed when we give it a name of main and then run our program.}
 \cventry{main}{main :: IO something}{where}{something is some concrete type.}{}{}
+\cventry{[IO a]}{sequence}{[IO a] $\to$ IO a,IO a ...}{}{}{}
 
 \subsection{<< bind >>}
 \cvlistitem{$\gets$ :in impure}
@@ -141,6 +144,10 @@
 \cvitem{prefix function}{add x y}
 \cvitem{}{to infix $\iff$ x \`{}add\`{} y}
 
+\section{syntax}
+\cventry{where}{where}{bindings are a syntactic construct that let you bind to variables at the end of a function}{and}{the whole function can see them}{including all the guards}
+\cventry{let}{let}{you bind to variables anywhere}{and, are expressions themselves}{but are very local}{so they don't span across guards}
+
 \section{Math Terms}
 \cvitem{Perfect number}{a positive integer is perfect if it equals the sum of all of its factors, excluding the number itself}
 \cvitem{ihabitant}{원소,주민}
@@ -153,6 +160,7 @@
 \cvitem{Token}{= Terminal symbol}
 \cvitem{Nonterminal}{grammer에 독립적인 symbol}
 \cvitem{Start Symbol}{Nonterminal symbol로 시작해야 한다.}
+\cventry{unless}{if not}{}{}{}{}
 
 \end{document}
 

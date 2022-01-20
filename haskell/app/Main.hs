@@ -2,12 +2,11 @@ module Main where
 
 import qualified Ga.Lib as L
 import Data.Char
+
+toInt :: String -> Int
+toInt xs =  read (take 1 (filter isDigit xs))::Int
+
 main :: IO ()
-main = do  
-      return ()
-      return "hahaha"
-      line <- getLine
-      return "blah blah"
-      return 4
-      putStrLn line
-      putStrLn "put numbers:"
+main = getLine >>= \x -> if null x
+                            then do main
+                            else putStrLn . show . L.npr [1..4] $ toInt x

@@ -1,0 +1,43 @@
+\documentclass[a4paper]{moderncv}
+\usepackage[scale=0.9]{geometry}
+\usepackage{blindtext}
+\usepackage{amsmath, kotex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\moderncvtheme[blue]{classic}
+
+\firstname{Funcion}
+\familyname{Category}
+\title{Functions about category}
+
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+%\photo{logo.png}
+
+\recipient{수령지}{Songpa ku\Seoul\Korea}
+\opening{Category 에게}
+\closing{안녕~}
+
+\begin{document}
+%makelettertitle
+%\blindtext
+%makeletterclosing
+%\newpage
+
+\maketitle
+
+\section{List}
+\cventry{}{map}{take a function and a list}{return sequence of a list}{}{}
+
+\section{Monad}
+\cventry{}{fmap}{take a function and a monad}{return sequence of  a monad}{}{}
+
+\section{IO action}
+\cvlistitem{import Controll.Monad}
+\cventry{}{sequence}{[IO a]}{$\to$}{IO a , IO a, ...}{}
+\cventry{}{mapM}{takes a functon and a list}{maps the IO action Function over the list and then sequence it}{mapM print [1,2,3]}{1 2 3 [(),(),()]}
+\cventry{}{mapM\_}{same as mapM}{but only it throws away the result later}{mapM\_ print [1,2,3]}{$\to$ 1 2 3}
+\cventry{}{forM}{takes and a list and a function}{like mapM}{only that forM has its parameters switched around}{}
+\end{document}

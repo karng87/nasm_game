@@ -1,4 +1,4 @@
-# Revision history for haskell
+# Revision history for demo
 
 ## 0.1.0.0 -- YYYY-mm-dd
 
