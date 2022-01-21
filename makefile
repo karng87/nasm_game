@@ -24,8 +24,8 @@ run:$(TARGETS)
 	@nohup zathura $(TARGETS) &
 
 clean:
-	@rm -rf {build,.}/*.{nohup.out,hi,o,aux,out,log,toc,nav,snm,lot,lof}
-	@$(call func,$@)
+		rm $(shell find . -regextype posix-extended -regex '.*\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$' -and -not -regex '.*(\.git|pack)/.*')
+		@$(call func,$@)
 
 echo:
 	@echo "This is root dir"

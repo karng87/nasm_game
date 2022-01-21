@@ -21,11 +21,12 @@ common common-all
 -- A copyright notice.
 -- copyright:
 -- category:
+
 extra-source-files:
     CHANGELOG.md
     README.md
 
-executable demo
+executable Main
     import: common-all
     main-is: Main.hs
 
@@ -36,15 +37,28 @@ executable demo
     -- other-extensions:
     hs-source-dirs: app, src
 
-executable form
+executable ForM
     import:	common-all
     main-is: ForM.hs
     hs-source-dirs: app
     ghc-options: -main-is ForM
 --		other-modules: Lib
 
-executable sudoku
+executable Sudoku
     import: common-all
     main-is: Sudoku.hs
     hs-source-dirs: app 
     ghc-options: -main-is Sudoku
+executable FpCourse
+    import:	common-all
+    main-is: FpCourse
+    hs-source-dirs: app, src
+    --other-modules: Lib
+    ghc-options: -main-is FpCourse
+
+executable TypeDataClassInstance
+    import:	common-all
+    main-is: TypeDataClassInstance
+    hs-source-dirs: app
+    --other-modules: Lib
+    ghc-options: -main-is TypeDataClassInstance
