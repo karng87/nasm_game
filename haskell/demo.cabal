@@ -42,3 +42,9 @@ executable form
     hs-source-dirs: app
     ghc-options: -main-is ForM
 --		other-modules: Lib
+
+executable sudoku
+    import: common-all
+    main-is: Sudoku.hs
+    hs-source-dirs: app 
+    ghc-options: -main-is Sudoku
