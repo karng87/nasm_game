@@ -1,0 +1,33 @@
+# << implicit-hie >> shell: gen-hie > hie.yaml
+cradle:
+  multi:
+    - path: "./app/Main.hs"
+      config:
+        cradle:
+          direct:
+            arguments: ["-i src", "-haddock"]
+    - path: "./src/Ga/Lib.hs"
+      config:
+        cradle:
+          direct:
+            arguments: ["-dynamic", "-haddock"]
+    - path: "./app/ForM.hs"
+      config:
+        cradle:
+          direct:
+            arguments: ["-dynamic", "-haddock"]
+    - path: "./app/Sudoku.hs"
+      config:
+        cradle:
+          direct:
+            arguments: ["-dynamic", "-haddock"]
+    - path: "./app/FpCourse.hs"
+      config:
+        cradle:
+          direct:
+            arguments: ["-dynamic", "-haddock"]
+    - path: "./app/TypeDataClassInstance.hs"
+      config:
+        cradle:
+          direct:
+            arguments: ["-dynamic", "-haddock"]

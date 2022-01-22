@@ -3,33 +3,31 @@ module Sudoku where
 main :: IO ()
 main = undefined
 
-{- basic declarations -}
-type Grid = Matrix Value
-type Matrix a = [Row a]
-type Row a = [a]
-type Value = Char
+{- Choices :: Matrix [Char] <=> [[['1'],..,['9']],[[1],...[]],[[1],..[9]]]-}
+{- Grid :: Matrix Char <=> [['1'],['2'],['.'],['4'],['5'],['.'],['7'],['.'],['9']] -}
+{- Row Char :: [Char] <=> ['1','.','2'] <=> "1.2" -}
+{- Value :: Char <=> '1' -}
 
-easy :: Grid
-easy = ["2....1.38",
-        "........5",
-        "........5",
-        "........5",
-        "........5",
-        "........5",
-        "........5",
-        "........5",
-        ".7...6..."]
+type Choices = [Value]    --  [["123.342"]]
+type Grid = Matrix Value  -- Matrix Char
+type Matrix a = [Row a]   -- [ ['a','b','c',], "2.31"]
+type Row a = [a]        -- "abc" == ['a','b','c']
+type Value = Char       -- 'a'
+
+easyM :: Matrix Int
+easyM = [[3,7],4,[5,2]]
+
+easyG :: Grid
+easyG = [".7....6.","2"]
+
+easyC :: Matrix [Char]
+easyC = [["1.......9"],["2.........8"]]
+
+easyP :: [Matrix Char]
+easyP = []
 
 blank :: Grid
 blank = replicate 9 (replicate 9 '.')
-
-{- Functons -}
-{- rows, clos, boxs :: Matrix a -> [Row a] -}
-{- valid :: Grid -> Bool -}
-{- Properties -}
-{- rows . rows = id -}
-{- cols . cols = id -}
-{- boxs . boxs = id -}
 
 rows :: Matrix a -> [Row a]
 --rows m = m
@@ -58,18 +56,25 @@ nodups (x:xs) = not (elem x xs) && nodups xs
 
 {- A basic solver -}
 {- makeing choies -}
-type Choices = [Value]
 
-choices :: Grid -> Matrix Choices
-choices g = map (map choice) g
-                      where
-                        choice v = if v == '.' then ['1'..'9']
-                                   else [v]
+-- TODO
+--choices :: Grid -> Matrix Choices
+--choices g = [map choice g]
+--               where
+--                 choice v = if v == '.' then ['1'..'9']
+--                            else [v]
 
 collapse :: Matrix [a] -> [Matrix a]
-collapse = undefined
+collapse m = undefined 
 
 -- https://www.youtube.com/watch?v=O1-ruHzabAU&list=PLF1Z-APd9zK5uFc8FKr_di9bfsYv8-lbc&index=3
 cp :: [[a]] -> [[a]]
-cp [] = [[]]
+cp [] = [[]] -- [] is not a $\emptyset$ but is the list type id
 cp (xs:xss) = [y:ys | y <- xs, ys <- cp xss]
+{- [ x | <- [] ] == [] -}
+{- [ x | <- [[]] ] == [[]] -}
+
+{- A basic solver -}
+solve :: Grid -> [Grid]
+solve = filter valid . collapse . choices
+
