@@ -1,14 +1,7 @@
 module Tmp where
 
 main :: IO ()
-main = do putStrLn "put a char:" 
-       >>= \_ -> getChar 
-       >>= \c -> if c /= ' ' 
-         then putChar c  
-           >>= \_ -> main
-         else putStrLn "A.txt" 
-           >>= \_ -> writeFile "A.txt" "Hi A.txt" 
-           >>= return
+main = putStrLn "put a char:" >> (getChar >>= \c -> if c /= ' ' then putChar c >> main else putStrLn "A.txt" >> writeFile "A.txt" "Hi A.txt")
 
 {- return :: a -> m a -}
 {- pure :: a -> f a -}
