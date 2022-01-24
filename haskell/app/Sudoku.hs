@@ -15,7 +15,7 @@ type Row a = [a]        -- "abc" == ['a','b','c']
 type Value = Char       -- 'a'
 
 easyM :: Matrix Int
-easyM = [[3,7],4,[5,2]]
+easyM = [[3,7],[5,2]]
 
 easyG :: Grid
 easyG = [".7....6.","2"]
@@ -76,5 +76,5 @@ cp (xs:xss) = [y:ys | y <- xs, ys <- cp xss]
 
 {- A basic solver -}
 solve :: Grid -> [Grid]
-solve = filter valid . collapse . choices
+solve = undefined
 

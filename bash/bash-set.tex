@@ -1,0 +1,35 @@
+\documentclass[a4paper]{moderncv}
+\usepackage[scale=0.9]{geometry}
+\usepackage{blindtext}
+\usepackage{amsmath, kotex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\moderncvtheme[blue]{classic}
+
+\firstname{set -x}
+\familyname{bash}
+\title{Title}
+
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+%\photo{logo.png}
+
+\recipient{수령지}{Songpa ku\Seoul\Korea}
+\opening{Latex에게}
+\closing{안녕~}
+
+\begin{document}
+%makelettertitle
+%\blindtext
+%makeletterclosing
+%\newpage
+
+\maketitle
+
+\section{set -x}
+\cventry{:=}{echo command before execute the command}{}{}{}{}
+\section{set -e}
+\cventry{:=}{if each commands return non zero then exit}{}{}{}{}
+\end{document}

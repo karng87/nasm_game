@@ -14,51 +14,58 @@ license:            MIT
 license-file:       LICENSE
 author:             karng87
 maintainer:         karng87@gmail.com
-common common-all
-    build-depends: base ^>= 4.14
-    default-language: Haskell2010
-    ghc-options: -Wall, -haddock
--- A copyright notice.
--- copyright:
--- category:
 
 extra-source-files:
     CHANGELOG.md
     README.md
 
 executable Main
-    import: common-all
     main-is: Main.hs
-
     -- Modules included in this executable, other than Main.
     other-modules: Ga.Lib
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     hs-source-dirs: app, src
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall, -haddock
+    default-language: Haskell2010
+
+executable Tmp
+    main-is: Tmp.hs
+    hs-source-dirs: app
+    -- other-modules: Lib
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall -haddock -main-is Tmp
+    default-language: Haskell2010
 
 executable ForM
-    import:	common-all
     main-is: ForM.hs
     hs-source-dirs: app
-    ghc-options: -main-is ForM
---		other-modules: Lib
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall, -haddock -main-is ForM
+    default-language: Haskell2010
+    -- other-modules: Lib
 
 executable Sudoku
-    import: common-all
     main-is: Sudoku.hs
     hs-source-dirs: app 
-    ghc-options: -main-is Sudoku
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall, -haddock -main-is Sudoku
+    default-language: Haskell2010
+
 executable FpCourse
-    import:	common-all
     main-is: FpCourse.hs
     hs-source-dirs: app, src
-    --other-modules: Lib
-    ghc-options: -main-is FpCourse
+    -- other-modules: Lib
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall, -haddock -main-is FpCourse
+    default-language: Haskell2010
 
 executable TypeDataClassInstance
-    import:	common-all
     main-is: TypeDataClassInstance.hs
     hs-source-dirs: app
-    --other-modules: Lib
-    ghc-options: -main-is TypeDataClassInstance
+    -- other-modules: Lib
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall, -haddock -main-is TypeDataClassInstance
+    default-language: Haskell2010
