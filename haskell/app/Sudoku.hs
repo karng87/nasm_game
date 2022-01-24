@@ -1,4 +1,5 @@
 module Sudoku where
+import Data.List (transpose)
 
 main :: IO ()
 main = undefined
@@ -30,12 +31,11 @@ blank :: Grid
 blank = replicate 9 (replicate 9 '.')
 
 rows :: Matrix a -> [Row a]
---rows m = m
-rows = id
--- Property: rows . rows = id
+rows  = id -- rows m = m
 
+-- Property: rows . rows = id
 cols :: Matrix a -> [Row a]
-cols  = undefined
+cols  = transpose
 -- Property: cols . cols = id
 
 boxs :: Matrix a -> [Row a]
@@ -58,11 +58,12 @@ nodups (x:xs) = not (elem x xs) && nodups xs
 {- makeing choies -}
 
 -- TODO
---choices :: Grid -> Matrix Choices
---choices g = [map choice g]
---               where
---                 choice v = if v == '.' then ['1'..'9']
---                            else [v]
+choices :: Grid -> Matrix Choices
+choices = undefined 
+
+mat :: Matrix Char 
+mat = ["1.234..."] 
+
 
 collapse :: Matrix [a] -> [Matrix a]
 collapse m = undefined 
