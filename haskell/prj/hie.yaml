@@ -1,0 +1,31 @@
+cradle:
+  cabal:
+    - path: "demoA/src"
+      component: "demoA:lib:mylib"
+
+    - path: "demoA/app/Main.hs"
+      component: "demoA:exe:main"
+
+    - path: "demoA/src/Main.hs"
+      component: "demoA:exe:main"
+
+    - path: "demoA/app/Tmp.hs"
+      component: "demoA:exe:Tmp"
+
+    - path: "demoA/app/ForM.hs"
+      component: "demoA:exe:ForM"
+
+    - path: "demoA/app/Sudoku.hs"
+      component: "demoA:exe:Sudoku"
+
+    - path: "demoA/app/FpCourse.hs"
+      component: "demoA:exe:FpCourse"
+
+    - path: "demoA/src/FpCourse.hs"
+      component: "demoA:exe:FpCourse"
+
+    - path: "demoA/app/TypeDataClassInstance.hs"
+      component: "demoA:exe:TypeDataClassInstance"
+
+    - path: "demoB/app/Main.hs"
+      component: "demoB:exe:main"

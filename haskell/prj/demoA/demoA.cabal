@@ -1,0 +1,87 @@
+cabal-version:      3.0
+name:               demoA
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+license:            MIT
+license-file:       LICENSE
+author:             karng87
+maintainer:         karng87@gmail.com
+
+
+extra-source-files:
+    CHANGELOG.md
+    README.md
+
+library mylib
+    visibility: public
+    exposed-modules: Mylib
+    hs-source-dirs: src
+    other-modules: Hello
+    build-depends: base ^>= 4.14, titlecase
+    ghc-options: -Wall -haddock
+    default-language: Haskell2010
+
+executable greet
+    main-is: Main.hs
+    -- other-modules: 
+    -- other-extensions:
+    hs-source-dirs: app, src
+    build-depends: base ^>= 4.14, mylib, titlecase 
+    ghc-options: -Wall -haddock
+    default-language: Haskell2010
+
+executable Tmp
+    main-is: Tmp.hs
+    hs-source-dirs: app
+    -- other-modules:
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall -haddock -main-is Tmp
+    default-language: Haskell2010
+
+executable ForM
+    main-is: ForM.hs
+    hs-source-dirs: app
+    build-depends: base ^>= 4.14
+    ghc-options: -Wall -haddock -main-is ForM
+    default-language: Haskell2010
+    -- other-modules: Lib
+
+executable Sudoku
+    main-is:            Sudoku.hs
+    hs-source-dirs:     app 
+    build-depends:      base ^>= 4.14
+    ghc-options:        -Wall -haddock -main-is Sudoku
+    default-language: Haskell2010
+
+executable FpCourse
+    main-is:            FpCourse.hs
+    hs-source-dirs:     app, src
+    -- other-modules: Lib
+    build-depends:      base ^>= 4.14
+    ghc-options:        -Wall -haddock -main-is FpCourse
+    default-language:   Haskell2010
+
+executable TypeDataClassInstance
+    main-is:            TypeDataClassInstance.hs
+    hs-source-dirs:     app
+    -- other-modules: Lib
+    build-depends:      base ^>= 4.14
+    ghc-options:        -Wall -haddock -main-is TypeDataClassInstance
+    default-language:   Haskell2010
+
+test-suite demoA-test
+    type:               exitcode-stdio-1.0
+    build-depends:      base>=4.14, mylib
+    hs-source-dirs:     tests 
+    default-language:   Haskell2010
+    main-is:            Test.hs
+    ghc-options:        -threaded -Wall
+

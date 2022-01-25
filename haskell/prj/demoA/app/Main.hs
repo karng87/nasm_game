@@ -1,6 +1,6 @@
 module Main where
 
-import qualified Ga.Lib as L
+import qualified Mylib as L
 import Data.Char
 import System.Environment
 

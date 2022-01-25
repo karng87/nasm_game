@@ -1,11 +1,12 @@
 {-# LANGUAGE Safe #-}
-module Ga.Lib where
+module Mylib where
 --import Data.ByteString (intercalate)
 
 import Data.Text.Titlecase
+import qualified Hello as H
 
 greet :: String -> String 
-greet who = titlecase $ "Hello, " <> who <> "!"
+greet = titlecase . H.hello
 
 pset' :: [Int] -> [[Int]]
 pset' [] = [[]]
