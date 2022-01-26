@@ -10,7 +10,32 @@ main = do
   putStrLn "The colors that you associate with 1,2,3 and 4 are: "
   mapM putStrLn colors
 
-main' :: IO [()]
-main' = pure [1..4] >>= mapM (\a -> putStrLn ("Which color " ++ show a ++ "?") >>=  (\x -> getLine)) >>= (\cs -> putStrLn "The color are: " >>= \_ -> mapM putStrLn cs)
+mainb :: IO[()]
+mainb = do
+  colors <- forM [1::Int ..4] (\a -> (putStrLn $ "what color do you associate with the number" ++ show a ++ "?")  >>= \x -> getLine)
+  putStrLn "The colors that you associate with 1,2,3 and 4 are: "
+  mapM putStrLn colors
 
+mainbb :: IO[()]
+mainbb = 
+  forM [1::Int ..4] (\a -> (putStrLn $ "what color do you associate with the number" ++ show a ++ "?")  >>= \x -> getLine)
+  >>= \cs -> putStrLn "The colors that you associate with 1,2,3 and 4 are: " >>= \_ -> mapM putStrLn cs
+
+mainbbb :: IO[()]
+mainbbb = 
+  forM [1::Int ..4] (\a -> (putStrLn $ "what color do you associate with the number" ++ show a ++ "?")  >> getLine)
+  >>= \cs -> putStrLn "The colors that you associate with 1,2,3 and 4 are: " >> mapM putStrLn cs
+main' :: IO [()]
+main' = pure [1::Int ..4] 
+  >>= mapM (\a -> putStrLn ("Which color do you associate number " ++ show a ++ "?") >>=  (\x -> getLine)) 
+  >>= (\cs -> putStrLn "The color are: " >>= \_ -> mapM putStrLn cs)
+
+main'' :: IO [()]
+main''= pure [1::Int ..4] 
+  >>= mapM (\a -> putStrLn ("Which color do you associate with the number " ++ show a ++ "?") >> getLine) 
+  >>= (\cs -> putStrLn "The color are: " >>  mapM putStrLn cs)
+
+main''' :: IO [()]
+main'''= mapM (\a -> putStrLn ("Which color do you associate with the number " ++ show a ++ "?") >> getLine) [1::Int ..4] 
+  >>= (\cs -> putStrLn "The color are: " >>  mapM putStrLn cs)
 

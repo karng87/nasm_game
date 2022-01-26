@@ -12,7 +12,6 @@ pkg-deps = titlecase
 FLAG_i = -isrc 
 #FLAG_i = -isrc -ilib/titlecase-1.0.1/src 
 #GHC_PACKAGE_PATH = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
-
 .PHONEY: all run clean echo test
 
 all: $(patsubst %.hs, bin/%, $(hss))
@@ -44,4 +43,3 @@ endif
 echo:
 	@echo $(tmp)
 	@echo "This is haskell demo dir"
-
