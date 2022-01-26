@@ -1,31 +1,34 @@
 cradle:
   cabal:
-    - path: "demoA/src"
-      component: "demoA:lib:mylib"
+    - path: "ademo/src"
+      component: "ademo:lib:mylib"
 
-    - path: "demoA/app/Main.hs"
-      component: "demoA:exe:main"
+    - path: "ademo/app/Main.hs"
+      component: "ademo:exe:greet"
 
-    - path: "demoA/src/Main.hs"
-      component: "demoA:exe:main"
+    - path: "ademo/src/Main.hs"
+      component: "ademo:exe:greet"
 
-    - path: "demoA/app/Tmp.hs"
-      component: "demoA:exe:Tmp"
+    - path: "ademo/app/Tmp.hs"
+      component: "ademo:exe:Tmp"
 
-    - path: "demoA/app/ForM.hs"
-      component: "demoA:exe:ForM"
+    - path: "ademo/app/ForM.hs"
+      component: "ademo:exe:ForM"
 
-    - path: "demoA/app/Sudoku.hs"
-      component: "demoA:exe:Sudoku"
+    - path: "ademo/app/Sudoku.hs"
+      component: "ademo:exe:Sudoku"
 
-    - path: "demoA/app/FpCourse.hs"
-      component: "demoA:exe:FpCourse"
+    - path: "ademo/app/FpCourse.hs"
+      component: "ademo:exe:FpCourse"
 
-    - path: "demoA/src/FpCourse.hs"
-      component: "demoA:exe:FpCourse"
+    - path: "ademo/src/FpCourse.hs"
+      component: "ademo:exe:FpCourse"
 
-    - path: "demoA/app/TypeDataClassInstance.hs"
-      component: "demoA:exe:TypeDataClassInstance"
+    - path: "ademo/app/TypeDataClassInstance.hs"
+      component: "ademo:exe:TypeDataClassInstance"
 
-    - path: "demoB/app/Main.hs"
-      component: "demoB:exe:main"
+    - path: "ademo/tests"
+      component: "ademo:test:demoA-test"
+
+    - path: "bdemo/app/Main.hs"
+      component: "bdemo:exe:main"

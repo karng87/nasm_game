@@ -1,5 +1,5 @@
 {-# LANGUAGE Safe #-}
-module Mylib where
+module Firstlib where
 --import Data.ByteString (intercalate)
 
 import Data.Text.Titlecase

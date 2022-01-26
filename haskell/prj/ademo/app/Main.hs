@@ -1,6 +1,6 @@
 module Main where
 
-import qualified Mylib as L
+import qualified Firstlib as L
 import Data.Char
 import System.Environment
 
