@@ -1,5 +1,6 @@
 module M1.List where
-import Prelude(Eq,Ord,Show(show),Bool(True,False),Int,Integer,(+),(*))
+import Prelude(Eq,Ord,Show,Bool,Int,(&&),(==),(/=),(<=),(+),(-),(*), Integer, undefined, seq, Num (abs))
+import M1.Optional
 
 data List t = Nil | t :. List t deriving (Eq,Ord,Show) -- t :. List t
 
@@ -15,14 +16,18 @@ infixr 5 :.
 -- in the different operator types
 
 infinity :: List Integer
-infinity = let inf x = x :. inf (x+1) in inf 0
+infinity = let inf x = x :. inf (x+1) in inf 1
+
+takeList :: Int -> List Integer -> List Integer
+takeList _ Nil = Nil
+takeList n (x:.xs) = if n <= 0 then Nil else x:. takeList (n-1) xs
 
 foldRight :: (a->b->b) -> b -> List a -> b
-foldRight _ i Nil = i
+foldRight _ i Nil = i  -- 중요중요
 foldRight f i (x:.xs) = f x (foldRight f i xs)
 
 foldLeft :: (b->a->b) -> b -> List a -> b
-foldLeft _ i Nil = i
+foldLeft _ i Nil = i  -- 중요중요
 foldLeft f i (x:.xs) = foldLeft f (f i x ) xs 
 
 headOr :: a -> List a -> a
@@ -40,7 +45,7 @@ length Nil = 0
 length (_:.xs) = 1 + length xs
 
 map :: (a -> b) -> List a -> List b
-map _ Nil = Nil
+map _ Nil = Nil 
 map f (x:.xs) = f x :. map f xs 
 
 filter :: (a -> Bool) -> List a -> List a
@@ -59,3 +64,26 @@ infixr 5 ++
 flatten :: List (List a) -> List a
 flatten Nil = Nil
 flatten (x:.xs) = x ++ flatten xs
+
+flatMap :: (a->List b) -> List a -> List b
+flatMap _ Nil = Nil
+flatMap f (x:.xs) = f x ++ flatMap f xs
+
+-- Full 1 :. Full 2:. Empty :. Full 3 :. Nil
+-- Full 1:.2:.3:.Nil
+
+seqOptional :: List (Optional a) -> Optional (List a)
+seqOptional = foldRight (\x' y' -> x' `adjFn` y') (Full Nil)
+  where
+    adjFn :: Optional a -> Optional (List a) -> Optional (List a)
+    adjFn Empty     _         = Empty 
+    adjFn _         Empty     = Empty
+    adjFn (Full x)  (Full y)  = Full (x:.y)
+
+find :: (a -> Bool) -> List a -> Optional a
+find _ Nil = Empty
+find f (x:.xs) = if f x then Full x else find f xs
+
+reverse :: List a -> List a
+reverse Nil = Nil
+reverse xs = foldLeft (\x y -> y :. x) Nil xs

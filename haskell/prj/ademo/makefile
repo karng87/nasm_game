@@ -6,19 +6,24 @@ endef
 tmp := $(shell find . -regextype posix-extended -regex '.*(bin/.*|tests/bin/.*|(\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$))' -and -not -regex '.*(\.git|pack)/.*')
 
 hss := $(notdir $(shell find -type f -regextype posix-extended -regex '.*/(app)/.+\.hs$$'))
+OBJS := $(notdir $(shell find -type f -regextype posix-extended -regex '.*/(src)/.+\.hs$$'))
 tss := $(notdir $(shell find -type f -regextype posix-extended -regex '.*/(tests)/.+\.hs$$'))
 pkg-db = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
 pkg-deps = titlecase
 FLAG_i = -isrc 
 #FLAG_i = -isrc -ilib/titlecase-1.0.1/src 
 #GHC_PACKAGE_PATH = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
-.PHONEY: all run clean echo test
+.PHONEY: all run clean echo test bin
 
-all: $(patsubst %.hs, bin/%, $(hss))
+all: $(patsubst %.hs, bin/%, $(hss)) $(patsubst %.hs, lib/%.hi, $(OBJS)) $(patsubst %.hs, lib/%.o, $(OBJS))
 
 bin/%: app/%.hs
 	$(MAKE) mkbin
-	ghc -v --make $(FLAG_i) -Wall -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps) 
+	ghc -v --make $(FLAG_i) -Wall -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
+
+lib/%.o: src/%.hs
+	$(MAKE) mklib
+	ghc -v --make $(FLAG_i) -Wall -odir $@ -hidir $@ $< -package-db $(pkg-db) -package $(pkg-deps) 
 
 
 test: test/Test.hs
@@ -27,6 +32,9 @@ test: test/Test.hs
 
 mkbin:
 	mkdir -p bin
+
+mklib:
+	mkdir -p lib
 
 run: bin/Main
 ifdef args 

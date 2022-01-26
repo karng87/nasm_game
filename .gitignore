@@ -1,3 +1,5 @@
+**/bin/**
+**/lib/**
 ############### vscode
 .vscode/*
 !.vscode/settings.json
