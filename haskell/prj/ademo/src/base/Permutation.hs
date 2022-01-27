@@ -10,8 +10,29 @@ import Distribution.Simple.Utils (xargs)
 split :: [a] -> [([a],[a])]
 split [] = []
 split [_] = []
-split (x:xs) = ([x],xs) : [(x:lhs, rhs) | (lhs, rhs) <- split xs]
+split (x:xs) = ([x],xs) : [(x:lhs,rhs) | (lhs, rhs) <- split xs ]
 
+-- [1,2,3,4]
+-- split [] =  []
+-- 
+-- split [4] = []
+-- 
+-- split [3,4] = ([3],4:[]) : [(3:[lhs],[rhs]) | (lhs, rhs) <- slit [4] ]
+-- split [3,4] = ([3],[4]) : [(3:[lhs],[rhs]) | (lhs, rhs) <- [] ]
+-- 
+-- split [3,4] = ([3],[4]) : [] =====> [([3],[4])]
+-- 
+-- split [2,3,4] = ([2],[3,4]) : [(2:[lhs],[rhs]) | (lhs, rhs) <- split [3,4] ]
+-- split [2,3,4] = ([2],[3,4]) : [([2,3],[4])]
+-- split [2,3,4] = [([2],[3,4]) , ([2,3],[4])]
+-- 
+-- split [1,2,3,4] = ([1],[2,3,4]) : [(1:[lhs],[rhs]) | (lhs, rhs) <- split [2,3,4] ]
+-- split [1,2,3,4] = ([1],[2,3,4]) : [([1,2],[3,4]) , ([1,2,3],[4])]
+
+
+-- split [] = []
+-- split [_] = []
+-- split (x:xs) = ([x],xs) : [(x:lhs, rhs) | (lhs, rhs) <- split xs]
 
 
 -- interleave 끼워넣기

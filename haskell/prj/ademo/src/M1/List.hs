@@ -1,5 +1,5 @@
 module M1.List where
-import Prelude(Eq,Ord,Show,Bool (False, True),Int,(<=),(+),(-),(*), Integer, const, (.), flip, (&&))
+import Prelude(Eq,Ord,Show,Bool (False, True),Int,(<=),(+),(-),(*), Integer, const, (.), flip, (&&), Num (abs))
 import M1.Optional
 
 data List t = Nil | t :. List t deriving (Eq,Ord,Show) -- t :. List t
@@ -135,6 +135,7 @@ produce f x = x:. produce f (f x)
 hlist :: List a -> [a]
 hlist = foldRight (\x y -> x : y) []
 
-{- nPr -}
-pumutation :: List a -> List (List a)
-pumutation = Nil:.Nil:.
+{- powerset o-}
+powerset :: List a -> List (List a)
+
+powerset (x:.xs)= foldLeft (\x' y' ->(y':.Nil):.x') Nil (x:.xs)
