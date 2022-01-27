@@ -1,6 +1,9 @@
 cradle:
   cabal:
     - path: "ademo/src"
+      component: "ademo:lib:testlib"
+
+    - path: "ademo/src"
       component: "ademo:lib:mylib"
 
     - path: "ademo/app/Main.hs"

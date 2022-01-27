@@ -19,6 +19,13 @@ maintainer:         karng87@gmail.com
 extra-source-files:
     CHANGELOG.md
     README.md
+library testlib
+    exposed-modules: M1.List 
+    hs-source-dirs: src
+    build-depends: base ^>= 4.14
+    other-modules: M1.Optional
+    ghc-options: -Wall -haddock
+    default-language: Haskell2010
 
 library mylib
     visibility: public

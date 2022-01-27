@@ -4,6 +4,7 @@ import Prelude(Eq,Show)
 
 data Optional a = Full a | Empty deriving (Eq,Show)
 
+
 mapOptional :: (a -> b) -> Optional a -> Optional b
 mapOptional f (Full x) = Full (f x)
 mapOptional _ _ = Empty
