@@ -61,6 +61,14 @@ executable ForM
     default-language: Haskell2010
     -- other-modules: Lib
 
+executable CountDown
+    main-is: CountDown.hs
+    hs-source-dirs: app
+    build-depends: base ^>= 4.14
+    -- other-modules: Hello
+    ghc-options: -Wall -haddock -main-is CountDown
+    default-language: Haskell2010
+
 executable Sudoku
     main-is:            Sudoku.hs
     hs-source-dirs:     app 

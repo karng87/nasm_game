@@ -1,18 +1,31 @@
-
--- Countdown example from chapter 9 of Programming in Haskell,
--- Graham Hutton, Cambridge University Press, 2016.
+module CountDown where
 
 import System.IO
 import System.CPUTime
 import Numeric
 import Data.List -- delete
 
+main :: IO ()
+main =  do 
+  hSetBuffering stdout NoBuffering
+  putStrLn "\nCOUNTDOWN NUMBERS GAME SOLVER"
+  putStrLn "-----------------------------\n"
+  putStr "Enter the given numbers : "
+  ns <- readLn
+  putStr "Enter the target number : "
+  n  <- readLn
+  display (solutions'' ns n)
+
 -- Arithmetic operators
 
 data Op = Add | Sub | Mul | Div
-op1 = Div 
+op1 :: Op
+op1 = Div
+
 data Expr = Val Int | App Op Expr Expr
-expr1 = App Add (App Mul (App Div (Val 6)(Val 3))(App Sub (Val 8)(Val 2)))(App Sub (Val 9)(Val 3))
+expr1 :: Expr
+expr1 = App Add (App Mul (App Div (Val 6)(Val 3)) (App Sub (Val 8)(Val 2))) (App Sub (Val 9)(Val 3))
+expr2 = App Add (App Mul (App Div (Val 6)(Val 3)) (App Sub (Val 8)(Val 12))) (App Sub (Val 9)(Val (-3)))
 
 instance Show Op where
    show Add = "+"
@@ -20,24 +33,18 @@ instance Show Op where
    show Mul = "*"
    show Div = "/"
 
+instance Show Expr where
+   show (Val n)     = show n
+   show (App o l r) = wh l ++ show o ++ wh r where -- op :: infix binary operators
+                      wh (Val n) = show n  -- show :: a -> [Char]
+                      wh expr = "(" ++ show expr ++ ")"
+
 -- all Expr > 0 && natural number
 valid :: Op -> Int -> Int -> Bool
 valid Add _ _ = True
 valid Sub x y = x > y
 valid Mul _ _ = True
 valid Div x y = x `mod` y == 0
-
-
--- Numeric expressions
---- evaluate Expr result in Val Int
-
-
-instance Show Expr where
-   show (Val n)     = show n
-   --show (App o l r) = "(" ++ show l ++ ")" ++ "[" ++ show o ++ "]" ++ "(" ++ show r ++ ")"
-   show (App o l r) = wh l ++ show o ++ wh r where
-                      wh (Val n) = show n
-                      wh expr = "(" ++ show expr ++ ")"
 
 values :: Expr -> [Int]
 values (Val n)     = [n]
@@ -52,9 +59,8 @@ apply Div x y = x `div` y
 
 eval :: Expr -> [Int]
 eval (Val n)     = [n | n > 0]
-eval (App op l r) = [apply op l' r' | l' <- eval l,
-                                      r' <- eval r,
-                                      valid op l' r']
+-- eval (App op l r) = [apply op l' r' | l' <- eval l, r' <- eval r, valid op l' r']
+eval (App op l r) = zipWith (apply op) (eval l) (eval r)
 
 -- Combinatorial functions
 subs :: [a] -> [[a]]
@@ -202,12 +208,3 @@ display es = do t0 <- getCPUTime
                             putStr (showtime ((t1 - t0) + (t3 - t2)))
                             putStr ".\n\n"
   
-main :: IO ()
-main =  do hSetBuffering stdout NoBuffering
-           putStrLn "\nCOUNTDOWN NUMBERS GAME SOLVER"
-           putStrLn "-----------------------------\n"
-           putStr "Enter the given numbers : "
-           ns <- readLn
-           putStr "Enter the target number : "
-           n  <- readLn
-           display (solutions'' ns n)

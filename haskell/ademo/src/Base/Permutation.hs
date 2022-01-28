@@ -1,4 +1,5 @@
-module Permutation where
+module Base.Permutation where
+
 import Data.List
 import Control.Monad
 import Distribution.Simple.Utils (xargs)
@@ -10,7 +11,8 @@ import Distribution.Simple.Utils (xargs)
 split :: [a] -> [([a],[a])]
 split [] = []
 split [_] = []
-split (x:xs) = ([x],xs) : [(x:lhs,rhs) | (lhs, rhs) <- split xs ]
+--split (x:xs) = ([x],xs) : (split xs >>= \(lhs,rhs) -> [(x:lhs,rhs)])
+split (x:xs) = ([x],xs) : (map (\(lhs,rhs) -> (x:lhs,rhs)) (split xs))
 
 -- [1,2,3,4]
 -- split [] =  []

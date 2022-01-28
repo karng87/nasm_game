@@ -1,6 +1,6 @@
 module Main where
 
-import Mylib
+import Firstlib 
 main :: IO ()
 main = 
   case greet "alice" of

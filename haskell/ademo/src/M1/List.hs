@@ -46,8 +46,8 @@ length = foldLeft (const . (+1)) 0
 --length Nil = 0
 --length (_:.xs) = 1 + length xs
 
-map :: (a -> b) -> List a -> List b
-map f = foldRight (\x y -> f x :. y ) Nil
+mapList :: (a -> b) -> List a -> List b
+mapList f = foldRight (\x y -> f x :. y ) Nil
 --map _ Nil = Nil 
 --map f (x:.xs) = f x :. map f xs 
 
@@ -135,7 +135,22 @@ produce f x = x:. produce f (f x)
 hlist :: List a -> [a]
 hlist = foldRight (\x y -> x : y) []
 
-{- powerset o-}
-powerset :: List a -> List (List a)
+{- split -}
+splitList :: List a -> List (List a ,List a)
+splitList Nil = Nil
+splitList (_:.Nil) = Nil
+splitList (x:.xs) = (x:.Nil, xs) :. mapList (\(lhs,rhs) -> (x:.lhs,rhs)) (splitList xs)
 
-powerset (x:.xs)= foldLeft (\x' y' ->(y':.Nil):.x') Nil (x:.xs)
+{- 사이사이 끼워넣기 -}
+interleaveA :: a -> List a -> List (List a)
+interleaveA x Nil = (x:.Nil):.Nil
+interleaveA x (y:.ys) = (x:.y:.ys) :. mapList (y:.) (interleaveA x ys)
+
+interleaveSelf:: List a -> List (List a)
+interleaveSelf Nil = Nil
+interleaveSelf (x:.xs) = interleaveA x xs
+
+interleaveN :: Int -> List a -> List (List a)
+interleaveN _ Nil = Nil
+interleaveN 0 _ = Nil
+interleaveN n (y:.ys) = interleaveA y ys ++ interleaveN (n-1) ys

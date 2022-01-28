@@ -18,6 +18,9 @@ cradle:
     - path: "ademo/app/ForM.hs"
       component: "ademo:exe:ForM"
 
+    - path: "ademo/app/CountDown.hs"
+      component: "ademo:exe:CountDown"
+
     - path: "ademo/app/Sudoku.hs"
       component: "ademo:exe:Sudoku"
 
