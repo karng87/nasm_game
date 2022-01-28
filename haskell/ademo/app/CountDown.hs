@@ -25,7 +25,7 @@ op1 = Div
 data Expr = Val Int | App Op Expr Expr
 expr1 :: Expr
 expr1 = App Add (App Mul (App Div (Val 6)(Val 3)) (App Sub (Val 8)(Val 2))) (App Sub (Val 9)(Val 3))
-expr2 = App Add (App Mul (App Div (Val 6)(Val 3)) (App Sub (Val 8)(Val 12))) (App Sub (Val 9)(Val (-3)))
+expr2 = App Add (App Mul (App Div (Val 6)(Val 3)) (App Sub (Val 8)(Val 2))) (App Sub (Val 3)(Val 9))
 
 instance Show Op where
    show Add = "+"
@@ -34,10 +34,10 @@ instance Show Op where
    show Div = "/"
 
 instance Show Expr where
-   show (Val n)     = show n
-   show (App o l r) = wh l ++ show o ++ wh r where -- op :: infix binary operators
-                      wh (Val n) = show n  -- show :: a -> [Char]
-                      wh expr = "(" ++ show expr ++ ")"
+  show (Val n)    = show n
+  show (App o l r)= wh l ++ show o ++ wh r where -- op :: infix binary operators
+                    wh (Val n) = show n  -- show :: a -> [Char]
+                    wh expr = "(" ++ show expr ++ ")"
 
 -- all Expr > 0 && natural number
 valid :: Op -> Int -> Int -> Bool
@@ -47,8 +47,12 @@ valid Mul _ _ = True
 valid Div x y = x `mod` y == 0
 
 values :: Expr -> [Int]
-values (Val n)     = [n]
-values (App _ l r) = values l ++ values r
+values (Val n) = [n]
+values App o l r = values l >>= \l' -> values r >>= \r' -> return l' ++ r'
+-- values (App _ l r) = values l ++ values r
+
+-- TODO unknown action
+--values (App _ l r) = values l >>= \l' -> values r  >>= \r' -> [0,l',r',9]
 
 -- div \iff all args \in \mathbb N
 apply :: Op -> Int -> Int -> Int
@@ -59,18 +63,26 @@ apply Div x y = x `div` y
 
 eval :: Expr -> [Int]
 eval (Val n)     = [n | n > 0]
+eval (App op l r) = eval l >>= \l' -> eval r >>= \r' -> [valid op l' r'] >>= \v -> if v then [apply op l' r'] else []
 -- eval (App op l r) = [apply op l' r' | l' <- eval l, r' <- eval r, valid op l' r']
-eval (App op l r) = zipWith (apply op) (eval l) (eval r)
+-- eval (App op l r) = zipWith (apply op) (eval l) (eval r)
 
--- Combinatorial functions
+-- Combinatial functions
 subs :: [a] -> [[a]]
 subs []     = [[]]
 subs (x:xs) = subs xs ++ map (x:) (subs xs) -- = yss ++ map (x:) yss where yss = subs xs
 
+bsubs :: [a] -> [[a]]
+bsubs [] = [[]]
+bsubs (x:xs) = bsubs xs >>= \x' -> [x'] ++ [x : x']
+
 -- nPr = permutation $ _nP_r = \frac{n!}{(n-r)!}$
-permutation :: Eq a => [a] -> Int -> [[a]]
-permutation np 0 = [[]]
-permutation np r = np >>= (\x -> (x:) <$> permutation (delete x np) (r-1))
+permutation :: Eq a => [a] -> [[a]]
+permutation []  = [[]]
+permutation (x:xs)  =  
+
+
+--permutation np r = np >>= (\x -> (x:) <$> permutation (delete x np) (r-1))
 
 -- power set 2^{n}
 powerset :: [a] -> [[a]]
