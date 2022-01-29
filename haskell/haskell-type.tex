@@ -25,6 +25,28 @@
 \maketitle
 
 \section{Prerequisite}
+\cventry{}{Obj(C)}{obj of Category}{}{}{}
+\cventry{}{Object}{set 이 될수 있는것}{}{}{}
+\cventry{}{Hom(C)}{homophism of Category}{}{}{}
+\cventry{}{MOrphism}{map arrow}{}{}{}
+\cventry{}{C(a,b)}{all mophism a to b in Category}{}{}{}
+\cventry{}{Category}{sets}{}{}{}
+\cventry{}{Monoid}{single object}{}{}{}
+\cventry{one object}{Monoid}{mempty}{monoid empty}{:: a}{}
+\cventry{}{Monoid}{mappend}{monoid append}{:: a $/to$ (a $/to$ a)}{return new function}
+\cventry{between C}{isomorphism}{linking category}{f $\circ$ g $\equiv$ h}{f' $\circ$ g' $\equiv$ h'}{}
+\cventry{between C}{class Functor f :: $\to$ * where}{}{}{}{}
+\cventry{Functor}{fmap :: (a $\to$ b) $\to$ (f a $\to$ f b)}{다른 집합에 사용 가능한 함수를 만들어 준다}{}{}{}
+\cventry{Functor}{fmap :: (a $\to$ b) $\to$ f a $\to$ f b}{함수를 다른 집합에 쏘아주는것이다}{that only takes a single unary function and lifts it into the functorial context}{}{}
+\cventry{Functor}{(<\$) :: a $\to$ f b $\to$ f a b}{}{}{}{}
+\cventry{Monoidal}{Monoidal Functors}{$\equiv$tensor category}{with a bifunctor}{(,)}{}
+\cventry{Monoidal}{class Funtor f $\Rightarrow$ Monoidal f where}{:with a bifunctor}{(,)}{}{}
+\cventry{Monoidal}{unit :: f()}{:with a bifunctor}{(,)}{}{}
+\cventry{Monoidal}{(**) :: f a $\to$ f b $\to$ f (a,b)}{:with a bifunctor}{(,)}{}{}
+\cventry{Monoidal}{instanc Monoidal [] where}{:with a bifunctor}{(,)}{}{}
+\cventry{Monoidal}{unit = [()]}{:with a bifunctor}{(,)}{}{}
+\cventry{Monoidal}{(**) as bs = [(a,b) | a $\gets$ as, b $\gets$ bs]}{:with a bifunctor}{(,)}{}{}
+\cventry{}{map f (map g)}{map (f $\circ$ g}{}{}{}
 \cventry{Type}{이미 정해진 규격을 만들어 놓고 그 중에서 하나만 선택하게 만들어야 할때}{}{}{}{}
 \cventry{Constructor}{= Cardinality: 규격중 선택 할 수 있는 목록을 제시하는 것}{}{}{}{}
 
