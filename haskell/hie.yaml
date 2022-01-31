@@ -38,3 +38,9 @@ cradle:
 
     - path: "bdemo/app/Main.hs"
       component: "bdemo:exe:main"
+
+    - path: "lense/app/Main.hs"
+      component: "lense:exe:lense"
+
+    - path: "lense/src/Main.hs"
+      component: "lense:exe:lense"

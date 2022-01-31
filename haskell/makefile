@@ -1,8 +1,9 @@
 SHELL := /bin/bash
 define func
-  for i in $(shell find . -name "makefile" | sed -En '/\.\/makefile/!{s/makefile//p}') ; do $(MAKE) -C $$i $1;done
+	for i in $(shell find . -name "makefile" | sed -En '/\.\/makefile/!{s/makefile//p}') ; do $(MAKE) -C $$i $1;done
 endef
 
+tmp := $(shell find . -type f -regextype posix-extended -regex '.*(build|src|app)/.*\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$')
 texs := $(notdir $(shell find -maxdepth 1 -name "*.tex"))
 
 .PHONEY: all clean recursive, run, echo
@@ -22,14 +23,11 @@ mkbuild:
 recursive:
 	@$(call func,all)
 
-tmp := $(shell find . -regextype posix-extended -regex '.*(build/.*|tests/bin/.*|(\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$))' -and -not -regex '.*(\.git|pack)/.*')
-
-# TODO not work
 clean:
-ifneq (tmp,'')
+ifneq ('', tmp)
 	rm $(tmp)
 endif
-
+	@$(call func,$@)
 
 echo:
 	@echo "This is root dir"

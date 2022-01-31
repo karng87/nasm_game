@@ -62,7 +62,7 @@ ncr :: [a] -> Int -> [[a]]
 ncr _ 0 = [[]]
 ncr xs n = filter (\x -> length x == n) $ pset xs
 
-npr :: [a] -> Int -> [[a]]
-npr _ 0 = [[]]
-npr (xs) n = concat $ map  perm $ filter (\x -> length  x == n) $ pset (xs)
+nPr :: [a] -> Int -> [[a]]
+nPr _ 0 = [[]]
+nPr (xs) n = concat $ map  perm $ filter (\x -> length  x == n) $ pset (xs)
 
