@@ -9,30 +9,22 @@ instance Show Foo where
 -- a := a value in the structure
 -- data Lense s a = Lense {view :: s -> a, set :: a -> s -> s}
 data Lense s a = Lense (s -> a) (a -> s -> s)
-
 view :: Lense s a -> s -> a
 view (Lense sa ass) s = sa s  
-
 set :: Lense s a -> a -> s -> s
 set (Lense sa ass) a s  = ass a s
 
 type Lense' s a = (a -> a) -> s -> s
+lense' :: (s -> a) -> (s -> a -> s) -> Lense' s a
+lense' sa sas aa s =  sas s $ aa (sa s)
 
-barLense :: Lense Foo (Int,Int)
-barLense = Lense bar (\x m -> m{bar=x})
+set' :: Lense' s a -> a -> s -> s
+set' l a s = l (const a) s
 
-getBar :: Foo -> (Int,Int)
-getBar  = bar
-setBar :: (Int, Int) -> Foo -> Foo
-setBar x m = m{bar=x}
-
-foo :: Foo
-foo = Foo (1,2) 'c'
+--view' :: Lense' s a -> s -> a
+--view' l s = l s
 
 main :: IO ()
 main = do
-  print $ view (Lense bar (\x m -> m{bar=x})) (Foo (1,2) 'b')
-  print $ set (Lense bar $ \x m -> m{bar=x}) (9,9) (Foo (1,2) 'b')
-  print $ set (Lense bar (\x m -> m{bar=x})) (set (Lense snd (\x (i,_) -> (i,x))) 9 (1,2)) (Foo (1,2) 'a')
-  print $ view (Lense (\(_,j) -> j) (\a (i,_) -> (i,a))) (9,8)
-  print $ set (Lense (\(_,j) -> j) (\a (i,_) -> (i,a))) 3 (1,2)
+  print $ set' ((lense' bar  (\m x -> m{bar=x})) . (lense' (\(_,j)-> j) (\(i,_) j' ->(i,j')))) 9  (Foo (1,2) 'c')
+  print $ set' ((lense' baz  (\m x -> m{baz=x})) . (lense' (\i -> i) (\i j -> j ))) 'f'  (Foo (1,2) 'c')
