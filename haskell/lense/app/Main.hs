@@ -1,51 +1,25 @@
 module Main where
-import Data.List (delete)
-{- 
-($) :: (a->b) -> (a->b)
-f $ g x = f (g x)
--}
-{- 
-s := stuff 
-a := magnitude stuf
-{} \iff record update notation
--}
-data Foo = Foo {bar :: (Int, Int), baz :: Char} 
--- {} is record notation 
--- view /iff  bar Foo or baz Foo
--- update /iff Foo{bar=(new)}
+import Data.List
 
-mytuple :: (Int,Int)
-mytuple = (1,2)
-myfoo :: Foo
-myfoo = Foo mytuple 'c'
-foo = myfoo{bar = (10,20)}
-
-data Lense s a = Lense {get :: s -> a, set :: s -> a -> s}
-
+data Foo = Foo {bar :: (Int, Int), baz :: Char}
 instance Show Foo where
-  show (Foo (i,j) c)=  "(" <> show i <> "," <> show j <> ") " <> show c -- = print Foo (3,4) 'cc
+  show (Foo r z) = "Foo " <> show r <> " " <> show z
 
-barL :: Lense Foo (Int,Int)
-barL = Lense bar $ \m x -> m{bar=x}
+data Lense s a = Lense {view :: s -> a, set :: a -> s -> s}
 
-barL' = Lense getbar setbar
-getbar :: Foo -> (Int,Int)
-getbar = bar
-setbar :: Foo -> (Int,Int) -> Foo
-setbar f r = f{bar=r}
+barLense :: Lense Foo (Int,Int)
+barLense = Lense bar (\x m -> m{bar=x})
 
-bar2L :: Lense (Int,Int) Int
-bar2L = Lense snd $ \(i,_) j' -> (i,j')
+getBar :: Foo -> (Int,Int)
+getBar  = bar
+setBar :: (Int, Int) -> Foo -> Foo
+setBar x m = m{bar=x}
 
-bar2L' = Lense get_2 set_2
-get_2 :: (Int,Int) -> Int
-get_2 (_,j) = j
-set_2 :: (Int,Int) -> Int -> (Int, Int)
-set_2 (i,_) j' = (i,j')
+foo :: Foo
+foo = Foo (1,2) 'c'
 
 main :: IO ()
 main = do
-  print $ get barL foo
-  print $ set barL foo (5,5)
-  print $ get bar2L mytuple
-  print $ set bar2L mytuple 10
+  print $ view (Lense bar (\x m -> m{bar=x})) (Foo (1,2) 'b')
+  print $ set (Lense bar $ \x m -> m{bar=x}) (9,9) (Foo (1,2) 'b')
+  print $ set (Lense bar (\x m -> m{bar=x})) (set (Lense snd (\x (i,_) -> (i,x))) 9 (1,2)) (Foo (1,2) 'a')
