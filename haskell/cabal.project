@@ -1,4 +1,1 @@
-packages: 
-  ademo/
-  bdemo/
-  lense/
+packages: */*.cabal

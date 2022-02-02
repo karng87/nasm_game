@@ -44,3 +44,6 @@ cradle:
 
     - path: "lense/src/Main.hs"
       component: "lense:exe:lense"
+
+    - path: "rankN/app/Main.hs"
+      component: "rankN:exe:rankN"
