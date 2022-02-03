@@ -20,8 +20,23 @@ maintainer:         karng87@gmail.com
 -- copyright:
 -- category:
 extra-source-files: CHANGELOG.md
+executable LenseOver
+    main-is: LenseOver.hs
+    hs-source-dirs: app, src
+    build-depends: base ^>= 4.14
+    -- other-modules: Hello
+    ghc-options: -Wall -haddock -main-is LenseOver
+    default-language: Haskell2010
 
-executable lense
+executable LenseIdConstFunctor
+    main-is: LenseIdConstFunctor.hs
+    hs-source-dirs: app
+    build-depends: base ^>= 4.14.3.0
+    -- other-modules: Hello
+    ghc-options: -Wall -haddock -main-is LenseIdConstFunctor
+    default-language: Haskell2010
+
+executable Main
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
@@ -30,5 +45,6 @@ executable lense
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:    base ^>=4.14.3.0
-    hs-source-dirs:   app, src
+    hs-source-dirs:   app
     default-language: Haskell2010
+    ghc-options: -Wall -haddock
