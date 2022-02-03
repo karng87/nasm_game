@@ -16,21 +16,21 @@ all: $(patsubst %.hs, build/libs/%, $(libs)) $(patsubst %.hs, build/bin/%, $(hss
 
 build/bin/%: app/%.hs
 	$(MAKE) mkbin
-	ghc -v $(FLAG_i) -Wall -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
+	ghc $(FLAG_i) -Wall -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/%.hs
 	$(MAKE) mklib
-	ghc -v $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
+	ghc $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/Base/%.hs
-	ghc -v $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
+	ghc $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/M1/%.hs
-	ghc -v $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
+	ghc $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/tests/bin/%: tests/%.hs
 	$(MAKE) mktests
-	ghc -v $(FLAG_i) -Wall -odir build/tests -hidir build/tests -o $(patsubst %.hs,build/tests/bin/%,$(notdir $<)) $< -package-db $(pkg-db) -package $(pkg-deps)
+	ghc $(FLAG_i) -Wall -odir build/tests -hidir build/tests -o $(patsubst %.hs,build/tests/bin/%,$(notdir $<)) $< -package-db $(pkg-db) -package $(pkg-deps)
 
 mkbin:
 	mkdir -p build/bin
