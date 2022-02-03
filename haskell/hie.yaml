@@ -39,10 +39,10 @@ cradle:
     - path: "bdemo/app/Main.hs"
       component: "bdemo:exe:main"
 
-    - path: "lense/app/LenseOver.hs"
-      component: "lense:exe:LenseOver"
+    - path: "lense/app/LenseMultiple.hs"
+      component: "lense:exe:LenseMultiple"
 
-    - path: "lense/src/LenseOver.hs"
+    - path: "lense/app/LenseOver.hs"
       component: "lense:exe:LenseOver"
 
     - path: "lense/app/LenseIdConstFunctor.hs"

@@ -2,7 +2,8 @@ define func
 	for i in $(shell find . -regextype posix-extended -regex '.*makefile$$' -and -not -regex '.*(\.git)/.*' | sed -En '/\.\/makefile/!{s/makefile//p}') ; do $(MAKE) -C $$i $1;done
 endef
 
-tmp := $(shell find . -type f -regextype posix-extended -regex '.*(build/.*|(\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$))' -and -not -regex '.*(\.git|pack)/.*')
+tmp := $(shell find . -type f -regextype posix-extended -regex '(./build/.*)|(./(app|src|test)/.*(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
+
 
 pkg-db = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
 pkg-deps = titlecase
@@ -53,13 +54,9 @@ else
 endif
 
 clean:
-ifneq ($(tmp),"")
 	rm $(tmp)
-else
-	$(info $(tmp))
-endif
 
 echo:
 	$(info info tmp: "$(tmp)")
-	@echo "This is haskell demo dir"
+	@echo "This is bdemo haskell dir"
 

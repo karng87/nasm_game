@@ -1,7 +1,8 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module LIdentity where
+module LenseIdConstFunctor where
+
 main :: IO ()
 main = do
   print "=== Lense set Identity ==="

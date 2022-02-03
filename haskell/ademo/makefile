@@ -2,7 +2,7 @@ define func
 	for i in $(shell find . -regextype posix-extended -regex '.*makefile$$' -and -not -regex '.*(\.git)/.*' | sed -En '/\.\/makefile/!{s/makefile//p}') ; do $(MAKE) -C $$i $1;done
 endef
 
-tmp := $(shell find . -type f -regextype posix-extended -regex '.*(build/.*|(\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$))' -and -not -regex '.*(\.git|pack)/.*')
+tmp := $(shell find . -type f -regextype posix-extended -regex '(./build/.*)|(./(app|src|test)/.*(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
 pkg-db = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
 pkg-deps = titlecase
 FLAG_i = -isrc
@@ -16,7 +16,7 @@ all: $(patsubst %.hs, build/libs/%, $(libs)) $(patsubst %.hs, build/bin/%, $(hss
 
 build/bin/%: app/%.hs
 	$(MAKE) mkbin
-	ghc $(FLAG_i) -Wall -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
+	ghc $(FLAG_i) -Wall -odir build -hidir build -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/%.hs
 	$(MAKE) mklib
