@@ -5,8 +5,8 @@ org 0x7c00
   mov ds, ax
   mov es, ax
 
-  .init:
-      mov si, msg
+  .init: ; /sum _si=0 ^eq=0 (int 0x10)
+      mov si, msg ;  
       cld
       mov ah, 0xe
   .check:

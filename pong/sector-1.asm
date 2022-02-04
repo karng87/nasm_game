@@ -1,3 +1,8 @@
+;-----------
+; format USB
+; dd if=/dev/zero of=/dev/sdb count=2880 bs=512
+; times (2880 * 512) - ($-$$) db 0
+; xxd /dev/sdb
 ; ----------
 ; ram
 ;   0x_7c00 ~ 0x7dff  512 bootloader

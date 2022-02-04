@@ -39,6 +39,9 @@ cradle:
     - path: "bdemo/app/Main.hs"
       component: "bdemo:exe:main"
 
+    - path: "learnyouahaskell/app/Main.hs"
+      component: "learnyouahaskell:exe:learnyouahaskell"
+
     - path: "lense/app/LenseMultiple.hs"
       component: "lense:exe:LenseMultiple"
 
@@ -50,6 +53,27 @@ cradle:
 
     - path: "lense/app/Main.hs"
       component: "lense:exe:Main"
+
+    - path: "quickCheck/src"
+      component: "quickCheck:lib:Lib"
+
+    - path: "quickCheck/app/Main.hs"
+      component: "quickCheck:exe:quickCheck"
+
+    - path: "quickCheck/src/Main.hs"
+      component: "quickCheck:exe:quickCheck"
+
+    - path: "quickCheck/app/Lib.hs"
+      component: "quickCheck:exe:quickCheck"
+
+    - path: "quickCheck/app/Lib2.hs"
+      component: "quickCheck:exe:quickCheck"
+
+    - path: "quickCheck/src/Lib.hs"
+      component: "quickCheck:exe:quickCheck"
+
+    - path: "quickCheck/src/Lib2.hs"
+      component: "quickCheck:exe:quickCheck"
 
     - path: "rankN/app/Main.hs"
       component: "rankN:exe:rankN"
