@@ -39,6 +39,9 @@ cradle:
     - path: "bdemo/app/Main.hs"
       component: "bdemo:exe:main"
 
+    - path: "domainModeling/app/Main.hs"
+      component: "domainModeling:exe:domainModeling"
+
     - path: "learnyouahaskell/app/Main.hs"
       component: "learnyouahaskell:exe:learnyouahaskell"
 

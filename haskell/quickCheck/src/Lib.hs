@@ -2,7 +2,6 @@ module Lib(someFunc) where
 
 --import Lib2 (add)
 import Test.QuickCheck(quickCheck)
-import Test.TypeSpec(
 
 someFunc :: IO ()
 someFunc = quickCheck prop_reverse
