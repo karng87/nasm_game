@@ -17,13 +17,13 @@ set_cursor_shape:
     mov cl, 0x07    ; end scanline
     int 0x10        ; box
 
-set_cursor_position
+set_cursor_position:
     mov ah, 2       ; cursor position
     mov dh, 24      ; dh = rows
     mov dl, 79      ; dl = columns
     int 0x10
     
-jmp game_start
+jmp $
 
 times 510 - ($-$$) db 0
 dw 0xaa55

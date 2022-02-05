@@ -18,12 +18,18 @@ set_cursor_shape:
     mov cl, 0x07    ; end scanline
     int 0x10        ; box
 
-set_cursor_position
+set_cursor_position:
     mov ah, 2       ; cursor position
     mov dh, 24      ; dh = rows
     mov dl, 79      ; dl = columns
     int 0x10
 
+;=================================
+; https://wiki.osdev.org/Text_UI
+;Bit 7|654||3|210
+;   7:= bg brightness, 654:=bg color , 3:=fg brightness 210:=fg color
+; 1111|0000 := white(bg)|black(fg)
+; 1111|1111 := white(bg)|white(fg)
 screen_clear:
     xor di, di
   .lp:
@@ -35,7 +41,7 @@ screen_clear:
     cmp di, (80 * 2) * 25 - 1
     jl .lp
 
-jmp game_start
+jmp screen_clear
 
 times 510 - ($-$$) db 0
 dw 0xaa55
