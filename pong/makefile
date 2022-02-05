@@ -1,24 +1,23 @@
 # sudo dd if=pong.img of=/dev/sdb count=1 bs=512
 		#dd if=/dev/zero of=floppy.bin count=2878 bs=512
 		#cat $(TARGET-1) $(TARGET-2) floppy.bin > $(OUT)
-TARGET = pong.bin
-TARGET-1 += sector-1.bin
-TARGET-2 += sector-2.bin
-TARGETS = $(TARGET) $(TARGET-1) $(TARGET-2)
-OUT = GameOS.img
+TARGET := build/pong.bin
+TARGET += build/sector-1.bin
+.PHONY: all run mkdir 
 
-OUT = pong.bin
+all: $(TARGET)
 
-.PHONY: all run 
-all: $(OUT)
+build/%.bin: mkdir ./%.asm
+	nasm -f bin $(word 2,$^) -o $@
 
-%.bin: %.asm
-		nasm -f bin $< -o $@
+run: $(TARGET)
+	qemu-system-i386 -drive file=$(TARGET),format=raw
 
-run:
-		@$(MAKE)
-		@qemu-system-i386 -drive file=$(OUT),format=raw
+xxd: $(word 1, $(TARGET))
+	xxd $<
+
+mkdir:
+	mkdir -p build
 
 clean:
-		@rm *.img *.bin
-
+	@rm $(TARGET)
