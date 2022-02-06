@@ -39,6 +39,15 @@ cradle:
     - path: "bdemo/app/Main.hs"
       component: "bdemo:exe:main"
 
+    - path: "countdown/app/Countdown.hs"
+      component: "countdown:exe:countdown"
+
+    - path: "countdown/src/Countdown.hs"
+      component: "countdown:exe:countdown"
+
+    - path: "countdown/app/Main.hs"
+      component: "countdown:exe:main"
+
     - path: "domainModeling/app/Main.hs"
       component: "domainModeling:exe:domainModeling"
 
@@ -80,3 +89,6 @@ cradle:
 
     - path: "rankN/app/Main.hs"
       component: "rankN:exe:rankN"
+
+    - path: "tictactoe/app/Main.hs"
+      component: "tictactoe:exe:tictactoe"

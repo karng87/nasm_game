@@ -3,7 +3,6 @@ define func
 endef
 
 tmp := $(shell find . -type f -regextype posix-extended -regex '(./build/.*)|(./(app|src|test)/.*(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
-
 pkg-db = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
 pkg-deps = titlecase
 FLAG_i = -isrc
@@ -11,38 +10,38 @@ hss = $(notdir $(shell find app -name "*.hs"))
 libs := $(notdir $(shell find -type f -regextype posix-extended -regex '.*(src)/.+\.hs$$'))
 tests := $(notdir $(shell find -type f -regextype posix-extended -regex '.*(tests)/.+\.hs$$'))
 
-.PHONEY: all run clean echo mkbin mklib mktests
+.PHONEY: all run clean echo
 
 all: $(patsubst %.hs, build/bin/%, $(hss)) $(patsubst %.hs, build/libs/%, $(libs)) $(patsubst %.hs, build/tests/bin/%, $(tests))
 
 build/bin/%: app/%.hs
-	$(MAKE) mkbin
-	ghc -v --make $(FLAG_i) -Wall  -odir build -hidir build -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
+	$(MAKE) build/bin
+	ghc --make $(FLAG_i) -Wall  -odir build -hidir build -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/%.hs
-	$(MAKE) mklib
-	ghc -v --make $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
+	$(MAKE) build/libs
+	ghc --make $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/Base/%.hs
-	$(MAKE) mklib
-	ghc -v --make $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
+	$(MAKE) build/libs
+	ghc --make $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/M1/%.hs
-	$(MAKE) mklib
-	ghc -v --make $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
+	$(MAKE) build/libs
+	ghc --make $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/tests/bin/%: tests/%.hs
-	$(MAKE) mktests
-	ghc -v --make $(FLAG_i) -Wall -odir build/tests -hidir build/tests -o $(patsubst %.hs,build/tests/bin/%,$(notdir $<)) $< -package-db $(pkg-db) -package $(pkg-deps)
+	$(MAKE) build/tests/bin
+	ghc --make $(FLAG_i) -Wall -odir build/tests -hidir build/tests -o $(patsubst %.hs,build/tests/bin/%,$(notdir $<)) $< -package-db $(pkg-db) -package $(pkg-deps)
 
-mkbin:
-	mkdir -p build/bin
+build/bin:
+	mkdir -p $@
 
-mklib:
-	mkdir -p build/libs
+build/libs:
+	mkdir -p $@
 
-mktests:
-	mkdir -p build/tests/bin
+build/tests/bin:
+	mkdir -p $@
 
 run: build/bin/Main
 ifdef args 
@@ -56,5 +55,5 @@ clean:
 
 echo:
 	@echo $(tmp)
-	@echo "This is rankN haskell dir"
+	@echo "This is haskell demo dir"
 

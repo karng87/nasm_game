@@ -49,15 +49,3 @@ calculateReport budget transaction = Report{
     netProfit' = getSum(foldMap asProfit transaction)
     asProfit (Sale m) = pure m
     asProfit (Purchase m) = pure (negate m)
-
-calculateProjectReport :: Project -> IO Report
-calculateProjectReport = calc
-  where
-    calc (Project p _) =
-      calculateReport <$> getBudget p <*> getTransactions p
-    calc (ProjectGroup _ projects) = foldMap calc projects
-
-instance Monoid Report where
-  mempty = Report 0 0 0
-  mappend (Report b1 n1 d1) (Report b2 n2 d2) =
-    Report (b1 + b2) (n1 + n2) (d1 + d2)

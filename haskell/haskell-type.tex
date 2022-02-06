@@ -1,6 +1,6 @@
 \documentclass[a4paper]{moderncv}
 \usepackage[scale=0.9]{geometry}
-\usepackage{amsmath, kotex}
+\usepackage{amsmath, amsfonts, kotex}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
@@ -185,6 +185,7 @@
 \section{syntax}
 \cventry{where}{where}{bindings are a syntactic construct that let you bind to variables at the end of a function}{and}{the whole function can see them}{including all the guards}
 \cventry{let}{let}{you bind to variables anywhere}{and, are expressions themselves}{but are very local}{so they don't span across guards}
+
 \section{Math Terms}
 \cvitem{Perfect number}{a positive integer is perfect if it equals the sum of all of its factors, excluding the number itself}
 \cvitem{Isomorphic}{with the same cardinality, same structure wrt a function}
@@ -194,6 +195,10 @@
 \cvitem{induction}{귀납, 유도}
 \cvitem{congruence}{합동}
 \cvitem{conjugate}{켤레}
+\cventry{category}                      {Magma}    {$\forall {a,b} \in \mathbb{M} \implies a \cdot b \in \mathbb{M} $}{$\cdot$ is binary operator}{}{}
+\cventry{associative Magma}             {Semigroup}{$\forall {a,b,c} \in \mathbb{M} \implies (a \cdot b) \cdot c = a \cdot (b \cdot c) holds $}{associative}{}{}
+\cventry{$\exists {id} \in$ Semigroup}  {Monoid}   {$\exists{e} \in \mathbb{S} \implies e \cdot a = a \cdot e = a holds$}{identity element}{associatvie}{}
+\cventry{$\exists$ inverse $\in$ Monoid}{Group}    {$\exists{a^{-1}} \in \mathbb{M} \implies a^{-1} \cdot a = a \cdot a^{-1} = e holds$}{inverse}{id element}{associative}
 
 \section{Language Terms}
 \cvitem{Terminal}{grammer에 종속되는 symbol}

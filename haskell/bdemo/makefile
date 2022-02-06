@@ -13,38 +13,38 @@ hss = $(notdir $(shell find app -name "*.hs"))
 libs := $(notdir $(shell find -type f -regextype posix-extended -regex '.*(src)/.+\.hs$$'))
 tests := $(notdir $(shell find -type f -regextype posix-extended -regex '.*(tests)/.+\.hs$$'))
 
-.PHONEY: all run clean echo mkbin mklib mktests
+.PHONEY: all run clean echo
 
 all: $(patsubst %.hs, build/libs/%, $(libs)) $(patsubst %.hs, build/bin/%, $(hss)) $(patsubst %.hs, build/tests/bin/%, $(tests))
 
 build/bin/%: app/%.hs
-	$(MAKE) mkbin
+	$(MAKE) build/bin 
 	ghc $(FLAG_i) -Wall -odir build -hidir build -main-is $(shell sed -En 's/.*\/([^.]+)\.hs$$/\1/p' <<< $<) -o $@ $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/%.hs
-	$(MAKE) mklib
+	$(MAKE) build/libs
 	ghc $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/Base/%.hs
-	$(MAKE) mklib
+	$(MAKE) build/libs
 	ghc $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/libs/%: src/M1/%.hs
-	$(MAKE) mklib
+	$(MAKE) build/libs 
 	ghc $(FLAG_i) -Wall -odir build/libs -hidir build/libs $< -package-db $(pkg-db) -package $(pkg-deps)
 
 build/tests/bin/%: tests/%.hs
-	$(MAKE) mktests
+	$(MAKE) buil/tests/bin
 	ghc $(FLAG_i) -Wall -odir build/tests -hidir build/tests -o $(patsubst %.hs,build/tests/bin/%,$(notdir $<)) $< -package-db $(pkg-db) -package $(pkg-deps)
 
-mkbin:
-	mkdir -p build/bin
+build/bin:
+	mkdir -p $@
 
-mklib:
-	mkdir -p build/libs
+build/libs:
+	mkdir -p $@
 
-mktests:
-	mkdir -p build/tests/bin
+build/tests/bin:
+	mkdir -p $@
 
 run: build/bin/Main
 ifdef args 

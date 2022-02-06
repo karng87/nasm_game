@@ -3,32 +3,29 @@ define func
 	for i in $(shell find . -name "makefile" | sed -En '/\.\/makefile/!{s/makefile//p}') ; do $(MAKE) -C $$i $1;done
 endef
 
-tmp := $(shell find . -type f -regextype posix-extended -regex '.*(build|src|app)/.*\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$')
+tmp := $(shell find . -type f -regextype posix-extended -regex '.*\.(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$' -and -not -regex '.*/(.git|dist.*|pdf)/.*')
 texs := $(notdir $(shell find -maxdepth 1 -name "*.tex"))
-
+target := ./build/haskell-type.pdf
 .PHONEY: all clean recursive, run, echo
 
 all: $(patsubst %.tex, build/%.pdf, $(texs)) recursive
 
 build/%.pdf: %.tex
-	$(MAKE) mkbuild
-	@pdflatex --jobname=$(patsubst %.tex,build/%, $<) $<
+	$(MAKE) build
+	pdflatex --jobname=$(patsubst %.tex,build/%,$<) $<
 
-pdf :$(patsubst %.tex, build/%.pdf, $(texs))
-	@nohup zathura $< &
+pdf: $(target) $(patsubst %.tex, build/%.pdf, $(texs))
+	nohup zathura $(word 1,$^) &
 
-mkbuild:
-	mkdir -p build
+build:
+	mkdir -p $@
 
 recursive:
-	@$(call func,all)
+	$(call func,all)
 
 clean:
-ifneq ('', tmp)
 	rm $(tmp)
-endif
-	@$(call func,$@)
 
 echo:
-	@echo "This is root dir"
-	@$(call func,$@)
+	echo "This is haskell root dir"
+	$(call func,$@)
