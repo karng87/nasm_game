@@ -1,5 +1,4 @@
 module Countdown where
-import Control.Monad
 
 main :: IO ()
 main = do
@@ -23,9 +22,14 @@ instance Show Expr where
   show (Val n)= show n
   show (App o l r) =  case o of Add -> "(" <> show l <> "+" <> show r <> ")"; Sub -> "(" <> show l <> "-" <> show r <> ")"; Mul -> "(" <> show l <> "*" <> show r <> ")"; Div -> "(" <> show l <> "/" <> show r <> ")"
 
-eval :: Expr -> Int
-eval (Val n) = n
-eval (App o l r) = case o of Add -> eval l + eval r; Sub -> eval l - eval r ; Mul -> eval l * eval r; Div -> eval l `div` eval r 
+-- 무효한 식을 공집합으로 받기 위해 []을 사용함
+eval :: Expr -> [Int]
+eval (Val n) = [n | n > 0]
+eval (App o l r) = case o of 
+  Add -> eval l >>= \l' -> eval r >>= \r' -> [l' + r']
+  Sub -> eval l >>= \l' -> eval r >>= \r' -> if (l' > r') then [l' - r'] else []
+  Mul -> eval l >>= \l' -> eval r >>= \r' -> [l' * r']
+  Div -> eval l >>= \l' -> eval r >>= \r' -> if (l' `mod` r' == 0) then [l' `div` r'] else []
 
 type Result = (Expr, Int)
 
@@ -50,22 +54,13 @@ powersets (x:xs) = powersets xs ++ (fmap (x:) $ powersets xs)
 exprs :: [Int] ->  [Expr]
 exprs [] = []
 exprs [x] = [Val x]
-exprs xs = interleave xs >>= \xs' -> split xs' >>= \(l,r) -> exprs l >>= \lval -> exprs r >>= \rval 
-        -> [Add,Sub,Mul,Div] >>= \o 
-          -> return (App o lval rval)
+exprs xs = split xs >>= \(l,r) -> exprs l >>= \lval -> exprs r >>= \rval -> [Add,Sub,Mul,Div] >>= \o  -> return (App o lval rval)
 
-validExprs :: [Int] -> [Expr] 
-validExprs xs = filter valid $ exprs xs
+solutions :: [Int] -> Int -> [Expr]
+solutions xs n = filter (\x -> eval x == [n]) (concat . map exprs . concat . map interleave . powersets $ xs)
 
 results :: [Int] -> Int -> [Result]
-results xs n = (filter (\e -> eval e == n) $ validExprs xs) >>= \ex -> return (ex, eval ex)
-
-valid :: Expr  -> Bool
-valid (App Add l r) = (eval l + eval r) > 0
-valid (App Mul l r) = (eval l * eval r) > 0
-valid (App Sub l r) = eval l > eval r
-valid (App Div l r) = eval r /= 0 && eval l `mod` eval r == 0
-valid (Val x) = x > 0
+results xs x = solutions xs x >>= \expr  -> eval expr >>= \n -> [(expr, n)]
 
 -- needs nPr
 nPr :: Eq a => [a] -> Int -> [[a]]
