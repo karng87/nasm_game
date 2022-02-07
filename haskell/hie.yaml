@@ -1,7 +1,7 @@
 cradle:
   cabal:
     - path: "ademo/src"
-      component: "ademo:lib:testlib"
+      component: "ademo:lib:mylist"
 
     - path: "ademo/src"
       component: "ademo:lib:mylib"
@@ -89,6 +89,21 @@ cradle:
 
     - path: "rankN/app/Main.hs"
       component: "rankN:exe:rankN"
+
+    - path: "test/app/Main.hs"
+      component: "test:exe:test"
+
+    - path: "test/src/Main.hs"
+      component: "test:exe:test"
+
+    - path: "test/app/Test_QuickCheck.hs"
+      component: "test:exe:test"
+
+    - path: "test/src/Test_QuickCheck.hs"
+      component: "test:exe:test"
+
+    - path: "test/src"
+      component: "lib:test"
 
     - path: "tictactoe/app/Main.hs"
       component: "tictactoe:exe:tictactoe"

@@ -19,7 +19,7 @@ maintainer:         karng87@gmail.com
 extra-source-files:
     CHANGELOG.md
     README.md
-library testlib
+library mylist
     exposed-modules: M1.List 
     hs-source-dirs: src
     build-depends: base ^>= 4.14
