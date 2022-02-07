@@ -1,13 +1,15 @@
 module Countdown where
+import Control.Monad
+
 main :: IO ()
 main = do
   putStrLn "give me a list [Int]"
   ns <- readLn ::IO[Int]
   putStrLn "give me a Int as the result Int"
-  --n <- readLn
-  display $ exprs ns 
+  n <- readLn
+  display $ results ns n
 
-display :: [Expr] -> IO()
+display :: [Result] -> IO()
 display = print
 
 data Op = Add | Sub | Mul | Div deriving (Show)
@@ -26,9 +28,6 @@ eval (Val n) = n
 eval (App o l r) = case o of Add -> eval l + eval r; Sub -> eval l - eval r ; Mul -> eval l * eval r; Div -> eval l `div` eval r 
 
 type Result = (Expr, Int)
-
-results :: [Int] -> Int -> Result
-results _ _ = (e1, eval e1)
 
 -- ns 를 쪼개기 :: 만들수 있는 자리수 쌍 구하기
 split :: [a] -> [([a],[a])]
@@ -51,7 +50,22 @@ powersets (x:xs) = powersets xs ++ (fmap (x:) $ powersets xs)
 exprs :: [Int] ->  [Expr]
 exprs [] = []
 exprs [x] = [Val x]
-exprs xs = interleave xs >>= \xs' -> split xs' >>= \(l,r) -> exprs l >>= \lval -> exprs r >>= \rval -> [Add,Sub,Mul,Div] >>= \o -> return $ App o lval rval
+exprs xs = interleave xs >>= \xs' -> split xs' >>= \(l,r) -> exprs l >>= \lval -> exprs r >>= \rval 
+        -> [Add,Sub,Mul,Div] >>= \o 
+          -> return (App o lval rval)
+
+validExprs :: [Int] -> [Expr] 
+validExprs xs = filter valid $ exprs xs
+
+results :: [Int] -> Int -> [Result]
+results xs n = (filter (\e -> eval e == n) $ validExprs xs) >>= \ex -> return (ex, eval ex)
+
+valid :: Expr  -> Bool
+valid (App Add l r) = (eval l + eval r) > 0
+valid (App Mul l r) = (eval l * eval r) > 0
+valid (App Sub l r) = eval l > eval r
+valid (App Div l r) = eval r /= 0 && eval l `mod` eval r == 0
+valid (Val x) = x > 0
 
 -- needs nPr
 nPr :: Eq a => [a] -> Int -> [[a]]
