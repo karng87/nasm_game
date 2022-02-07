@@ -1,14 +1,13 @@
 module Countdown where
-
 main :: IO ()
 main = do
   putStrLn "give me a list [Int]"
   ns <- readLn ::IO[Int]
   putStrLn "give me a Int as the result Int"
-  n <- readLn
-  display $ results ns n
+  --n <- readLn
+  display $ exprs ns 
 
-display :: Result -> IO()
+display :: [Expr] -> IO()
 display = print
 
 data Op = Add | Sub | Mul | Div deriving (Show)
@@ -28,10 +27,6 @@ eval (App o l r) = case o of Add -> eval l + eval r; Sub -> eval l - eval r ; Mu
 
 type Result = (Expr, Int)
 
---exprs :: [Int] -> Int -> Expr
---exprs [] n = Val n
---exprs _ n = App Add (Val n) (Val n)
-
 results :: [Int] -> Int -> Result
 results _ _ = (e1, eval e1)
 
@@ -44,7 +39,7 @@ split (x:xs) = [([x],xs)] ++ (fmap (\(i,j)-> (x:i,j)) $ split xs)
 -- 쪼갠 ns의 쌍으로 만들수 있는 조합 구하기 :: 순열이 아닌 이유는 ns를 중복해서 사용하지 않는 조건
 -- combination nCr :: 구하기 전에 powersets 먼저 구함
 nCr :: [a] -> Int -> [[a]]
-nCr xs n = filter (\x -> length x == n) $ powersets xs
+nCr ns r = filter (\x -> length x == r) $ powersets ns
 
 powersets :: [a] -> [[a]]
 powersets [] = [[]] -- if [] then fmap (x:) [] == [] ::: fmap (x:) [[]] == [[x]]
@@ -56,4 +51,28 @@ powersets (x:xs) = powersets xs ++ (fmap (x:) $ powersets xs)
 exprs :: [Int] ->  [Expr]
 exprs [] = []
 exprs [x] = [Val x]
-exprs xs = split xs >>= \(l,r) -> exprs l >>= \lval -> exprs r >>= \rval -> [Add,Sub,Mul,Div] >>= \o -> return $ App o lval rval
+exprs xs = interleave xs >>= \xs' -> split xs' >>= \(l,r) -> exprs l >>= \lval -> exprs r >>= \rval -> [Add,Sub,Mul,Div] >>= \o -> return $ App o lval rval
+
+-- needs nPr
+nPr :: Eq a => [a] -> Int -> [[a]]
+nPr [] _ = [[]]
+nPr  _ 0 = [[]]
+--nPr [3] = [[3]]
+--nPr [2,3] = [[2,3],[3,2]]
+--nPr [1,2,3] = [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+--nPr [1,2,3] = [[1,2,3],[2,1,3],[2,3,1],[1,3,2],[3,1,2],[3,2,1]]
+nPr ns r = ns >>= \n' -> fmap (n':) $ nPr (filter (/=n') ns ) (r-1)
+-- f[1,2,3] 2 => [1,2,3] >>= 1: f[2,3] 1
+--                              f[2,3] 1 => [2,3] >>= 2: f [3] 0
+--                                                       f [3] 0 == [[]]
+--            [1:2:[[]]] == [[1,2]] 
+--            [1:3:[[]]] == [[1,3]] 
+--            [2:1:[[]]] == [[2,1]] 
+--            [2:3:[[]]] == [[2,3]] 
+--            [3:1:[[]]] == [[3,1]] 
+--            [3:2:[[]]] == [[3,2]] 
+interleave :: [a] -> [[a]]
+interleave [] = [[]]
+interleave [x] = [[x]]
+interleave (x:y:zs) = [x:y:zs] ++ (fmap (y:) $ interleave (x:zs))
+
