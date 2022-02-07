@@ -6,9 +6,9 @@ main = do
   ns <- readLn ::IO[Int]
   putStrLn "give me a Int as the result Int"
   n <- readLn
-  display $ exprs ns n
+  display $ results ns n
 
-display :: Expr -> IO()
+display :: Result -> IO()
 display = print
 
 data Op = Add | Sub | Mul | Div deriving (Show)
@@ -31,3 +31,6 @@ type Result = (Expr, Int)
 exprs :: [Int] -> Int -> Expr
 exprs [] n = Val n
 exprs _ n = App Add (Val n) (Val n)
+
+results :: [Int] -> Int -> Result
+results _ _ = (e1, eval e1)
