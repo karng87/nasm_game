@@ -34,3 +34,9 @@ exprs _ n = App Add (Val n) (Val n)
 
 results :: [Int] -> Int -> Result
 results _ _ = (e1, eval e1)
+
+-- ns 를 쪼개기 :: 만들수 있는 자리수 쌍 구하기
+split :: [a] -> [([a],[a])]
+split [] = [] -- ([],[])
+split [_]= [] -- ([],[])
+split (x:xs) = [([x],xs)] ++ (fmap (\(i,j)-> (x:i,j)) $ split xs)
