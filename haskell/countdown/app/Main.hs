@@ -87,6 +87,11 @@ exprs ns  = [e | (ls,rs) <- split ns,
                  r       <- exprs rs,
                  e       <- combine l r]
 
+--exprs [1,2,3] = 
+--  split [1,2,3] == [ ([1],[2,3]) ([1,2],[3]) ] >>= (ls, rs) == ([1]=ls,[2,3]=rs) >>= exprs [1] = l; exprs[2,3] = r
+--    exprs [1] == Val 1
+--    exprs [2,3] == split [2,3] >>= (2,3) >>= exprs 2=l; exprs 3=r >>= l = (Val 2) r = (Val 3) >>= combine l r => e 
+
 combine :: Expr -> Expr -> [Expr]
 combine l r = [App o l r | o <- ops]
 
