@@ -51,6 +51,9 @@ cradle:
     - path: "domainModeling/app/Main.hs"
       component: "domainModeling:exe:domainModeling"
 
+    - path: "gui/app/Main.hs"
+      component: "gui:exe:gui"
+
     - path: "learnyouahaskell/app/Main.hs"
       component: "learnyouahaskell:exe:learnyouahaskell"
 

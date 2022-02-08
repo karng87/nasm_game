@@ -2,9 +2,9 @@ module Countdown where
 
 main :: IO ()
 main = do
-  putStrLn "give me a list [Int]"
+  putStrLn "give me a list [1,3,7,10,25,50]"
   ns <- readLn ::IO[Int]
-  putStrLn "give me a Int as the result Int"
+  putStrLn "give me a Int(765) as the result Int"
   n <- readLn
   display $ results ns n
 
@@ -56,13 +56,18 @@ exprs [] = []
 exprs [x] = [Val x]
 exprs xs = split xs >>= \(l,r) -> exprs l >>= \lval -> exprs r >>= \rval -> [Add,Sub,Mul,Div] >>= \o  -> return (App o lval rval)
 
+-- (x)powersets 즉 부분집합들 끼리 서로 엮어서 계산 해야 함으로 부분 집합의 순열로 해야 한다. 
 solutions :: [Int] -> Int -> [Expr]
-solutions xs n = filter (\x -> eval x == [n]) (concat . map exprs . concat . map interleave . powersets $ xs)
+solutions xs n = filter (\x -> eval x == [n]) (concat . map exprs . concat . map nPn . powersets $ xs)
 
 results :: [Int] -> Int -> [Result]
 results xs x = solutions xs x >>= \expr  -> eval expr >>= \n -> [(expr, n)]
 
 -- needs nPr
+nPn :: Eq a => [a] -> [[a]]
+nPn [] = [[]]
+nPn xs = xs >>= \x' -> fmap (x':) (nPn (filter (/=x') xs))
+
 nPr :: Eq a => [a] -> Int -> [[a]]
 nPr [] _ = [[]]
 nPr  _ 0 = [[]]
@@ -80,8 +85,7 @@ nPr ns r = ns >>= \n' -> fmap (n':) $ nPr (filter (/=n') ns ) (r-1)
 --            [2:3:[[]]] == [[2,3]] 
 --            [3:1:[[]]] == [[3,1]] 
 --            [3:2:[[]]] == [[3,2]] 
-interleave :: [a] -> [[a]]
-interleave [] = [[]]
-interleave [x] = [[x]]
-interleave (x:y:zs) = [x:y:zs] ++ (fmap (y:) $ interleave (x:zs))
+interleave :: a  -> [a] -> [[a]]
+interleave x [] = [[x]]
+interleave x (y:ys) = [x:y:ys] ++ (fmap (y:) (interleave x ys))
 
