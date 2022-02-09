@@ -14,18 +14,21 @@ gas_SRCS = $(notdir $(shell find src -type f -name "*.S"))
 lib_nasm_SRCS := $(notdir $(shell find -type f -regextype posix-extended -regex 'libs/.+\.asm$$'))
 lib_gas_SRCS := $(notdir $(shell find -type f -regextype posix-extended -regex 'libs/.+\.S$$'))
 test_nasm_SRCS := $(notdir $(shell find -type f -regextype posix-extended -regex 'tests/.+\.asm$$'))
+tex_SRCS := $(notdir $(shell find -maxdepth 1 -type f -name "*.tex"))
 
 nasm_BINS=$(patsubst %.asm,build/%.bin,$(nasm_SRCS))
 gas_BINS = $(patsubst %.S,build/gas/%.bin,$(gas_SRCS))
 lib_nasm_OBJS=$(patsubst %.asm,build/libs/%.o,$(lib_nasm_SRCS))
-test_BINS=$(patsubst %.asm,build/tests/%.o,$(test_SRCS))
+
+tex_SRCS := $(notdir $(shell find -maxdepth 1 -type f -name "*.tex"))
+tex_BINS:= $(patsubst %.tex,build/pdf/%.pdf,$(tex_SRCS))
 
 TMP := $(shell find . -type f -regextype posix-extended -regex '(./build/.*)|(.*compile_commands.json$$)|(./(app|src|test)/.*(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
 
 LIB_S=build/libs/libmylib.so}
 LIB_A=build/libs/libmylib.a}
 
-all: $(nasm_BINS) $(gas_BINS) $(lib_nasm_OBJS) $(test_BINS) compile_commands.json
+all: $(nasm_BINS) $(gas_BINS) $(lib_nasm_OBJS) $(test_BINS) $(tex_BINS) compile_commands.json
 
 release: CFLAGS=-Wall -O2 -DNDEBUG
 release: clean
@@ -41,8 +44,8 @@ build/%.bin: src/%.asm
 	$(MAKE) mkdir
 	$(NASM) $(NASMFLAGS) -o $@ $<
 
-build/gas/%.bin: src/%.asm src/%.inc
-	$(MAKE) build
+build/%.bin: src/%.asm src/%.inc
+	$(MAKE) mkdir
 	$(NASM) $(NASMFLAGS) -o $@ $<
 
 build/gas/%.o: src/%.S
@@ -53,7 +56,7 @@ build/gas/%.bin: build/gas/%.o
 	$(MAKE) mkdirgas
 	$(LD) $(LDFLAGS) -o $@ $^
 
-mkdir:
+mkdir: 
 	mkdir -p build
 
 mkdirgas:
@@ -61,6 +64,17 @@ mkdirgas:
 
 compile_commands.json:
 	make --no-print-directory --always-make --dry-run | sed -En '/\.c\s*$$/p' | jq -nR '[inputs|{directory:".", command:., file:match(" [^ ]+$$").string[1:]}]' > compile_commands.json
+
+
+build/pdf/%.pdf: %.tex
+	$(MAKE) mkdirpdf
+	pdflatex --jobname=$(patsubst %.tex,build/pdf/%, $<) $<
+
+mkdirpdf:
+	mkdir -p build/pdf
+
+pdf :$(patsubst %.tex,build/pdf/%.pdf, $(tex_SRCS))
+	@nohup zathura $(word 1, $<) &
 
 clean:
 	rm $(TMP)

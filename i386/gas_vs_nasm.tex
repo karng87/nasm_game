@@ -1,0 +1,75 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{empheq}
+\usepackage{mdframed}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{psfrag}
+\usepackage{pgfplots}
+\usepackage{bm}
+\usepackage{multirow}
+
+% Other Settings
+
+\geometry{a4paper}
+
+%% Define some useful colors %%
+\definecolor{ocre}{RGB}{243,102,25}
+\definecolor{mygray}{RGB}{243,243,244}
+\definecolor{deepGreen}{RGB}{26,111,0}
+\definecolor{shallowGreen}{RGB}{235,255,255}
+\definecolor{deepBlue}{RGB}{61,124,222}
+\definecolor{shallowBlue}{RGB}{235,249,255}
+
+%% Define an orangebox command %%
+\newcommand\orangebox[1]{\fcolorbox{ocre}{mygray}{\hspace{1em}#1\hspace{1em}}}
+
+%% English Environments %%
+\newtheoremstyle{mytheoremstyle}{3pt}{3pt}{\normalfont}{0cm}{\rmfamily\bfseries}{}{1em}{{\color{black}\thmname{#1}~\thmnumber{#2}}\thmnote{\,--\,#3}}
+\newtheoremstyle{myproblemstyle}{3pt}{3pt}{\normalfont}{0cm}{\rmfamily\bfseries}{}{1em}{{\color{black}\thmname{#1}~\thmnumber{#2}}\thmnote{\,--\,#3}}
+\theoremstyle{mytheoremstyle}
+\newmdtheoremenv[linewidth=1pt,backgroundcolor=shallowGreen,linecolor=deepGreen,leftmargin=0pt,innerleftmargin=20pt,innerrightmargin=20pt,]{theorem}{Theorem}[section]
+\theoremstyle{mytheoremstyle}
+\newmdtheoremenv[linewidth=1pt,backgroundcolor=shallowBlue,linecolor=deepBlue,leftmargin=0pt,innerleftmargin=20pt,innerrightmargin=20pt,]{definition}{Definition}[section]
+\theoremstyle{myproblemstyle}
+\newmdtheoremenv[linecolor=black,leftmargin=0pt,innerleftmargin=10pt,innerrightmargin=10pt,]{problem}{Problem}[section]
+
+%% Plotting Settings %%
+\usepgfplotslibrary{colorbrewer}
+\pgfplotsset{width=8cm,compat=1.9}
+
+\title{AT\&T(GAS) vs NASM}
+\author{Karng Lee}
+
+\begin{document}
+    \maketitle
+\begin{table}   
+  \begin{center}
+  \begin{tabular}{|l||l|l|}
+    \hline
+    Mode & Intel & AT\&T \\
+    \hline
+    \hline
+    Absolute & mov eax, [0x0100] & movl 0x0100, \%eax \\
+    \hline
+    Register & mov eax, [esi] & movl (\%esi), \%eax \\
+    \hline
+    Reg + offset & mov eax, [ebp-8] & movl -8(\%esi), \%eax \\
+    \hline
+    Reg * Scale + off & mov eax, [ebx*4 + 0x100] & movl 0x100(,\%ebx,4), \%eax \\
+    \hline
+    Base + Reg*Scale + off & mov eax, [edx+ebx*4+8] & movl 0x8(\%edx,\%ebx,4), \%eax \\
+    \hline
+  \end{tabular}
+    \caption{AT\&T(GAS) vs NASM}
+    \label{tab:table1}
+  \end{center}
+\end{table}
+\end{document}
