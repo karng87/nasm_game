@@ -7,12 +7,13 @@ pkg-db = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
 pkg-deps = containers -package text -package time
 FLAG_i = -isrc -threaded -rtsopts -with-rtsopts=-N
 hss = $(notdir $(shell find app -name "*.hs"))
+SRCS = $(notdir $(shell find src -name "*.c"))
 libs := $(notdir $(shell find -type f -regextype posix-extended -regex '.*(src)/.+\.hs$$'))
 tests := $(notdir $(shell find -type f -regextype posix-extended -regex '.*(tests)/.+\.hs$$'))
 
 .PHONEY: all run clean echo
 
-all: $(patsubst %.hs, build/libs/%, $(libs)) $(patsubst %.hs, build/bin/%, $(hss)) $(patsubst %.hs, build/tests/bin/%, $(tests))
+all: $(patsubst %.hs, build/libs/%, $(libs)) $(patsubst %.hs, build/bin/%, $(hss)) $(patsubst %.hs, build/tests/bin/%, $(tests)) $(patsubst %.c, build/cc/%, $(SRCS))
 
 build/bin/%: app/%.hs
 	$(MAKE) build/bin
@@ -34,7 +35,14 @@ build/tests/bin/%: tests/%.hs
 	$(MAKE) build/tests/bin
 	ghc $(FLAG_i) -Wall -odir build/tests -hidir build/tests -o $(patsubst %.hs,build/tests/bin/%,$(notdir $<)) $< -package-db $(pkg-db) -package $(pkg-deps)
 
+build/cc/%: src/%.c
+	$(MAKE) build/cc
+	gcc -g -Wall -lSDL2 -o $@ $<
+
 build/bin:
+	mkdir -p $@
+
+build/cc:
 	mkdir -p $@
 
 build/libs:
@@ -43,10 +51,17 @@ build/libs:
 build/tests/bin:
 	mkdir -p $@
 
-run: build/bin/Main
+h: build/bin/Main
 ifdef args 
 	./$< $(args)
 else
+	./$< lee
+endif
+
+c: build/cc/tictactoe
+ifdef args
+	./$< $(args)
+else 
 	./$< lee
 endif
 
@@ -56,4 +71,5 @@ clean:
 echo:
 	@echo $(tmp)
 	@echo "This is the haskell "
-
+compile_commands.json:
+	make --no-print-directory --always-make --dry-run | sed -En '/\.c\s*$$/p' | jq -nR '[inputs|{directory:".", command:., file:match(" [^ ]+$$").string[1:]}]' > compile_commands.json
