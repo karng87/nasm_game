@@ -34,7 +34,14 @@ int main(){
   }
 
   int quit = 0;
+  SDL_Event pEvent;
   while (quit == 0){
+    while(SDL_PollEvent(&pEvent)){
+      switch (pEvent.type){
+        case SDL_QUIT:
+          quit = 1;
+      }
+    }
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     //render and update game
