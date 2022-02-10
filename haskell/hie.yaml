@@ -36,6 +36,9 @@ cradle:
     - path: "ademo/tests"
       component: "ademo:test:demoA-test"
 
+    - path: "arrayFibonacci/app/Main.hs"
+      component: "arrayFibonacci:exe:arrayFibonacci"
+
     - path: "bdemo/app/Main.hs"
       component: "bdemo:exe:main"
 
