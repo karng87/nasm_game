@@ -4,7 +4,7 @@ endef
 
 tmp := $(shell find . -type f -regextype posix-extended -regex '(./build/.*)|(./(app|src|test)/.*(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
 pkg-db = /home/jkarng/.cabal/store/ghc-8.10.7/package.db
-pkg-deps = gloss -package text -package time
+pkg-deps = gloss -package array -package text -package time
 FLAG_i = -isrc -threaded -rtsopts -with-rtsopts=-N
 hss = $(notdir $(shell find app -name "*.hs"))
 SRCS = $(notdir $(shell find src -name "*.c"))
