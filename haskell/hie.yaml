@@ -54,6 +54,12 @@ cradle:
     - path: "domainModeling/app/Main.hs"
       component: "domainModeling:exe:domainModeling"
 
+    - path: "gui/app/Myglfw.hs"
+      component: "gui:exe:myglfw"
+
+    - path: "gui/src/Myglfw.hs"
+      component: "gui:exe:myglfw"
+
     - path: "gui/app/Main.hs"
       component: "gui:exe:gui"
 
