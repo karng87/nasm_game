@@ -41,4 +41,3 @@
             mov rdx, str_length
             syscall
             ret
-```
