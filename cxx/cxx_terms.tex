@@ -1,0 +1,54 @@
+\documentclass[a4paper]{moderncv}
+\usepackage[scale=0.9]{geometry}
+\usepackage{blindtext}
+\usepackage{amsmath, kotex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\moderncvtheme[blue]{classic}
+
+\firstname{Terms}
+\familyname{c++}
+\title{Basic concepts}
+
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+%\photo{logo.png}
+
+\recipient{수령지}{Songpa ku\\Seoul\\Korea}
+\opening{latex 에게}
+\closing{안녕~}
+
+\begin{document}
+%\makelettertitle
+%\blindtext
+%\makeletterclosing
+%\newpage
+
+\maketitle
+
+\section{C++ Program}
+\cvitem{cvitem}{gets xs}
+\cvlistitem{lsititem}
+\cventry{1999--2002}{R1}{R2}{R3}{R4}{R5}
+\section{Declarations}
+\cventry{:=}{declarations}{introduce names into the C++ program}{Each kind of entity is declared differently}{}{}
+\cventry{}{Function definition}{}{}{}{}
+\cventry{}{Template declaration}{including Partial template specialization}{}{}{}
+\cventry{}{Explicit template instantiation}{}{}{}{}
+\cventry{}{Explicit templat specialization}{}{}{}{}
+\cventry{}{Namespace definition}{}{}{}{}
+\cventry{}{Linkage}{specification}{}{}{}
+\cventry{}{Attribute declaration (attr;)}{}{}{}{}
+\cventry{}{Empty declarations (;)}{}{}{}{}
+\section{Definition}
+\cventry{:=}{Definitions}{are declarations that are sufficient to use the entity identified by the name}{}{}{}
+\section{Attribute}
+\cventry{:=}{Attributes}{provide the unified staandard syntax for implementation-defined language extensions}{such as the GNU and IBM language extenstions \_\_attribute\_\_((...)),}{Microsoft extension \_\_declspec()}{etc}
+\cventry{specifier}{[[arrr]]}{}{}{}{}
+\cventry{specifire sequence}{[[att1] [[att2]]}{[[att1,att2]]}{[[namespace::attr(args)]]alignas\_specifier}{}{}
+\cventry{}{[[using CC: opt(1), debug]]}{= [[CC::opt(1), CC::debug]]}{}{}{}
+\cventry{An attribute}{can be used almost everywhere in the C program}{and can be applied to almost everything:}{to types}{to variable}{to functions, to names, to code blocks, to entire translation units}
+\cventry{standard att}{[[deprecated]]}{[[maybe\_unused]]}{[[nodisard]]}{}{}
+\end{document}
