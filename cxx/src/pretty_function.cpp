@@ -4,9 +4,9 @@
 template <typename T>
 void prettyFunc (T n){
 #ifdef __FUNC_SIG__
-  std::cout << __FUNC_SIG__ << std::endl;
+  std::cout << "prettyFunc: " << __FUNC_SIG__ << std::endl;
 #endif
-  std::cout << __PRETTY_FUNCTION__ << std::endl;
+  std::cout << "___PRETTY_FUNCTION__: " << __PRETTY_FUNCTION__ << std::endl;
 }
 
 int main(){
