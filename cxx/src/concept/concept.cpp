@@ -11,7 +11,7 @@ namespace head_differ{
     if constexpr (sizeof...(Types) == 0){
       return head_differ_c<P>;}
     else {
-      return (head_differ_c<P,Types...> && isAllDiffer<Types...>);}
+      return (head_differ_c<P,Types...> && &isAllDiffer<Types...>);}
   }
 }// end of head_differ namespace
 template<typename P, typename ... Types>
@@ -41,7 +41,7 @@ auto sum(P p, Qs... qs){
 
 int main(){
   std::cout << sum(1,2,3,4,5) << std::endl;
-  std::cout << sum(1.1d,2,3.0f) << std::endl;
-  std::cout << sum(1.1d,2,3.1,3.0f) << std::endl;
+  std::cout << sum(1.1,2,3.0f) << std::endl;
+  std::cout << sum(1.1,2,3.1,3.0f) << std::endl;
   return 0;
 }

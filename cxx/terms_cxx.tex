@@ -29,9 +29,18 @@
 \maketitle
 
 \section{C++ Program}
-\cvitem{cvitem}{gets xs}
-\cvlistitem{lsititem}
-\cventry{1999--2002}{R1}{R2}{R3}{R4}{R5}
+\subsection{<< Memory >>}
+\cventry{compile-time}{at compile-time}{an object is instantiated}{}{}{}
+\cventry{link-time}{at link-time}{its reserved memory is mapped}{}{}{}
+\cventry{run-time}{at run-time}{its physical memory is allocated}{}{}{}
+\cventry{type}{A type}{determines memory layout}{i.e. memory alignment and memory size for the object}{유형}{}{}
+\cventry{identifier}{An indentifier}{symbol}{named an object}{식별자}{}
+\cventry{symbol}{A symbol}{identifies an object in memory}{표시}{}{}
+\cventry{object}{An object}{is anything that has its reserved memory}{대상,목적}{}{}
+\cventry{instance}{An intance}{is an object of a specific type}{즉석}{}{}
+\cventry{spec}{Specification}{상세서}{명세서}{明細書}{}
+\cventry{specialization}{Specialization}{특정하기}{}{}{}
+
 \section{Declarations}
 \cventry{:=}{declarations}{introduce names into the C++ program}{Each kind of entity is declared differently}{}{}
 \cventry{}{Function definition}{}{}{}{}
@@ -51,4 +60,13 @@
 \cventry{}{[[using CC: opt(1), debug]]}{= [[CC::opt(1), CC::debug]]}{}{}{}
 \cventry{An attribute}{can be used almost everywhere in the C program}{and can be applied to almost everything:}{to types}{to variable}{to functions, to names, to code blocks, to entire translation units}
 \cventry{standard att}{[[deprecated]]}{[[maybe\_unused]]}{[[nodisard]]}{}{}
+
+\section{Instanciation}
+\cventry{:=}{Instanciation}{means reserve memory for objects.}{}{}{}
+
+\section{Object}
+\cventry{ones}{an object}{is intantiated at compile-time}{}{}{}
+
+\section{Type}
+\cventry{:=}{Type}{determines memory layout.}{}{}{}
 \end{document}
