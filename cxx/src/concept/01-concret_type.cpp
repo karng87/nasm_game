@@ -1,14 +1,22 @@
 #include <iostream>
 
+// concret class
 struct Concret{int i; double d;};
+
+// non concret class template
 template <typename T> struct NonConcret{T m,n; NonConcret(T t1, T t2):m{t1},n{t2}{}};
 
+// primary class template
 template <typename T> struct DeductionStruct{T v;};
+
 // class template argument dedution guide
 template <typename T> DeductionStruct(T t) -> DeductionStruct<T>;
 
 template <typename T> struct Div1{T a,b; T operator()(){return a/b;}};
+
+// class template argument deduction
 template <typename T> Div1(T t1, T t2)-> Div1<T>;
+
 int main(){
   Concret cs {3,3.14};
   NonConcret ns{3.14,2.791828};

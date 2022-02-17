@@ -7,10 +7,10 @@ template<typename T, typename S> struct is_same{constexpr static bool value =fal
 // = template<typename T> struct is_same:std::false_type{};
 // specialization
 template<typename T> struct is_same<T,T>:std::true_type{};
-template<typename T,typename S> constexpr bool is_same_v = is_same<T,S>::value;
+template<typename T,typename S> constexpr bool traits_is_same = is_same<T,S>::value;
 
 int main(){
-  std::cout << is_same_v<int,short> << std::endl;
-  std::cout << is_same_v<int,int> << std::endl;
+  std::cout << traits_is_same<int,short> << std::endl;
+  std::cout << traits_is_same<int,int> << std::endl;
   return 0;
 }
