@@ -1,3 +1,6 @@
+; nasm -felf64 loop.asm
+; clang -no-pie loop.o
+; gcc -no-pie loop.o
 extern printf
 
 section .data

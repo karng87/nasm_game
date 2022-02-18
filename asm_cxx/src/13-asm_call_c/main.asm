@@ -1,3 +1,6 @@
+; nasm -felf64 main.nasm
+; gcc main.o message.c or, gcc -c message.c ; gcc -oa.out main.o message.o
+
 extern message
 
 section .data
