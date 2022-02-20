@@ -14,9 +14,9 @@ section .data
 
 section .bss
 section .text
-    global _start
+    global main
 
-    _start:
+    main:
         mov rax, SYSCALL_WRITE 
         mov rdi, STDOUT
         mov rsi, str
