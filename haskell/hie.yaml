@@ -119,3 +119,32 @@ cradle:
 
     - path: "tictactoe/app/Main.hs"
       component: "tictactoe:exe:tictactoe"
+    - path: "src"
+      component: "lib:haskell"
+
+    - path: "app/Main.hs"
+      component: "haskell:exe:main.out"
+
+    - path: "src/Main.hs"
+      component: "haskell:exe:main.out"
+
+    - path: "app/Ga/Lib.hs"
+      component: "haskell:exe:main.out"
+
+    - path: "src/Ga/Lib.hs"
+      component: "haskell:exe:main.out"
+
+    - path: "app/ForM.hs"
+      component: "haskell:exe:forM.out"
+
+    - path: "app/Sudoku.hs"
+      component: "haskell:exe:sudoku.out"
+
+    - path: "app/FpCourse.hs"
+      component: "haskell:exe:fpCourse.out"
+
+    - path: "app/TypeDataClassInstance.hs"
+      component: "haskell:exe:typeData.out"
+
+    - path: "test"
+      component: "haskell:test:haskell-tests"

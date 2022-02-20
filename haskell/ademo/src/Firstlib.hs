@@ -7,6 +7,14 @@ import qualified Hello as H
 
 greet :: String -> String 
 greet = titlecase . H.hello
+=======
+module Ga.Lib where
+--import Data.ByteString (intercalate)
+
+import Data.Text.Titlecase
+
+greet :: String -> String 
+greet who = titlecase $ "Hello, " <> who <> "!"
 
 pset' :: [Int] -> [[Int]]
 pset' [] = [[]]
