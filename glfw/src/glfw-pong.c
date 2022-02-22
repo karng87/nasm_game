@@ -11,8 +11,8 @@ double seedrand(){
   return (double) rand() / RAND_MAX;
 }
 struct Ball{
-  double x ;
-  double y ;
+  double x;
+  double y;
   double dx;
   double dy;
 };
@@ -20,10 +20,12 @@ int W=640;
 int H=480;
 float ratio;
 
-void keyboardCallback(GLFWwindow * window, int key, int scancode, int action, int mods){
-  if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    glfwWindowShouldClose(window);
+void keyCallback(GLFWwindow * window, int key, int scancode, int action, int mods){
+  if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwWindowShouldClose(window);
 }
+
+void framebufferSizeCallback(GLFWwindow * win, int w, int h){glViewport(0,0,w,h);}
+
 int main(){
   GLFWwindow * win;
   glfwInit();
@@ -34,9 +36,12 @@ int main(){
     printf("Failed to initialize GLAD");
     return -1;
   }
+  const unsigned char* glversion = glGetString(GL_VERSION);
+  printf ("GL_VERSION: %s\n",glversion);
 
   // Making the OpenGL context current
-  glfwSetKeyCallback(win, keyboardCallback);
+  glfwSetKeyCallback(win, keyCallback);
+  glfwSetFramebufferSizeCallback(win,framebufferSizeCallback);
 
   struct Ball ball = {
     .x=seedrand(),
@@ -49,35 +54,11 @@ int main(){
     glViewport(0, 0, W, H);
 
     glClear(GL_COLOR_BUFFER_BIT);
-    /*
-    glMatrixMode(GL_PRO);
-    glLoadIdentity();
-
-    glOrtho(-ratio, ratio, -1.f, 1.f, 1.f,-1.f);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    // draw ball
-    glPushMatrix();
-    glTranslated(ball.x, ball.y, 0);
-    glScalef(0.05f, 0.05f, 1);
-
-    glBegin(GL_QUADS);
-    glColor3f(0.5f, 0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.0f);
-    glVertex3f(-0.5f, 0.5f, 0.0f);
-    glVertex3f(0.5f, 0.5f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.0f);
-    glEnd();
-
-    glPopMatrix();
-    //== end draw ball ==//
-    */
-
     glfwSwapBuffers(win);
     // poll 결정할것인가 기권할것인가?
     glfwPollEvents();
   }
   glfwDestroyWindow(win);
+  glfwTerminate();
   return 0;
 }
