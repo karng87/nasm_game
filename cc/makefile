@@ -4,7 +4,7 @@ CFLAGS=-g -Wall -lSDL2
 c_SRCS=$(shell find src -type f -regextype posix-extended -regex '.*\.c$$' -and -not -regex '\./(lib|build)/.*')
 c_TARGETS=$(patsubst src/%.c,build/bin/%,$(c_SRCS))
 
-.PHONEY: compile_commands.json all run clean echo
+.PHONY: compile_commands.json all run clean echo
 
 all:compile_commands.json $(c_TARGETS)
 

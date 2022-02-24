@@ -5,7 +5,7 @@ LIBS:=$(shell find libs -type f -regextype posix-extended -regex '.*\.cpp' -and 
 C_LIBS:=$(shell find libs -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '\./test.c')
 
 
-all: $(patsubst src/%,build/%.out,$(SRCS))
+all: $(patsubst src/%,build/%.out,$(C_SRCS)) $(patsubst src/%,build/%.out,$(SRCS))
 
 
 build/libs/%.c.o: libs/%.c
@@ -34,7 +34,7 @@ build/%.cpp.out: src/%.cpp
 	g++ -g -Wall -std=c++20 -o $@ $< $(LDFLAGS)
 
 
-runc: $(patsubst src/%,build/%.out,$(C_SRCS))
+crun: $(patsubst src/%,build/%.out,$(C_SRCS))
 	LD_LIBRARY_PATH+=. ./$(word 1,$^)
 
 run: $(patsubst src/%,build/%.out,$(SRCS))
@@ -51,12 +51,12 @@ clean:
 
 build/json/%.cpp.json: src/%.cpp
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
-	clang++ -MJ $@ -Wall -std=c++20 $(LDFLAGS) -o/dev/null $<
+	clang++ -MJ $@ -Wall -std=c++20 -o/dev/null $< $(LDFLAGS)
 
 build/json/%.c.json: src/%.c
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
-	clang -MJ $@ -Wall $(LDFLAGS) -o/dev/null $<
+	clang -MJ $@ -Wall -o/dev/null $< $(LDFLAGS)
 
-compile_commands.json:  $(patsubst src/%,build/json/%.json,$(C_SRCS))$(patsubst src/%,build/json/%.json,$(SRCS))
+compile_commands.json:  $(patsubst src/%,build/json/%.json,$(C_SRCS)) $(patsubst src/%,build/json/%.json,$(SRCS))
 	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find -type f -name "*.json"` > compile_commands.json)
 
