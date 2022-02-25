@@ -35,7 +35,7 @@ build/%.cpp.out: src/%.cpp
 
 
 crun: $(patsubst src/%,build/%.out,$(C_SRCS))
-	LD_LIBRARY_PATH+=. ./$(word 1,$^)
+	LD_LIBRARY_PATH=.${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} ./$(word 1,$^)
 
 run: $(patsubst src/%,build/%.out,$(SRCS))
 	LD_LIBRARY_PATH+=. ./$(word 1,$^)

@@ -1,5 +1,6 @@
 CC=clang
-CFLAGS=-g -Wall -lSDL2
+CFLAGS=-g -Wall
+LDFLAGS =-lSDL2 --sanitize=address
 
 c_SRCS=$(shell find src -type f -regextype posix-extended -regex '.*\.c$$' -and -not -regex '\./(lib|build)/.*')
 c_TARGETS=$(patsubst src/%.c,build/bin/%,$(c_SRCS))
@@ -11,9 +12,16 @@ all:compile_commands.json $(c_TARGETS)
 
 build/bin/%: src/%.c
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/bin/\1#p' <<< $<)
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $< 
 
-run: $(c_TARGETS)
+sdl: build/bin/sdl2
+ifdef args 
+	./$< $(args)
+else
+	./$< 
+endif
+
+crun: $(c_TARGETS)
 ifdef args 
 	./$(word 1,$^) $(args)
 else
@@ -31,5 +39,3 @@ clean:
 
 compile_commands.json:
 	make --no-print-directory --always-make --dry-run | sed -En '/\.c\s*$$/p' | jq -nR '[inputs|{directory:".", command:., file:match(" [^ ]+$$").string[1:]}]' > compile_commands.json
-
-
