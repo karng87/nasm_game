@@ -88,6 +88,11 @@ int main(){
     glViewport(0, 0, W, H);
 
     glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(-0.5f,-0.5f);
+    glVertex2f(0.5,-0.5f);
+    glVertex2f(0.5f,0.5f);
+    glEnd();
     glfwSwapBuffers(win);
     // poll 결정할것인가 기권할것인가?
     glfwPollEvents();

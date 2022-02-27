@@ -1,7 +1,8 @@
 # L_FLAGS:= -L./build/libs -lmylibc -lmylib -lglfw -ldl
-L_FLAGS:=-L./external/libs -lglad -lglfw -ldl
+L_FLAGS:=-L./external/libs 
+l_FLAGS:=-lglad -lglfw -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 I_FLAGS:=-I./external/include -Isrc/include
-LD_FLAGS:=$(I_FLAGS) $(L_FLAGS)
+LD_FLAGS:=$(I_FLAGS) $(L_FLAGS) $(l_FLAGS)
 
 CC:=gcc
 CFLAGS:=-g -Wall
