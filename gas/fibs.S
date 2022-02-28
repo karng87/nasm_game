@@ -14,7 +14,7 @@ main:
 print:
   push %rax
   push %rcx
-  mov $format, %rdi
+  lea format, %rdi
   mov %rax, %rsi
   xor %rax, %rax
 

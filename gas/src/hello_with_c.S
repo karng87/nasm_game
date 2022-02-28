@@ -31,9 +31,10 @@
 # gcc -no-pie hello_with_c.S
 main: 
   push %rcx
-  mov $msg, %rdi
-  call puts
+  mov msg(%rip), %rdi
+  call puts@plt
   ret
 
+.data
 msg:
   .asciz "Hola, mundo" # asciz ascizero : puts a 0byte at the end
