@@ -16,7 +16,17 @@ LIBS := $(shell find libs/src -type f -regextype posix-extended -regex '.*\.cpp'
 C_LIBS := $(shell find libs/src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '\./test.c')
 
 
-all: $(patsubst src/%,build/%.out,$(SRCS) $(C_SRCS))
+all: $(patsubst src/%,build/S/%.S,$(SRCS) $(C_SRCS)) $(patsubst src/%,build/%.out,$(SRCS) $(C_SRCS))
+
+# .cfi in GAS for debugging stands for call frame information.
+# to disable .cfi directive -fno-....
+build/S/%.c.S: src/%.c
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/S/\1#p' <<< $<)
+	gcc -S -O0 -fno-dwarf2-cfi-asm -fno-stack-protector -fno-asynchronous-unwind-tables -o$@ $< $(LDFLAGS)
+
+S: $(patsubst src/%,build/S/%.S,$(C_SRCS))
+	nvim ./$(word 1,$^)
+
 
 init:
 	mkdir -p {external/{include,libs},libs/{src,include},src}
