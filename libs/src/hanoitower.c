@@ -2,19 +2,24 @@
 
 void hanoitower(int n, char from, char mid, char to);
 int main(){
-  hanoitower(3,'A','B','C');
-  printf("============\n");
-  hanoitower(4,'A','B','C');
+  hanoitower(3,'S','W','D');
   return 0;
 }
-void hanoitower(int n, char from, char mid, char to){
-  if(n==1) {
-    printf("%d을 %c에서 %c로 옮긴다\n",n,from,to);
+void hanoitower(int n, char start, char waypoint, char dest){
+  printf("*** entering hanoi(%d,%c,%c,%c) ",n,start,waypoint,dest);
+  if(n==0) {
+    printf("*** exit if n ==0 end return ***\n");
     return;
   }
-  hanoitower(n-1,from,to,mid);
-  printf("%d를 %c 에서 %c로 옮긴다\n",n,from,to);
-  hanoitower(n-1,mid,from,to);
+  printf("---> call h(%d) ",n-1);
+  hanoitower(n-1,start,dest,waypoint);
+
+  printf("\t%d를 %c 에서 %c로 옮긴다 ",n,start,dest);
+
+  printf("---> call h(%d) ",n-1);
+  hanoitower(n-1,waypoint,start,dest);
+  printf("*** exited hanoi(%d,%c,%c,%c) end return ***\n",n,start,waypoint,dest);
+  return;
 }
 
 /**********************
