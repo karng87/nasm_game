@@ -6,19 +6,19 @@ int main(){
   return 0;
 }
 void hanoitower(int n, char start, char waypoint, char dest){
-  printf("*** entering hanoi(%d,%c,%c,%c) ",n,start,waypoint,dest);
+  printf("\n***> entering hanoi(%d,%c,%c,%c) ",n,start,waypoint,dest);
   if(n==0) {
-    printf("*** exit if n ==0 end return ***\n");
+    printf("<*** if return ***\n");
     return;
   }
-  printf("---> call h(%d) ",n-1);
+  printf("-- pass if and <1st> call h(%d,출발점에서 경유지로) ",n-1);
   hanoitower(n-1,start,dest,waypoint);
 
-  printf("\t%d를 %c 에서 %c로 옮긴다 ",n,start,dest);
+  printf("\n\t\t%d를 %c 에서 %c로 옮긴다(출발지에서 목적지로)\n",n,start,dest);
 
-  printf("---> call h(%d) ",n-1);
+  printf("-- <2nd> call h(%d, 경유지에서 목적지로)",n-1);
   hanoitower(n-1,waypoint,start,dest);
-  printf("*** exited hanoi(%d,%c,%c,%c) end return ***\n",n,start,waypoint,dest);
+  printf("<*** exited hanoi(%d,%c,%c,%c) end return ***\n",n,start,waypoint,dest);
   return;
 }
 
