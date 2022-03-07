@@ -37,7 +37,7 @@ build/%.c.out: src/%.c
 	gcc -g -Wall -o $@ $< $(LD_jc)
 
 crun: $(patsubst src/%,build/%.out,$(C_SRCS))
-	LD_LIBRARY_PATH+=$$(pwd)/lib. ./$(word 1,$^)
+	LD_LIBRARY_PATH+=$$(pwd)/lib ./build/hanoitower_with_for.c.out
 
 
 lib/build/%.cpp.o: lib/src/%.cpp
