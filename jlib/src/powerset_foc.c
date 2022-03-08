@@ -3,7 +3,17 @@
 
 void powersets(char *, int, char**);
 int main(){
-  int n = 3;
+  /*
+  int a = 0b001;
+  int b = 0b100;
+  if(a & b) printf("%d & %d = %d true\n",a,b, a & b);
+  else printf("%d & %d = %d false\n",a,b, a & b);
+  if(a && b) printf("%d & %d = %d true\n",a,b, a & b);
+  else printf("%d & %d = %d false\n",a,b, a & b);
+  return 0;
+  */
+  
+  int n = 4;
   char * set = malloc(n);
   for(int i=0;i<n;i++){*(set+i) = 'A'+i;}
   char ** psets = malloc((1<<n) * sizeof(char*));
@@ -27,8 +37,8 @@ void powersets(char* set, int n, char**res){
   for(int i=0;i<(1<<n);i++){
     char* e =malloc(n);
     //*e = ' ';
-    for(int j=0;j<n;j++){
-      if(i & (1<<j)){/*printf("%c",*(set+j));*/
+    for(int j=0,k=i;k;j++,k >>= 1){
+      if(k & 1){/*printf("%c",*(set+j));*/
         *(e+j) = *(set+j);
       }
     }
@@ -37,12 +47,13 @@ void powersets(char* set, int n, char**res){
   }
 }
 /*
-   0b_0000
-   0b_0001
-   0b_0010
-   0b_0011
-   0b_0100
-   0b_0101
+   el_dcba
+   0b_0000 = []
+   0b_0001 = [a]
+   0b_0010 = [b]
+   0b_0011 = [a,b]
+   0b_0100 = [c]
+   0b_0101 = [c,a]
    0b_0110
    0b_0111
    0b_1000

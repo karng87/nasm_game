@@ -23,27 +23,33 @@ void hanoitower(int n, char start, char waypoint, char dest){
 }
 
 /**********************
-* f(3,A,B,C){
-*     f(2,A,C,B){
-*               f(1,A,B,C){1:A->C}
-*               2=: A->B
-*               f(1,C,A,B){1:C->B}
-*     }
-*
-*     3=:A->C
-*
-*     f(2,B,A,C){
-*               f(1,B,C,A){1=:B->A}
-*               2=:B->C
-*               f(1,A,B,C){1=:B->C}
-*     }
-* }
-************************/
+  stack {([[{{}}]])}
+  점화식 recursion formula
 
-/************************
-* f(4,A,B,C){
-*       f(3,A,C,B){}
-*       4=:A->C
-*       f(3,B,A,C){}
-* }
+  f_1(s->d) = print(s -> d);
+  f_2(s->d) = f_1(s->w);f_1(s->d);
+  f_3(s->d) = f_2(s->w);f_1(s->d);f_2(w->d);
+  f_4(s->d) = f_3(s->w);f_1(s->d);f_3(w->d);
+  f_5(s->d) = f_4(s->w);f_1(s->d);f_4(w->d);
+  f_n(s->d) = f_(n-e)(s-w>); f_(1)(s->d); f_{n-1}(w->d);
+
+  f(int n){
+    if(n=1){printf;}
+    f(n-1);
+  }
+
+  void f(n,arg){
+    cmd1;
+    f(n-1,arg);
+    cmd2;
+    f(n-2,arg);
+    return;
+  }
+  void f(n,arg){
+    if(n==1) printf;return;
+    f(n-1,arg){cmd1; f(n-2,arg){}; cmd2; f(n-3,arg){}; return;}
+    cmd2;
+    f(n-2,arg);
+    return;
+  }
 ************************/
