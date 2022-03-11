@@ -6,7 +6,7 @@
 int main(){
   const wchar_t * cmd = L"/home/jkarng/.config/nvim/bin/tts 한글test";
   setlocale(LC_ALL,NULL);
-  system(cmd);
-  printf("한글\n");
+  //system(cmd);
+  printf("tts 한글\n");
   return 0;
 }

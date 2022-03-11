@@ -2,6 +2,7 @@
 #include<stdlib.h>
 
 void powersets(char *, int, char**);
+void powerset(char *, int, char**);
 int main(){
   /*
   int a = 0b001;
@@ -15,15 +16,17 @@ int main(){
   
   int n = 4;
   char * set = malloc(n);
-  for(int i=0;i<n;i++){*(set+i) = 'A'+i;}
+    for(int i=0;i<n;i++){*(set+i) = 'A'+i;}
   char ** psets = malloc((1<<n) * sizeof(char*));
-  powersets(set,n,psets);
-  for(int i=0;i<(1<<n); i++){
-    for(int j=0;j<n;j++){
-      printf("%c",*(*(psets+i)+j));
+    for(int i=0;i<(1<<n);i++){ *(psets+i) = malloc(n*sizeof(char)); /*for(int j=0;j<n;j++){*(*(psets+i)+j) = 0;}*/ }
+  powerset(set,n,psets);
+    for(int i=0;i<(1<<n); i++){
+      printf("(");
+      for(int j=0;j<n;j++){
+        printf("%c",*(*(psets+i)+j));
+      }
+      printf(")\n");
     }
-    printf("\n");
-  }
   free(set);
   for(int i=0;i<(1<<n);i++){
     free(*(psets+i));
@@ -33,17 +36,23 @@ int main(){
   psets=NULL;
   return 0;
 }
-void powersets(char* set, int n, char**res){
+void powerset(char* set, int n, char**res){
   for(int i=0;i<(1<<n);i++){
-    char* e =malloc(n);for(int i=0;i<n;i++) *(e+i)=0;
-    //*e = ' ';
-    for(int j=0,k=i;k;j++,k >>= 1){
-      if(k & 1){/*printf("%c",*(set+j));*/
-        *(e+j) = *(set+j);
+    for(int j=0;j<n;j++){
+      if(i & 1<<j){
+        *(*(res+i)+j) = *(set+j);
       }
     }
-    *(res+i) = e;
-    e = NULL;
+  }
+}
+void powersets(char* set, int n, char**res){
+  for(int i=0;i<(1<<n);i++){
+    for(int j=0,k=i;k;j++,k >>= 1){
+      if(k & 1){
+        printf("%c",*(set+j));
+        *(*(res+i)+j) = *(set+j);
+      }
+    }
   }
 }
 /*

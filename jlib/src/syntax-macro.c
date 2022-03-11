@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <jprint.h>
 #include <jbits.h>
 
-#define PRINTB(X) jprint_i2b(X);
+#define PRINTB(X) jb_i2b(X);
 #define PRINTX(X) printf("\n" #X " is %#x\n",X);
 int main(){
   int a=0b0101;
@@ -11,7 +10,7 @@ int main(){
   PRINTX(b)
   //a^b=0b0010;
   //a ^= b ^= a ^= b;
-  j_swap(&a,&b);
+  jb_swap(&a,&b);
   PRINTB(a)
   PRINTX(b)
 

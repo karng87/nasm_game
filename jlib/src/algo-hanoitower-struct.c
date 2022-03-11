@@ -55,6 +55,6 @@ void movedisk(struct Stack *src, struct Stack *des){
   int desT = pop(des);
   if(srcT == INT_MIN){
     push(src,desT);
-    printf("Move the disk %d from \'%c\' to \'%c\'\n",desT,d,s);
+    //printf("Move the disk %d from \'%c\' to \'%c\'\n",desT,d,s);
   }
 }

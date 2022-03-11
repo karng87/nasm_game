@@ -53,3 +53,21 @@ void pset_rec(char* src,int s_size,char** des,int depth){
 2     [][a][b][ab]
 3     [][a][b][ab][c] [ca] [cb] [cab]
   */
+
+/*
+   nums{A,B,C} =size:3
+
+   f[d:0,v:[],num[A,B,C],res[[]]
+    => f(d:1,v:[],num[ABC],res[]) => v[]+:num[0] => f(d:1,v[+A],res[]) => v[]-A
+    
+   > f[d:1,v:[],num[ABC],res[[]] <
+    => f(d:2,v:[],num[ABC],res[]) => v[B] => f(d:2,v[B],res[]) => v[]
+
+   >> f[d:2,v:[B],num[ABC],res[[]] <=> res[[],C], v[] <<
+    => f(d:3,v:[B],num[ABC],res[]) => v[]+:num[2] => f(d:2,v[+C],res[]) => v[]-C
+    => res[[],C,B]=:v[B] => v[B,C] => * f(d:2,v[BC],res[[],C,B]) => v[]-C 
+    => res=:v[[],[C],[B],[BC]] => v[B,C] => * f(d:2,v[+C],res[[]]) => v[]-C
+        => * f(d:3,v[C],res[]) => v[]-C
+        <=> res[[],C], v[]
+
+*/

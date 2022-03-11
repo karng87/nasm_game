@@ -3,6 +3,6 @@
 
 #include<stdio.h>
 
-void jprint_i2b(int x);
+//void jprint_i2b(int x);
 
 #endif

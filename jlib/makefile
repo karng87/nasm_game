@@ -3,19 +3,21 @@
 #l_j :=
 #LD_x :=$(I_x) $(L_x) $(l_x)
 
+rpath_j := -Wl,-rpath=./libs
 I_j := -I./libs/include
 L_j := -L./libs
 l_j := -lj
-l_jc := -ljc
-LD_j := $(I_j) $(L_j) $(l_j)
-LD_jc := $(I_j) $(L_j) $(l_jc)
+l_jc := -ljc 
+LD_j := $(I_j) $(L_j) $(l_j) $(rpath_j)
+LD_jc := $(I_j) $(L_j) $(l_jc) $(rpath_j)
 
+rpath_p := -Wl,-rpath=./build/libs
 I_p := -I./src/inclucde
 L_p := -L./build/libs
 l_p := -lp
 l_pc := -lpc
-LD_p := $(I_p) $(L_p) $(l_p)
-LD_pc := $(I_p) $(L_p) $(l_pc)
+LD_p := $(I_p) $(L_p) $(l_p) $(rpath_p)
+LD_pc := $(I_p) $(L_p) $(l_pc) $(rpath_p)
 
 SRCS := $(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '\./test.cpp')
 C_SRCS := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '\./test.c')
