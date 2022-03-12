@@ -21,35 +21,72 @@ void hanoitower(int n, char start, char waypoint, char dest){
   printf("<*** <4th end call: hanoi(%d,%c,%c,%c) void return\n",n,start,waypoint,dest);
   return;
 }
+/** tree **
+ node (root internal leaf)
+ edge (depth)
+ level (transverse level)
+****/
+/*** Inorder tree search *** 
+  left -> root(In) -> right
+    - Preorder tree search => root(Pre) -> left -> right
+    - Postorder tree search =>  left -> right -> root(Post)
+  node leaf 
+****/
 
-/**********************
-  stack {([[{{}}]])}
-  점화식 recursion formula
+/********
+  context:: n=3 start={'S'} waypoint={'W'} dest={'D'}
+  edge -> root -> edge (inorder)
+----------------------------
+call: f(3, 1:'S', 2:'W', 3:'D')
+  0l{ edge||f(2, 1:'S', 3:'D', 2:'W')|| node(print [3] 1:'S'-> 3:'D') edge||f(2, 2:'W', 1:'S', 3:'D')|| }
 
-  f_1(s->d) = print(s -> d);
-  f_2(s->d) = f_1(s->w);f_1(s->d);
-  f_3(s->d) = f_2(s->w);f_1(s->d);f_2(w->d);
-  f_4(s->d) = f_3(s->w);f_1(s->d);f_3(w->d);
-  f_5(s->d) = f_4(s->w);f_1(s->d);f_4(w->d);
-  f_n(s->d) = f_(n-e)(s-w>); f_(1)(s->d); f_{n-1}(w->d);
+0l-edge: f(2,1:'S',2:'D',3:'W') -> call 0l-node 
+  1l{edge||f(1, 1:'S', 3:'W', 2:'D')|| node(print [2] 1:'S'-> 3:'W') edge||f(1, 2'D', 1'S', 3'W')|| }
 
-  f(int n){
-    if(n=1){printf;}
-    f(n-1);
-  }
+1l-edge: f(1,1:'S',2:'W',3:'D') => call 1l-node
+  2l{edge||f(0, 1:'S', 3:'D', 2:'W')|| node(print [1] 1:'S'-> 3:'D') edge||f(0, 2:'W', 1:'S', 3:'D')|| }
 
-  void f(n,arg){
-    cmd1;
-    f(n-1,arg);
-    cmd2;
-    f(n-2,arg);
-    return;
-  }
-  void f(n,arg){
-    if(n==1) printf;return;
-    f(n-1,arg){cmd1; f(n-2,arg){}; cmd2; f(n-3,arg){}; return;}
-    cmd2;
-    f(n-2,arg);
-    return;
-  }
-************************/
+2l-edge: f(0,1:'S',2:'D',3:'W') => call 2l-node
+  3l{edge||f(0, 1:'S', 3:'W', 2:'D')|| node(print [0] 1:'S'-> 3:'W') edge||f(0, 2:'D', 1:'S', 3:'W')|| }
+30-edge: f(0, 1:'S', 2:'W', 3:'D')> => call 3l-node
+  leaf{return;} 
+
+*************/
+/********
+  context:: n=3 start={'S'} waypoint={'W'} dest={'D'}
+  edge -> root -> edge (inorder)
+----------------------------
+call: f(3,{1:'S'},{2:'W'},{3:'D'})
+  0l{ edge|-f(2,1:'S',3:'D',2:'W')-| _node(print [3] 1:'S'-> 3:'D') edge|-f(2,2:'W',1:'S',3:'D')-| }
+
+0l-edge: f(2,1:'S',2:'D',3:'W') -> call 0l-node 
+  1l{edge||-f(1,1:'S',3:'W',2:'D')-|| __node(print [2] 1:'S'-> 3:'W') edge||-f(1,2'D',1'S',3'W')-|| }
+
+1l-edge: f(1,1:'S',2:'W',3:'D') => call 1l-node
+  2l{edge||||-f(0,1:'S',3:'D',2:'W')-|||| ____node(print [1] 1:'S'-> 3:'D') edge||||-f(0,2:'W',1:'S',3:'D')-|||| }
+
+2l-edge: f(0,1:'S',2:'D',3:'W') => call 2l-node
+  3l{edge||||||||-f(0,1:'S',3:'W',2:'D')-|||||||| node(print [0] 1:'S'-> 3:'W') edge||||||||-f(0,2:'D',1:'S',3:'W')-|||||||| }
+30-edge: f(0,1:'S',2:'W',3:'D')> => call 3l-node
+  leaf{return;} 
+
+*************/
+/********
+  context:: n=3 start={'S'} waypoint={'W'} dest={'D'}
+  edge -> root -> edge (inorder)
+----------------------------
+call: f(3,{1:'S'},{2:'W'},{3:'D'})
+  0l{ edge-f(2,1:'S',3:'D',2:'W')- node(print [3] 1:'S'-> 3:'D') edge-f(2,2:'W',1:'S',3:'D')- }
+
+0l-edge: f(2,1:'S',2:'D',3:'W') -> call 0l-node 
+  1l{edge-f(1,1:'S',3:'W',2:'D')- node(print [2] 1:'S'-> 3:'W') edge-f(1,2'D',1'S',3'W')- }
+
+1l-edge: f(1,1:'S',2:'W',3:'D') => call 1l-node
+  2l{edge-f(0,1:'S',3:'D',2:'W')- node(print [1] 1:'S'-> 3:'D') edge-f(0,2:'W',1:'S',3:'D')- }
+
+2l-edge: f(0,1:'S',2:'D',3:'W') => call 2l-node
+  3l{edge-f(0,1:'S',3:'W',2:'D')- node(print [0] 1:'S'-> 3:'W') edge||||||||-f(0,2:'D',1:'S',3:'W')-|||||||| }
+30-edge: f(0,1:'S',2:'W',3:'D')> => call 3l-node
+  leaf{return;} 
+
+*************/
