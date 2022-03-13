@@ -2,6 +2,7 @@
 #define _H_JBIT_H
 
 void jb_swap(int*,int*);
+void jb_swap_c(char*,char*);
 int jb_odd(int);
 int jb_even(int);
 int jb_is_nth(int,int);

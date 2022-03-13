@@ -1,6 +1,7 @@
 #include <jbits.h>
 
 void jb_swap(int* a, int* b){*a ^= *b ^= *a ^= *b;}
+void jb_swap_c(char* a, char* b){*a ^= *b ^= *a ^= *b;}
 int jb_odd(int x){return (x&1)?1:0;}
 int jb_even(int x){return !jb_odd(x)?1:0;}
 int jb_is_nth(int x, int n){return (x & (1<<n)) ? 1:0;}
