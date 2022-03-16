@@ -15,7 +15,7 @@
 */
 typedef struct matrix{int rows;int cols;double ** data;}matrix;
 matrix* create_matrix(int rows,int cols){
-  srand(time(NULL));
+  srand(time(0));
   matrix * mat = malloc(sizeof(matrix));
   if(mat ==NULL) {printf("Fail mat");return NULL;}
   mat->rows = rows;
@@ -64,8 +64,8 @@ void print_matrix(matrix* mat){
 
 int main(){
   //{system("tts \"Elementary operation\"");printf("\tElementary Operaton: 기본행 연산\n");}
-  matrix * A = create_matrix(3,3);
-  matrix * B = create_matrix(3,3);
+  matrix * A = create_matrix(2,2);
+  matrix * B = create_matrix(2,1);
   print_matrix(A);
   print_matrix(B);
   matrix * C=mul_matrix(A,B);
