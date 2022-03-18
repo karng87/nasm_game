@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include<math.h>
 
 double NaN = 0.0/0.0;
 double Inf = 1.0/0.0;
@@ -29,7 +30,7 @@ int get_non_zero_col(matrix*,int);
 void echelon(matrix** M);
 int main(){
   //{system("tts \"Elementary operation\"");printf("\tElementary Operaton: 기본행 연산\n");}
-  matrix * A = MRR(3,3,5);
+  matrix * A = MR(3,3);
   print_matrix(A);
   echelon(&A);
   print_matrix(A);
@@ -40,7 +41,7 @@ int main(){
  **/
 int get_non_zero_col(matrix* M,int row){
     for(int j=0;j<M->cols;j++){
-      if(*(*(M->data+row)+j) != 0){
+      if(fabs(*(*(M->data+row)+j)) > 0.0000001){
         return j;
       }
     }
@@ -66,8 +67,11 @@ void echelon(matrix** M){
     if(c==-1) continue;
     idx pi = {i,c};
     for(int b=i+1;b<(*M)->rows;b++){
+      if(*(*((*M)->data+b)+c)==0) continue;
       idx bi = {b,c};
-      *M = EM_bipi(*M,bi,pi);
+      matrix * tmp = EM_bipi(*M,bi,pi);
+      *M  = mul_matrix(tmp,*M);
+      print_matrix(*M);
     }
   }
 }
@@ -146,6 +150,8 @@ matrix* mul_matrix(matrix* A,matrix* B){
       }
     }
   }
+  free_matrix(A);
+  free_matrix(B);
   return res;
 }
 
