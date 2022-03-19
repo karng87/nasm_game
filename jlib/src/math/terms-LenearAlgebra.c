@@ -1,7 +1,21 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void terms(){
+void matrix_terms(){
+  system("tts \"Matrix\"");
+  system("tts \"Identity matrix\"");
+  system("tts \"Elementary matrix\"");
+  system("tts \"Diagonal matrix\"");
+  system("tts \"trianglar matrix\"");
+  system("tts \"Upper trianglar matrix\"");
+  system("tts \"Lower trianglar matrix\"");
+  system("tts \"Transverse matrix\"");
+  system("tts \"augmented matrix\"");
+  system("tts \"coefficient matrix\"");
+}
+
+void terms_tts(){
+  matrix_terms();
   system("tts \"nonzero row\"");
   system("tts \"nonzero column\"");
   system("tts \"leading entry of row\"");
@@ -16,6 +30,6 @@ void terms(){
   system("tts \"1-2) pivot column\"");
 }
 int main(){
-  terms();
+  terms_tts();
   return 0;
 }
