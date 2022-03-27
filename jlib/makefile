@@ -8,8 +8,8 @@ I_j := -I./libs/include
 L_j := -L./libs
 l_j := -lj
 l_jc := -ljc 
-LD_j := $(I_j) $(L_j) $(l_j) $(rpath_j)
-LD_jc := $(I_j) $(L_j) $(l_jc) $(rpath_j)
+LD_j := $(I_j) $(L_j) $(l_j) $(rpath_j) -lmgl2-qt5 -lmgl2
+LD_jc := $(I_j) $(L_j) $(l_jc) $(rpath_j) -lmgl2-qt5 -lmgl2
 
 rpath_p := -Wl,-rpath=./build/libs
 I_p := -I./src/inclucde
