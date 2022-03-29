@@ -28,10 +28,10 @@ p_LDXXFLAGS := $(p_l)
 
 
 CFLAGS :=
-LDFLAGS := -lmgl2 -lmgl2-fltk -lmgl2-glut -lmgl2-qt5
+LDFLAGS := -lGL -lGLEW -lglfw -lmgl2 -lmgl2-fltk -lmgl2-glut -lmgl2-qt5
 
 CXXFLAGS :=
-LDXXFLAGS := -lmgl2 -lmgl2-fltk -lmgl2-glut -lmgl2-qt5
+LDXXFLAGS := -lGL -lGLEW -glfw -lmgl2 -lmgl2-fltk -lmgl2-glut -lmgl2-qt5
 
 
 SRCS := $(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '\./test.cpp')

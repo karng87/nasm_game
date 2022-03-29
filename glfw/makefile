@@ -1,35 +1,30 @@
 # L_FLAGS:= -L./build/libs -lmylibc -lmylib -lglfw -ldl
-L_FLAGS:=-L./external/libs 
-l_FLAGS:=-lglad -lglfw -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
-I_FLAGS:=-I./external/include -Isrc/include
-LD_FLAGS:=$(I_FLAGS) $(L_FLAGS) $(l_FLAGS)
+glad_CFLAGS:= -I./external/include -Isrc/include
+glad_LDFLAGS:= -L./external/libs -lglad -lglfw -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
+glad_FLAGS:= $(glad_CFLAGS) $(glad_LDFLAGS)
+
+glew_FLAGS:= -lGLEW -lGL -lglfw
 
 CC:=gcc
-CFLAGS:=-g -Wall
-lib_fPIC_CFLAGS:=-g -Wall -fPIC
-lib_shared_LD_CFLAGS:=-shared
-
+CFLAGS:=-g -Wall $(glad_CFLAGS)
 CXX:=g++
-CXXFLAGS:=-g -Wall
-lib_fPIC_CXXFLAGS:=-g -Wall -fPIC
-lib_shared_LD_CXXFLAGS:=-shared -Wall
+CXXFLAGS:=-g -Wall -std=c++20
+
+fPIC_CFLAGS:=-g -Wall -fPIC
+shared_LDFLAGS:=-shared
+
 
 no_pie_LD_CFLAGS:=-no-pie
 static_LD_CFLAGS:=-static
 
-nasm_CFLAGS:=
-
-CXX:=g++
-CXXFLAGS:=-g -Wall -std=c++20
-
 AS:=as
-ASFLAGS:=--64
+AS_FLAGS:=--64
 
 NASM:=nasm
-NASMFLAGS:=-g -felf64
+NASM_FLAGS:=-g -felf64
 
-LD=ld
-LDFLAGS := -melf_x86_64 -emain -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
+ld=ld
+ldFLAGS := -melf_x86_64 -emain -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
 	 -L /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/ \
 		/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/crtbegin.o \
 		/usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/crtend.o \
@@ -38,42 +33,50 @@ LDFLAGS := -melf_x86_64 -emain -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
 		/lib/crtn.o
 
 nasm_SRCS=$(shell find src -type f -regextype posix-extended -regex '.*\.asm$$' -and -not -regex '\./(lib|build)/.*')
-nasm_TARGETS=$(patsubst src/%.asm,build/binn/%,$(nasm_SRCS))
+nasm_TARGETS=$(patsubst src/%.asm,build/%.out,$(nasm_SRCS))
 
 as_SRCS=$(shell find src -type f -regextype posix-extended -regex '.*\.S$$' -and -not -regex '\./(lib|build)/.*')
-as_TARGETS=$(patsubst src/%.asm,build/bina/%,$(as_SRCS))
+as_TARGETS=$(patsubst src/%.asm,build/%.out,$(as_SRCS))
 
 c_SRCS=$(shell find src -type f -regextype posix-extended -regex '.*\.c$$' -and -not -regex '\./(lib|build)/.*')
-c_TARGETS=$(patsubst src/%.c,build/binc/%,$(c_SRCS))
+c_TARGETS=$(patsubst src/%.c,build/%.out,$(c_SRCS))
 cxx_SRCS=$(shell find src -type f -regextype posix-extended -regex '.*\.cpp$$' -and -not -regex '\./(lib|build)/.*')
-cxx_TARGETS=$(patsubst src/%.cpp,build/bin/%,$(cxx_SRCS))
+cxx_TARGETS=$(patsubst src/%.cpp,build/%.out,$(cxx_SRCS))
 
 
-.PHONY: libs compile_commands.json all run clean echo
+.PHONY: external libs compile_commands.json all run clean echo
 
-all: libs
+all: external
 	$(MAKE) $(c_TARGETS)
 	$(MAKE) $(cxx_TARGETS)
 
-libs: 
+external: 
 	$(MAKE) -C external 
 	$(MAKE) -C libs
 
-build/binc/%: src/%.c
-	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/binc/\1#p' <<< $<)
-	$(CC) $(CFLAGS) $(LD_FLAGS) -o $@ $<
+build/%.out: src/%.c
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
+	$(CC) $(CFLAGS) $(glad_FLAGS) -o $@ $<
 
-build/bin/%: src/%.cpp 
-	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/bin/\1#p' <<< $<)
-	$(CXX) $(CXXFLAGS) $(LD_FLAGS) -o $@ $<
+build/%_glew.out: src/%_glew.c
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
+	$(CC) $(CFLAGS) $(glew_FLAGS) -o $@ $<
 
-build/bina/%: src/%.S
-	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/bina/\1#p' <<< $<)
-	$(CC) $(CFLAGS) $(LD_FLAGS) -o $@ $<
+build/%.out: src/%.cpp 
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
+	$(CXX) $(CXXFLAGS) $(glad_FLAGS) -o $@ $<
 
-build/binn/%: src/%.asm
-	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/binn/\1#p' <<< $<)
-	$(CC) $(CFLAGS) $(LD_FLAGS) -o $@ $<
+build/%_glew.out: src/%_glew.cpp 
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
+	$(CXX) $(CXXFLAGS) $(glew_FLAGS) -o $@ $<
+
+build/%.out: src/%.S
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
+	$(CC) $(CFLAGS)  -o $@ $<
+
+build/%.out: src/%.asm
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
+	$(NASM) $(NASM_FLAGS) -o $@ $<
 
 run: $(cxx_TARGETS)
 ifdef args 
@@ -100,11 +103,18 @@ clean:
 
 build/json/%.cpp.json: src/%.cpp
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
-	clang++ -MJ $@ -Wall -std=c++20 $(LD_FLAGS) -o/dev/null $<
+	clang++ -MJ $@ -Wall -std=c++20 $(glad_FLAGS) -o/dev/null $<
+
+build/json/%_glew.cpp.json: src/%_glew.cpp
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
+	clang++ -MJ $@ -Wall -std=c++20 $(glew_FLAGS) -o/dev/null $<
 
 build/json/%.c.json: src/%.c
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
-	clang -MJ $@ -Wall $(LD_FLAGS) -o/dev/null $<
+	clang -MJ $@ -Wall $(glad_FLAGS) -o/dev/null $<
+build/json/%_glew.c.json: src/%_glew.c
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
+	clang -MJ $@ -Wall $(glew_FLAGS) -o/dev/null $<
 
 compile_commands.json: $(patsubst src/%,build/json/%.json,$(c_SRCS)) $(patsubst src/%,build/json/%.json,$(cxx_SRCS))
 	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find build/json -type f -name "*.json"` > compile_commands.json)
