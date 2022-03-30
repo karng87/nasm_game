@@ -1,4 +1,6 @@
-LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
+vulkan_ldflags = -lglfw -lvulkan -ldl -lpthread -lxcb -lX11 -lX11-xcb -lxcbcommon -lXxf86vm -lXrandr -lXi
+CFAAGS := -g -MM -Wall -Werror 
+
 SRCS:=$(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '\./test.cpp')
 C_SRCS:=$(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '\./test.c')
 LIBS:=$(shell find libs -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '\./test.cpp')
@@ -41,10 +43,10 @@ run: $(patsubst src/%,build/%.out,$(SRCS))
 	LD_LIBRARY_PATH+=. ./$(word 1,$^)
 
 
+tmp := $(shell find -type f,l -regextype posix-extended -regex '(./compile_commands.json$$)|(./build/.*)|(./(app|src|test)/.*(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*|Sample2017)/.*')
 echo:
-	echo $(SRCS)
+	echo $(tmp)
 
-tmp := $(shell find -type f,l -regextype posix-extended -regex '(./compile_commands.json$$)|(./build/.*)|(./(app|src|test)/.*(hi|o|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
 clean:
 	rm $(tmp)
 
