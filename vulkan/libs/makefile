@@ -1,4 +1,5 @@
 vulkan_LD := -lglfw -lvulkan -ldl -lpthread -lxcb -lX11 -lX11-xcb -lxkbcommon -lXxf86vm -lXrandr -lXi
+mce_LD := -Lbuild -lmce
 CFLAGS := -g -MM -Wall -Werror 
 Define := -D_DEBUG
 
@@ -18,7 +19,7 @@ build/libmce.so: $(patsubst src/%.c,build/obj/%.c.o,$(SRCS))
 
 build/%: src/test.c 
 	@mkdir -p $(shell sed -En 's,src/(.*/)*.+,build/\1,p' <<< $<)
-	gcc -g -Wall -Werror -Lbuild -Wl,-rpath,. $(vulkan_LD) -o $@ $< 
+	gcc -g -Wall -Werror -Wl,-rpath,./build $(mce_LD) -o $@ $< 
 
 run: build/test
 	#LD_LIBRARY_PATH+=$$(pwd)/build 

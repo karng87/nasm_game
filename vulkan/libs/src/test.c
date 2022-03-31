@@ -1,7 +1,8 @@
 #include<stdio.h>
 #include<vulkan/vulkan.h>
+#include"log.h"
 
 int main(){
-  printf("Hello Math C engine");
+  init_log();
   return 0;
 }

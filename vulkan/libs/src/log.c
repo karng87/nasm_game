@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 bool init_log(){
+  printf("init_log\n");
   return true;
 }
 void shutdown_log(){
