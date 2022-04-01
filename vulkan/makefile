@@ -1,20 +1,20 @@
 external_I  := -I./external/build/include
-external_ld := -L./external/build -l...
+external_ld := -L./external/build -lglad
 
-lib_I:=libs/include
-lib_L:=libs/build
-libc_l = jc
-libcxx_l = j
-libasm_l = ja
-Wl_rpath = -Wl,-rpath build/libs -Wl,-rpath libs/build
+lib_I := -Ilibs/include
+lib_L := -Llibs/build
+libc_l := -ljc
+libcxx_l := -lj
+libasm_l := -lja
+Wl_rpath := -Wl,-rpath libs/build
 
-I := -I$(lib_I)
-L := -L$(lib_L)
-lc := -l$(libc_l)
-lcxx := -l$(lib_l)
-lasm := -l$(libasm_l)
+I := $(lib_I)
+L := $(lib_L)
+lc := $(libc_l)
+lcxx := $(libcxx_l)
+lasm := $(libasm_l)
 
-CFLAGS := -g -Wall -Werror $(I)
+CFLAGS := -g -Wall $(I)
 CXXFLAGS := $(CFLAGS)
 LDFLAGS := $(L) $(lc) $(Wl_rpath)
 LDXXFLAGS := $(L) $(lcxx) $(Wl_rpath)
@@ -30,19 +30,31 @@ all: build_library $(patsubst src/%,build/%.out,$(SRC_C) $(SRC_CXX) $(SRC_ASM))
 build_library:
 	$(MAKE) -C libs
 
+
+build/obj/%.asm.o: src/%.asm
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
+	nasm -felf64 -o$@ $<
+build/%.asm.out: build/obj/%.asm.o
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
+	gcc $(LDFLAGS) -o $@ $<
+
+runasm: build_library $(patsubst src/%,build/%.out,$(SRC_C))
+	./$(word 2,$^)
+
+
 build/%.c.out: src/%.c
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
-	gcc -g -Wall $(CFLAGS) $(LDFLAGS) -o $@ $< 
+	gcc -g -Wall $(CFLAGS) $(LDFLAGS) -o $@ $<
 
 runc: build_library $(patsubst src/%,build/%.out,$(SRC_C))
-	LD_LIBRARY_PATH+=$$(pwd)/build/libs ./$(word 2,$^)
+	./$(word 2,$^)
 
 build/%.cpp.out: src/%.cpp 
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
 	g++ -g -Wall -std=c++20 $(CXXFLAGS) $(LDXXFLAGS) -o $@ $< 
 
 run: build_libarary $(patsubst src/%,build/%.out,$(SRC_CXX))
-	LD_LIBRARY_PATH+=$$(pwd)/build/libs ./$(word 2,$^)
+	./$(word 2,$^)
 
 
 tmp := $(shell find -type f,l -regextype posix-extended -regex '(./compile_commands.json$$)|(./build/.*)|(./(app|src|libs|test)/.*\.(hi|o|so|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
@@ -63,6 +75,5 @@ build/json/%.c.json: src/%.c
 	clang -MJ $@ -Wall $(CFLAGS) $(LDFLAGS) -o/dev/null $<
 
 compile_commands.json:  $(patsubst src/%,build/json/%.json,$(SRC_C)) $(patsubst src/%,build/json/%.json,$(SRC_CXX))
-	$(MAKE) -C libs compile_commands.json
 	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find -type f -name "*.json"` > compile_commands.json)
 

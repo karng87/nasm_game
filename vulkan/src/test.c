@@ -8,9 +8,9 @@ int main(){
   FATAL("A test msg: %f",3.14f);
 
   char * targets = "e^x = sin(x) + cos(x)";
-  char * pattern = "[a-z]*([0-9]+)([a-z]*)";
   //char * pattern = "[a-z]*([0-9]+)([a-z]*)";
-  //char * pattern = "([^= ]).*([a-z0-9]*).*(cos.*)";
+  //char * pattern = "[a-z]*([0-9]+)([a-z]*)";
+  char * pattern = "([^=)+)=([a-z0-9]*).*(cos.*)";
   size_t maxGroups = 3;
 
   regex_t rg_struct;
