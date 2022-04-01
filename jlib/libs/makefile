@@ -2,7 +2,7 @@ so_libc := libjc.so
 so_libcxx := libj.so
 so_libasm := libja.so
 
-I := -Ilibs/include 
+I := -Iinclude
 L :=
 lc :=
 lcxx :=
@@ -18,9 +18,9 @@ SRC_C:=$(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -n
 SRC_CXX:=$(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test.cpp')
 SRC_ASM:=$(shell find src -type f -regextype posix-extended -regex '.*\.asm' -and -not -regex '.*/test.asm')
 
-.PHONY: compile_commands.json all run runc runasm clean echo
+.PHONY: compile_commands all run runc runasm clean echo
 
-all: build/$(so_libc) build/$(so_libasm) build/$(so_libcxx)
+all: build/$(so_libc)
 
 build/obj/%.asm.o: src/%.asm
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
@@ -37,7 +37,7 @@ build/test.asm.out: build/obj/test.asm.o
 
 build/obj/%.c.o: src/%.c
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
-	gcc -fPIC -Wall $(CFLAGS) -c -L$(I) -o$@ $<
+	gcc -fPIC -Wall -c -L$(I) -o$@ $<
 
 build/$(so_libc): $(patsubst src/%,build/obj/%.o,$(SRC_C))
 	gcc -shared -Wall $(LDFLAGS) -o$@ $^
@@ -65,10 +65,8 @@ runasm: $(so_libasm) build/test.asm.out
 
 tmp := $(shell find -type f,l -regextype posix-extended -regex '(./compile_commands.json$$)|(./build/.*)|(./(app|src|libs|test)/.*\.(hi|o|so|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
 echo:
-	$(MAKE) -C libs echo
 	echo $(tmp)
 clean:
-	$(MAKE) -C libs clean
 	rm $(tmp)
 
 build/json/%.cpp.json: src/%.cpp
@@ -77,8 +75,8 @@ build/json/%.cpp.json: src/%.cpp
 
 build/json/%.c.json: src/%.c
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
-	clang -MJ $@ -Wall $(CFLAGS) $(LDFLAGS) -o/dev/null $<
+	clang -MJ $@ -Wall -o/dev/null $<
 
-compile_commands.json:  $(patsubst src/%,build/json/%.json,$(C_SRCS)) $(patsubst src/%,build/json/%.json,$(SRCS))
+compile_commands:  $(patsubst src/%,build/json/%.json,$(C_SRCS)) $(patsubst src/%,build/json/%.json,$(SRCS))
 	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find -type f -name "*.json"` > compile_commands.json)
 

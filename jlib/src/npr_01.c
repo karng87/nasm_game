@@ -15,7 +15,7 @@ int main(){
   char * src = malloc(n*1); char c =('A'-0); for(int i=0;i<n;i++){*(src+i)=c++;}
   char ** des = malloc(inpr(n,r)*sizeof(char*)); for(int i=0;i<inpr(n,3);i++){*(des+i)=malloc(r*1);}
   nPr(src,des,n,3);
-  printpp(des,inpr(5,3),3);
+  printpp((void*)des,inpr(5,3),3);
   return 0;
 }
 

@@ -17,7 +17,7 @@ void print_node_linkedList(struct node_linkedList *head);
 struct node_linkedList* create_node_linkedList(int val);
 void free_node_linkedList(struct node_linkedList * head);
 
-struct node_linkedList * insert_at_head(struct node_linkedList **head, struct node_linkedList *new);
+struct node_linkedList * insert_at_head(struct node_linkedList **, struct node_linkedList *);
 void insert_after_node_linkedList(struct node_linkedList* node_linkedList_to_insert_after,struct node_linkedList* new_node_linkedList);
 bool remove_node_linkedList(struct node_linkedList ** head, struct node_linkedList * to_del_node_linkedList);
 #endif

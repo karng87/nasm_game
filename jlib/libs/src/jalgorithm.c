@@ -1,7 +1,7 @@
-#include<jbits.h>
-#include<jalgorithm.h>
-#include<stdio.h>
-#include<stdlib.h>
+#include <jbits.h>
+#include <jalgorithm.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /*** nPn ***/
 static int dest_idx;

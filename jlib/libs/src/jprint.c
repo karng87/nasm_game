@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <jbits.h>
 
 void jb_i2b(int x){
