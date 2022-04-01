@@ -1,8 +1,9 @@
-#include<stdio.h>
-#include<vulkan/vulkan.h>
-#include"log.h"
+#include <stdio.h>
+#include <log/log.h>
+#include <flatform/asserts.h>
 
 int main(){
-  init_log();
+  FATAL("A test msg: %f",3.14f);
+  ASSERT(1==0);
   return 0;
 }

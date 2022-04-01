@@ -1,41 +1,82 @@
-vulkan_LD := -lglfw -lvulkan -ldl -lpthread -lxcb -lX11 -lX11-xcb -lxkbcommon -lXxf86vm -lXrandr -lXi
-mce_LD := -Lbuild -lmce
-CFLAGS := -g -MM -Wall -Werror 
-Define := -D_DEBUG
+so_libc := libjc.so
+so_libcxx := libj.so
+so_libasm := libja.so
 
+I := -Iinclude
+L :=
+lc :=
+lcxx :=
+lasm :=
+Wl_rpath = -Wl,-rpath build
 
-SRCS := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test.c')
+CFLAGS := -fPIC -g -Wall $(I)
+CXXFLAGS := $(CFLAGS)
+LDFLAGS := -shared $(L) $(lc)
+LDXXFLAGS := -shared $(L) $(lcxx)
 
-.PHONY: run echo clean
+SRC_C :=$(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test.c')
+SRC_CXX :=$(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test.cpp')
+SRC_ASM :=$(shell find src -type f -regextype posix-extended -regex '.*\.asm' -and -not -regex '.*/test.asm')
 
-all: build/libmce.so build/test
+.PHONY: compile_commands.json all run runc runasm clean echo
 
-build/obj/%.c.o: $(SRCS)
-	@mkdir -p $(shell sed -En 's,src/(.*/)*.+,build/obj/\1,p' <<< $<)
-	gcc -g -Wall -Werror -fPIC $(I) -c -o$@ $<
+all: build/$(so_libc)
 
-build/libmce.so: $(patsubst src/%.c,build/obj/%.c.o,$(SRCS))
-	gcc -shared -Wall -o$@ $^
+build/obj/%.asm.o: src/%.asm
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
+	nasm -felf64 -o$@ $<
 
-build/%: src/test.c 
-	@mkdir -p $(shell sed -En 's,src/(.*/)*.+,build/\1,p' <<< $<)
-	gcc -g -Wall -Werror -Wl,-rpath,./build $(mce_LD) -o $@ $< 
+build/$(so_libasm): $(patsubst %,build/obj/%.o,$(asm_SRCS))
+	gcc $(LDFLAGS) -o$@ $^
 
-run: build/test
-	#LD_LIBRARY_PATH+=$$(pwd)/build 
-	./build/test
+build/obj/test.asm.o: src/test.asm
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
+	nasm -felf64 -o$@ $<
+build/test.asm.out: build/obj/test.asm.o
+	gcc $(LDFLAGS) $< -o $@
+
+build/obj/%.c.o: src/%.c
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
+	gcc $(CFLAGS) -c -L$(I) -o$@ $<
+
+build/$(so_libc): $(patsubst src/%,build/obj/%.o,$(SRC_C))
+	gcc $(LDFLAGS) -o$@ $^
+
+build/test.c.out: src/test.c
+	gcc -g -Wall $< -o $@ -Iinclude -Lbuild -l$(patsubst lib%.so,%,$(so_libc)) $(Wl_rpath)
+
+build/obj/%.cpp.o: src/%.cpp
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
+	g++ $(CXXFLAGS) -c -o$@ $<
+build/$(so_libcxx): $(patsubst %,build/obj/%.o,$(SRC_CXX))
+	g++ $(LDXXFLAGS) -o$@ $^
+
+build/test.cpp.out: src/test.cpp
+	g++ -g -Wall $< -o $@ -Iinclude -Lbuild -l$(patsubst lib%.so,%,$(so_libcxx)) $(Wl_rpath)
+
+runc: build/$(so_libc) build/test.c.out
+	./$(word 2,$^)
+
+run: build/$(so_libcxx) build/test.cpp.out
+	LD_LIBRARY_PATH+=build ./$(word 2,$^)
+
+runasm: build/$(so_libasm) build/test.asm.out
+	LD_LIBRARY_PATH+=build ./$(word 2,$^)
 
 tmp := $(shell find -type f,l -regextype posix-extended -regex '(./compile_commands.json$$)|(./build/.*)|(./(app|src|libs|test)/.*\.(hi|o|so|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
-
 echo:
-	echo $(SRCS)
-
+	echo $(tmp)
 clean:
 	rm $(tmp)
 
-build/json/%.c.json: src/%.c
-	@mkdir -p $(shell sed -En 's,src/(.*/)*.+,build/json/\1,p' <<< $<)
-	clang -MJ $@ -Wall -Lbuild -lmce $(vulkan_LD) -o/dev/null $<
+build/json/%.cpp.json: src/%.cpp
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
+	clang++ -MJ $@ -Wall -std=c++20  $(CXXFLAGS) $(LDXXFLAGS) -c -o/dev/null $<
 
-compile_commands.json:  $(patsubst src/%,build/json/%.json,$(SRCS))
-	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find build -type f -name "*.json"` > compile_commands.json)
+build/json/%.c.json: src/%.c
+	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/json/\1#p' <<< $<)
+	clang -MJ $@ -Wall $(CFLAGS) $(LDFLAGS) -o/dev/null $<
+
+compile_commands.json:  $(patsubst src/%,build/json/%.json,$(SRC_C)) $(patsubst src/%,build/json/%.json,$(SRC_CXX))
+	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find -type f -name "*.json"` > compile_commands.json)
+
