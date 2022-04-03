@@ -1,16 +1,6 @@
 #pragma once
 
-#include <flatform/_dllexport.h>
-
-// Properly define static assertions.
-#if defined(__clang__) || defined(__gcc__)
-/** @brief Static assertion */
-#define STATIC_ASSERT _Static_assert
-#else
-
-/** @brief Static assertion */
-#define STATIC_ASSERT static_assert
-#endif
+#include <defines.h>
 
 // Disable assertions by commenting out the below line.
 #define ASSERTIONS_ENABLED

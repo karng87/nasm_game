@@ -1,27 +1,24 @@
-external_I  := -I./external/build/include
-external_ld := -L./external/build -lglad
+l_vulkan := -lvulkan -lxcb -lX11 -lX11-xcb -lxkbcommon
 
-lib_I := -Ilibs/include
-lib_L := -Llibs/build
-libc_l := -ljc
-libcxx_l := -lj
-libasm_l := -lja
+I_j := -Ilibs/include
+
+L_j := -Llibs/build
+
+l_jc := -ljc
+l_j := -lj
+l_ja := -lja
 Wl_rpath := -Wl,-rpath libs/build
+D := -D_DEBUG 
 
-I := $(lib_I)
-L := $(lib_L)
-lc := $(libc_l)
-lcxx := $(libcxx_l)
-lasm := $(libasm_l)
 
-CFLAGS := -g -Wall $(I)
+CFLAGS := -g -Wall $(I_j) $(D)
 CXXFLAGS := $(CFLAGS)
-LDFLAGS := $(L) $(lc) $(Wl_rpath)
-LDXXFLAGS := $(L) $(lcxx) $(Wl_rpath)
+LDFLAGS := $(L_j) $(l_jc) $(l_vulkan) $(Wl_rpath)
+LDXXFLAGS := $(L_j) $(l_j) $(Wl_rpath)
 
-SRC_C := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test.c')
-SRC_CXX := $(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test.cpp')
-SRC_ASM := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test.c')
+SRC_C := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test\.c')
+RC_CXX := $(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test\.cpp')
+SRC_ASM := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test\.asm')
 
 .PHONY: compile_commands.json all run runc runasm clean echo
 
@@ -38,8 +35,8 @@ build/%.asm.out: build/obj/%.asm.o
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
 	gcc $(LDFLAGS) -o $@ $<
 
-runasm: build_library $(patsubst src/%,build/%.out,$(SRC_C))
-	./$(word 2,$^)
+runasm: build_library $(patsubst src/%,build/%.out,$(SRC_ASM))
+	./main.asm.out
 
 
 build/%.c.out: src/%.c
@@ -47,20 +44,20 @@ build/%.c.out: src/%.c
 	gcc -g -Wall $(CFLAGS) $(LDFLAGS) -o $@ $<
 
 runc: build_library $(patsubst src/%,build/%.out,$(SRC_C))
-	./$(word 2,$^)
+	./build/main.c.out
 
 build/%.cpp.out: src/%.cpp 
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
 	g++ -g -Wall -std=c++20 $(CXXFLAGS) $(LDXXFLAGS) -o $@ $< 
 
 run: build_libarary $(patsubst src/%,build/%.out,$(SRC_CXX))
-	./$(word 2,$^)
+	./build/main.cpp.out
 
 
 tmp := $(shell find -type f,l -regextype posix-extended -regex '(./compile_commands.json$$)|(./build/.*)|(./(app|src|libs|test)/.*\.(hi|o|so|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
 echo:
 	$(MAKE) -C libs echo
-	echo $(tmp)
+	echo $(SRC_C)
 clean:
 	$(MAKE) -C libs clean
 	rm $(tmp)
