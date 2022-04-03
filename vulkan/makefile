@@ -1,42 +1,37 @@
 l_vulkan := -lvulkan -lxcb -lX11 -lX11-xcb -lxkbcommon
 
 I_j := -Ilibs/include
-
 L_j := -Llibs/build
-
 l_jc := -ljc
 l_j := -lj
 l_ja := -lja
-Wl_rpath := -Wl,-rpath libs/build
-D := -D_DEBUG 
-
+Wl_rpath := -Wl,-rpath libs/build #-Wl,-rpath build/libs
+D := -D_DEBUG -DEXPORT
 
 CFLAGS := -g -Wall $(I_j) $(D)
 CXXFLAGS := $(CFLAGS)
 LDFLAGS := $(L_j) $(l_jc) $(l_vulkan) $(Wl_rpath)
-LDXXFLAGS := $(L_j) $(l_j) $(Wl_rpath)
+LDXXFLAGS := $(L_j) $(l_j) $(l_vulkan) $(Wl_rpath)
 
 SRC_C := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test\.c')
-RC_CXX := $(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test\.cpp')
+SRC_CXX := $(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test\.cpp')
 SRC_ASM := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test\.asm')
 
 .PHONY: compile_commands.json all run runc runasm clean echo
 
-all: build_library $(patsubst src/%,build/%.out,$(SRC_C) $(SRC_CXX) $(SRC_ASM))
+all: build_library $(patsubst src/%,build/%.out,$(SRC_C) $(SRC_CXX) $(SRC_ASM)) compile_commands.json
 
 build_library:
 	$(MAKE) -C libs
-
 
 build/obj/%.asm.o: src/%.asm
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
 	nasm -felf64 -o$@ $<
 build/%.asm.out: build/obj/%.asm.o
-	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)
 	gcc $(LDFLAGS) -o $@ $<
 
 runasm: build_library $(patsubst src/%,build/%.out,$(SRC_ASM))
-	./main.asm.out
+	./build/main.asm.out
 
 
 build/%.c.out: src/%.c
@@ -57,7 +52,7 @@ run: build_libarary $(patsubst src/%,build/%.out,$(SRC_CXX))
 tmp := $(shell find -type f,l -regextype posix-extended -regex '(./compile_commands.json$$)|(./build/.*)|(./(app|src|libs|test)/.*\.(hi|o|so|out|aux|log|toc|nav|snm|lot|lof)$$)' -and -not -regex '.*(\.git|pack|dist.*)/.*')
 echo:
 	$(MAKE) -C libs echo
-	echo $(SRC_C)
+	echo $(tmp)
 clean:
 	$(MAKE) -C libs clean
 	rm $(tmp)
@@ -72,5 +67,5 @@ build/json/%.c.json: src/%.c
 	clang -MJ $@ -Wall $(CFLAGS) $(LDFLAGS) -o/dev/null $<
 
 compile_commands.json:  $(patsubst src/%,build/json/%.json,$(SRC_C)) $(patsubst src/%,build/json/%.json,$(SRC_CXX))
-	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find -type f -name "*.json"` > compile_commands.json)
+	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find build/json -type f -regextype posix-extended -regex ".*/.*\.json" -and -not -regex ".*/.*\.compile_commands.json"` > compile_commands.json)
 

@@ -35,7 +35,7 @@ SRC_ASM :=$(shell find src -type f -regextype posix-extended -regex '.*\.asm' -a
 
 .PHONY: compile_commands.json all run runc runasm clean echo
 
-all: build/$(so_libc) #build/test.c.out
+all: build/$(so_libc) compile_commands.json #build/test.c.out
 
 build/obj/%.c.o: src/%.c
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/obj/\1#p' <<< $<)
@@ -62,5 +62,5 @@ build/json/%.c.json: src/%.c
 	clang -MJ $@ -Wall $(CFLAGS) $(LDFLAGS) -o/dev/null $<
 
 compile_commands.json:  $(patsubst src/%,build/json/%.json,$(SRC_C)) $(patsubst src/%,build/json/%.json,$(SRC_CXX))
-	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find -type f -name "*.json"` > compile_commands.json)
+	$(shell sed -E -e '1s#^#[\n#' -e '$$s#,$$#\n]#' `find build/json -type f -name "*.json"` > compile_commands.json)
 
