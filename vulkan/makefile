@@ -1,3 +1,4 @@
+
 l_vulkan := -lvulkan -lxcb -lX11 -lX11-xcb -lxkbcommon
 
 I_j := -Ilibs/include
@@ -20,6 +21,16 @@ SRC_ASM := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -an
 .PHONY: compile_commands.json all run runc runasm clean echo
 
 all: build_library $(patsubst src/%,build/%.out,$(SRC_C) $(SRC_CXX) $(SRC_ASM)) compile_commands.json
+
+tex_SRCS := $(notdir $(shell find -maxdepth 1 -type f -name "*.tex"))
+tex_BINS:= $(patsubst %.tex,%.pdf,$(tex_SRCS))
+
+build/pdf/%.pdf: %.tex
+	@mkdir -p build/pdf
+	pdflatex --jobname=$(patsubst %.tex,build/pdf/%, $<) $<
+
+pdf :$(patsubst %.tex,build/pdf/%.pdf, $(tex_SRCS))
+	@nohup zathura $(word 1, $^) &
 
 build_library:
 	$(MAKE) -C libs

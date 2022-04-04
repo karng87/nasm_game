@@ -3,7 +3,10 @@
 #include <time.h>
 #include <core/log.h>
   
-struct vec{int dim; double* e;};
+typedef struct idx{int * free; int * dummy;}idx;
+typedef struct vec{int dim; double* elm;}vec;
+typedef struct matrix{int dim; double* m; double* n;}matrix;
+
 struct orthogonal_basis{double* i;double *j;double *k;};
 struct basis{double* x;double *y;double *z;};
 struct nabula{double p_over_px;double p_over_py;double p_over_pz;};
