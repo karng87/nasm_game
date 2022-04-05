@@ -185,6 +185,7 @@ matrix* mul_matrix(matrix* A,matrix* B){
       }
     }
   }
+  free_matrix(B);
   return res;
 }
 
