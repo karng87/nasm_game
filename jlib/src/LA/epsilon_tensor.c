@@ -35,7 +35,6 @@ double kronecker_delta_tensor(idx*);
 double epsilon_tensor(idx*);
 double determinant(matrix*);
 
-
 int main(){
   srand(time(NULL));
 
@@ -48,26 +47,18 @@ int main(){
 
   matrix* C = malloc(sizeof(matrix));
   free(C);
-  C = mul_mat(&B,A);
+  C = mul_mat(A,&B);
 
   matrix* D = mul_mat(A,&B);
 
-  printf("B: ");
   print_matrix(&B);
-  printf("A: ");
-  print_matrix(A);
-  printf("C = BxA: ");
   print_matrix(C);
-  printf("D = AxB: ");
   print_matrix(D);
-
   matrix* E;
-  E =cross_mat(A);
-  printf("A: ");
-  print_matrix(A);
-  printf("E: cross of A: ");
+  E =cross_mat(&B);
+  print_matrix(&B);
   print_matrix(E);
-  printf("Determinant of A: %lf\n\n",determinant(A));
+  printf("\nDeterminant of A: %lf\n",determinant(&B));
 
   free_matrix(A);
   free_matrix(&B);
@@ -141,17 +132,13 @@ matrix* summation_tensor(matrix* A, matrix* B){
           *(*(C->e+i)+l) += kronecker_delta(j,l)*(*(*(A->e+i)+j)) * (*(*(B->e+l)+m));
         }
       }
+    printf("\n");
     }
+    printf("\n");
   }
   return C;
 }
 
-/*
-  0+,2-,3+)) 123, 231  312 
-  0+,2-,3+,4+)) 1234, 1243, 1423, 4123
-  0+,2-,3+,4+,5-)) 12345, 12354, 12543, 15432 54231
-  0+,2-,3+,4+,5-,6)) 123456, 123546, 125436, 154326 542316 654321 614325(164325-124365-123465-123456) 612345(162345-126345-123645-123465-123456)
-*/
 double epsilon_tensor(idx* idx){
   for(int i=0;i<idx->n;i++){
     for(int j=i+1;j<idx->n;j++){
@@ -175,14 +162,16 @@ double epsilon_tensor(idx* idx){
   free(buf);
   return (flag % 2 == 0)?1.:-1.;
 }
-
 double epsilon_ijk(int i,int j,int k){
-  int ii[3] = {i,j,k}; 
-  idx idx ={.n=3,.i=ii};
-  return epsilon_tensor(&idx);
+  if(i==j || j==k || k==i) return 0.;
+  int sum=0;
+  sum += (i==0)?0:1;
+  sum += (j==1)?0:1;
+  sum += (k==2)?0:1;
+  if(sum==0) return 1;
+  // only 3 index
+  else return ((sum % 2) == 0)?-1.:1.;
 }
-
-/**** Kronecker_Delta ***/
 double kronecker_delta_tensor(idx* idx){
   int tmp  = *idx->i;
   for(int ii = 1; ii < idx->n; ii++){
@@ -194,7 +183,6 @@ double kronecker_delta(int i,int j){
   return (i==j)?1.:0.;
 }
 
-/** Zero Matrix **/
 void create_Z(matrix* A,int i,int j){
   (A)->m=i;
   (A)->n=j;
@@ -242,8 +230,7 @@ void create_mat(matrix** A,int i,int j){
   for(int i=0;i<(*A)->m;i++){
     *((*A)->e+i) = malloc(sizeof(double) * ((*A)->n));
     for(int j=0;j<(*A)->n;j++){
-      //*(*((*A)->e+i)+j) = (double)rand()- (double)RAND_MAX/2;
-      *(*((*A)->e+i)+j) = (double)i+j;
+      *(*((*A)->e+i)+j) = (double)rand()- (double)RAND_MAX/2;
     }
   }
 }
@@ -280,7 +267,7 @@ matrix* mul_mat(matrix* A, matrix* B){
 }
 
 void print_matrix(matrix* A){
-  printf("** Matrix M: %d by %d **\n",A->m,A->n);
+  printf("\n** Matrix M[%d,%d] **\n",A->m,A->n);
   for(int i=0;i<A->m;i++){
     printf("(%d):[ ",i+1);
     for(int j=0;j<A->n;j++){
