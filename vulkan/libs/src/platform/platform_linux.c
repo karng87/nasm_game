@@ -1,4 +1,5 @@
 #include <platform/platform.h>
+#include <containers/darray.h>
 
 // Linux platform layer.
 #if KPLATFORM_LINUX
@@ -305,6 +306,10 @@ void platform_sleep(u64 ms) {
     }
     usleep((ms % 1000) * 1000);
 #endif
+}
+
+void platform_get_required_extension_names(const char*** names_array){
+  darray_push(*names_array, &"VK_KHR_xcb_surface");
 }
 
 // Key translation

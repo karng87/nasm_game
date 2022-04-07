@@ -50,7 +50,7 @@ build/%.c.out: src/%.c
 	gcc -g -Wall $(CFLAGS) $(LDFLAGS) -o $@ $<
 
 runc: build_library $(patsubst src/%,build/%.out,$(SRC_C))
-	./build/main.c.out
+	./build/entry.c.out
 
 build/%.cpp.out: src/%.cpp 
 	@mkdir -p $(shell sed -En 's#src/(.*/)*.+#build/\1#p' <<< $<)

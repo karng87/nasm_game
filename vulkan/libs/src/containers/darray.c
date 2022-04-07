@@ -34,9 +34,7 @@ void _darray_field_set(void* array, u64 field, u64 value) {
 void* _darray_resize(void* array) {
     u64 length = darray_length(array);
     u64 stride = darray_stride(array);
-    void* temp = _darray_create(
-        (DARRAY_RESIZE_FACTOR * darray_capacity(array)),
-        stride);
+    void* temp = _darray_create((DARRAY_RESIZE_FACTOR * darray_capacity(array)), stride);
     kcopy_memory(temp, array, length * stride);
 
     _darray_field_set(temp, DARRAY_LENGTH, length);

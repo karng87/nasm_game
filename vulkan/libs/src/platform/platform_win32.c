@@ -184,6 +184,9 @@ void platform_sleep(u64 ms) {
     Sleep(ms);
 }
 
+void platform_get_required_extension_names(const char*** names_array){
+  darray_push(*names_array, &"VK_KHR_win32_surface");
+}
 LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARAM l_param) {
     switch (msg) {
         case WM_ERASEBKGND:
