@@ -7,18 +7,14 @@
 
 \moderncvtheme[blue]{classic}
 
-\firstname{grep -rl, grep -Hn}
-\familyname{sed -i}
-\title{for i in `grep -rl 'pattern'`;do sed -i 's/pattern/subs/g';done}
+\firstname{grep -E -rl, grep -E -Hn,}
+\familyname{sed -E -i}
+\title{for i in \`\,grep -E -rl `pattern'\,\`\,;do sed -E -i `s/pattern/subs/g';done}
 
 \address{Seoul, Korea}
 \mobile{010-3201-xxxx}
 \email{karng87@gmail.com}
 %\photo{logo.png}
-
-\recipient{수령지}{Songpa ku\Seoul\Korea}
-\opening{Latex 에게}
-\closing{안녕~}
 
 \begin{document}
 %makelettertitle
@@ -29,10 +25,17 @@
 \maketitle
 
 \section{grep}
-\cventry{:=}{grep -rl 'pattern' ./dir}{}{}{}{}
-\cventry{:=}{grep -nH 'pattern' file}{}{}{}{}
-\cventry{:=}{for i in `grep -rl 'pattern' .dir`; do grep -nH 'pattern' \$ i}{}{}{}{}
+\cventry{:=}{grep -rl `pattern' ./dir}{recursivly find files with pattern}{}{}{}
+\cventry{:=}{grep -nH `pattern' *}{print the line number and a file name}{}{}{}
+\cventry{:=}{grep -RnH `pattern' *}{search recursive and print the line number and a file name}{}{}{}
+\cventry{:=}{grep -v `pattern' file}{inverse search}{exclusive}{}{}
+\cventry{:=}{for i in \`grep -rl `pattern' .dir\`; do grep -nH `pattern' \$ i}{}{}{}{}
 \section{sed}
-\cventry{:=}{sed -i 's/pattern/subs/g'}{}{}{}{}
+\cventry{:=}{sed -i `s/pattern/subs/g'}{}{}{}{}
+\cventry{insert}{for i in `grep -rl `pattern`;do sed -i `s/pattern/subs/g';done}{}{}{}{}
+\section{in terminal}
+\cventry{}{grep -E -rl `"([\^\,.]+$\backslash$.h)"' . | xargs sed -E -i `s/"([\^\,.]+$\backslash$.h)"/<$\backslash$1>/'}{}{}{}{}
+\section{in vim}
+\cventry{}{:grep -E -RnH `pattern' *}{recursivly find a file and print file names with a line number in current dir}{}{}{}
 \end{document}
 

@@ -1,6 +1,6 @@
-#include <core/log.h>
+#include <core/logger.h>
 #include <core/asserts.h>
-#include <win/windows.h>
+#include <platform/platform.h>
 
 // TODO: temporary
 #include <stdio.h>
@@ -9,7 +9,7 @@
 
 b8 initialize_logging() {
     // TODO: create log file.
-    return true;
+    return TRUE;
 }
 
 void shutdown_logging() {

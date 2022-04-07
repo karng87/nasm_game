@@ -16,18 +16,18 @@ so_libc := libjc.so
 so_libcxx := libj.so
 so_libasm := libja.so
 
-I := -Iinclude
+I := $(j_I)
 L :=
-lc :=
-lcxx :=
+lc := $(vulkan_LD)
+lcxx := $(vulkan_LD)
 lasm :=
 Wl_rpath = -Wl,-rpath build
 D := -D_DEBUG -DEXPORT
 
 CFLAGS := -g -Wall -fPIC $(I) $(D)
-LDFLAGS := -shared
+LDFLAGS := -shared $(L) $(lc)
 CXXFLAGS := $(CFLAGS)
-LDXXFLAGS := -shared $(vulkan_LD)
+LDXXFLAGS := -shared $(L) $(lcxx)
 
 SRC_C :=$(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test.c')
 SRC_CXX :=$(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test.cpp')
