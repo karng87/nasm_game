@@ -1,6 +1,6 @@
 #pragma once
-#include <game.h>
 
+#include <game.h>
 #include <core/kmemory.h>
 
 // Define the function to create a game

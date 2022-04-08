@@ -1,8 +1,9 @@
+#include <entry.h>
 #include <core/application.h>
 #include <core/logger.h>
 #include <core/kmemory.h>
 #include <game_types.h>
-#include <entry.h>
+
 // Externally-defined function to create a game.
 extern b8 create_game(game* out_game);
 
