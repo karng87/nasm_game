@@ -1,5 +1,6 @@
 #pragma once
 #include <assert.h>
+
 // Unsigned int types.
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -98,3 +99,6 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes.");
 #endif
 #endif
 
+#define KCLAMP(value, min, max) (value <= min) ? min : (value >= max) ? max \
+                                                                      : value;
+                                                                      

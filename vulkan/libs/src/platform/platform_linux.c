@@ -59,7 +59,7 @@ b8 platform_startup(
     state->display = XOpenDisplay(NULL);
 
     // Turn off key repeats.
-    XAutoRepeatOff(state->display);
+    // XAutoRepeatOff(state->display);
 
     // Retrieve the connection from the display.
     state->connection = XGetXCBConnection(state->display);
