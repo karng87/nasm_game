@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include <os/defines.h>
+#include <defines.h>
 
 /**
  * @brief Represents event contextual data to be sent along with an

@@ -1,63 +1,119 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <core/log.h>
-  
-typedef struct idx{int * free; int * dummy;}idx;
-typedef struct vec{int dim; double* elm;}vec;
-typedef struct matrix{int dim; double* m; double* n;}matrix;
 
-struct orthogonal_basis{double* i;double *j;double *k;};
-struct basis{double* x;double *y;double *z;};
-struct nabula{double p_over_px;double p_over_py;double p_over_pz;};
-struct gradient{double pf_over_px; double pf_over_py; double pf_over_pz;};
-struct divergence{double pux_over_px;double puy_over_py;double puz_over_pz;struct vec dot_du;};
-struct curl{double p_over_px;double p_over_py;double p_over_pz;struct vec cross_du;};
-double dot(struct vec, struct vec);
-void create_vec(struct vec*,int);
+typedef unsigned long long u64; 
+
+
+struct jmatrix{char* name; u64 m; u64 n; u64 stride; void** data;};
+struct jidx{u64 n; u64 * index;};
+
+struct jmatrix* create_matrix(char*,u64,u64,u64,char);
+double kronecker_delta(u64,u64);
+double epsilon_tensor(struct jidx*);
+double det3(struct jmatrix*);
+double det4(struct jmatrix*);
+
 int main(){
-  struct vec v;
-    v.dim=3;
-    v.e = malloc(3*sizeof(double));
-  for(int i=0;i<v.dim;i++){
-    *(v.e+i) = (double)(i+1);
-    printf("%lf,",*(v.e+i));
-  }
-  struct vec u;
-  create_vec(&u,3);
+  struct jmatrix* A;
+  A = create_matrix("A",4,4,8,' ');
 
-  printf("%lf,%lf\n",dot(u,v),dot(v,u));
-  free(v.e);
-  free(u.e);
+  printf("Det(A): %lf\n",det4(A));
+
+  for(int i=0;i<A->m;i++) free(*(A->data+i));
+  free(A->data);
+  free(A);
 }
 
-void create_vec(struct vec * v,int dim){
-  v->dim=dim,v->e=malloc(dim*sizeof(double));
-  srand(time(NULL));
-  for(int i=0;i<v->dim;i++){
-    *(v->e+i) = (double)(rand());
-    printf("%lf,",*(v->e+i));
+struct jmatrix* create_matrix(char * str,u64 m, u64 n, u64 stride,char type){
+  struct jmatrix * A = malloc(sizeof(struct jmatrix));
+  A->name = str;
+  A->m = m;
+  A->n = n;
+  A->stride = stride;
+  A->data = malloc(sizeof(void*)*A->m);
+  printf("%s:(%llu by %llu)\n",A->name,A->m,A->n);
+  for(int i=0; i<A->n; i++){
+    *(A->data+i) = malloc(A->n * A->stride);
+    printf("[ ");
+    for(int j=0;j<A->n; j++){
+      if(type=='I'){
+        *((double*)*(A->data+i)+j) = kronecker_delta(i,j);
+      }else if(type=='Z'){
+        *((double*)*(A->data+i)+j) = 0.;
+      }else{
+        *((double*)*(A->data+i)+j) = i*3.+j+1.;
+      }
+      printf("%lf, ",*((double*)*(A->data+i)+j));
+    }
+    printf("\b ]\n");
   }
+  return A;
 }
 
-double dot(struct vec v,struct vec u){
+double kronecker_delta(u64 i, u64 j){
+  return i==j?1:0;
+}
+double epsilon_tensor(struct jidx* idx){
+  for(u64 i =0; i< idx->n;i++){
+    for(u64 j=i+1;j<idx->n;j++){
+      if(*(idx->index+i) == *(idx->index+j)) return 0.;
+    }
+  }
+  int s=0;
+  for(u64 i=0; i< idx->n; i++){
+    if(*(idx->index+i) != i){
+      s++;
+      for(u64 j=i+1; j<idx->n; j++){
+        if (*(idx->index+j)==i){
+          *(idx->index+j) = *(idx->index+i);
+        }
+      }
+    }
+  }
+  return (s%2)?-1.:1.;
+}
+
+double det3(struct jmatrix* A){
   double res=0;
-  for(int i=0; i<v.dim; i++){
-    res += *(v.e+i) * *(u.e+i);
+  struct jidx* idx = malloc(sizeof(struct jidx));
+  (*idx).n=3;
+  (*idx).index  = malloc(sizeof(u64)*3);
+
+  for(u64 i=0; i<(*A).n; i++){
+    for(u64 j=0; j<(*A).n; j++){
+      for(u64 k=0; k<(*A).n; k++){
+        *((*idx).index+0) = i;
+        *((*idx).index+1) = j;
+        *((*idx).index+2) = k;
+        res += epsilon_tensor(idx) * *((double*)*((*A).data+0)+i) * *((double*)*((*A).data+1)+j) * *((double*)*((*A).data +2)+k);
+      }
+    }
   }
+  free((*idx).index);
+  free(idx);
   return res;
 }
-double delta_ij(int i, int j){
-  return (i==j)?1:0;
-}
-double epsilon_ijk(int i, int j, int k){
-  if(i==j||i==k||j==k) return 0;
-  if(i==1){
-    return (j==i+1&&k==i+2) ?1 :-1;
-  }else if(i==2){
-    return (j==i+1&&k==i-1) ?1 :-1;
-  }else if(i==3){
-    return (j==i-1&&k==i-2) ?1 :-1;
-  }else{}
-  FATAL("epsilon_ijk indexing error");
+double det4(struct jmatrix* A){
+  double res=0;
+  struct jidx* idx = malloc(sizeof(struct jidx));
+  (*idx).n=(*A).m;
+  (*idx).index  = malloc(sizeof(u64)*idx->n);
+
+  for(u64 i=0; i<(*A).n; i++){
+    for(u64 j=0; j<(*A).n; j++){
+      for(u64 k=0; k<(*A).n; k++){
+        for(u64 l=0; l<(*A).n; l++){
+          *((*idx).index+0) = i;
+          *((*idx).index+1) = j;
+          *((*idx).index+2) = k;
+          *((*idx).index+3) = l;
+          res += epsilon_tensor(idx) * *((double*)*((*A).data+0)+i) * *((double*)*((*A).data+1)+j) * *((double*)*((*A).data +2)+k) * *((double*)*((*A).data +3)+l);
+        }
+      }
+    }
+  }
+  free((*idx).index);
+  free(idx);
+  return res;
 }

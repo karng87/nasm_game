@@ -1,9 +1,7 @@
 #ifndef _H_jalgorithm_h
 #define _H_jalgorithm_h
 
-#define bool char
-#define true 1
-#define false 0
+#include <defines.h>
 
 struct node_linkedList{
   int value;  // 0-4 byte 4~8byte(padding)
@@ -19,6 +17,6 @@ void free_node_linkedList(struct node_linkedList * head);
 
 struct node_linkedList * insert_at_head(struct node_linkedList **, struct node_linkedList *);
 void insert_after_node_linkedList(struct node_linkedList* node_linkedList_to_insert_after,struct node_linkedList* new_node_linkedList);
-bool remove_node_linkedList(struct node_linkedList ** head, struct node_linkedList * to_del_node_linkedList);
+b8 remove_node_linkedList(struct node_linkedList ** head, struct node_linkedList * to_del_node_linkedList);
 #endif
  
