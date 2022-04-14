@@ -4,10 +4,13 @@
 #include <stdbool.h>
 struct jMatrix{int rows; int cols; double** cell;};
 struct jData{int sizes; int used; int stride; void* p;};
+
 void jb_swap(int*,int*);
 void jb_swap_c(char*,char*);
+
 bool jb_odd(int);
 bool jb_even(int);
+
 bool jb_is_set_nth(int,int);
 int jb_set_nth(int,int);
 int jb_unset_nth(int,int);
