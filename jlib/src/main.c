@@ -7,7 +7,7 @@ typedef unsigned long long u64;
 
 struct jmatrix{char* name; u64 m; u64 n; u64 stride; void** data;};
 struct jidx{u64 n; u64 * index;};
-
+struct jfs{double (**fns)(double,double);};
 struct jmatrix* create_matrix(char*,u64,u64,u64,char);
 double kronecker_delta(u64,u64);
 double epsilon_tensor(struct jidx*);
