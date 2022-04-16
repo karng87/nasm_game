@@ -17,20 +17,20 @@ LDXXFLAGS := $(L_j) $(l_j) $(l_vulkan) $(Wl_rpath)
 SRC_C := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test\.c')
 SRC_CXX := $(shell find src -type f -regextype posix-extended -regex '.*\.cpp' -and -not -regex '.*/test\.cpp')
 SRC_ASM := $(shell find src -type f -regextype posix-extended -regex '.*\.c' -and -not -regex '.*/test\.asm')
+SRC_TEX := $(notdir $(shell find -maxdepth 1 -type f -name "*.tex"))
 
 .PHONY: compile_commands.json all run runc runasm clean echo
 
 all: build_library $(patsubst src/%,build/%.out,$(SRC_C) $(SRC_CXX) $(SRC_ASM)) compile_commands.json
 
-tex_SRCS := $(notdir $(shell find -maxdepth 1 -type f -name "*.tex"))
-tex_BINS:= $(patsubst %.tex,%.pdf,$(tex_SRCS))
-
 build/pdf/%.pdf: %.tex
 	@mkdir -p build/pdf
 	pdflatex --jobname=$(patsubst %.tex,build/pdf/%, $<) $<
 
-pdf :$(patsubst %.tex,build/pdf/%.pdf, $(tex_SRCS))
-	@nohup zathura $(word 1, $^) &
+pdf :$(patsubst %.tex,build/pdf/%.pdf, $(SRC_TEX))
+
+runpdf :$(patsubst %.tex,build/pdf/%.pdf, $(SRC_TEX))
+	zathura $(word 1, $^) &
 
 build_library:
 	$(MAKE) -C libs

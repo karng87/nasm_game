@@ -1,0 +1,69 @@
+\documentclass[a4paper]{moderncv}
+\usepackage[scale=0.9]{geometry}
+\usepackage{blindtext}
+\usepackage{amsmath, kotex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\moderncvtheme[blue]{classic}
+
+\firstname{Vulkan}
+\familyname{Tutorial}
+\title{vulkan}
+
+\address{Seoul, Korea}
+\mobile{010-3201-xxxx}
+\email{karng87@gmail.com}
+%\photo{logo.png}
+
+\recipient{수령지}{Songpa ku\\Seoul\\Korea}
+\opening{latex 에게}
+\closing{안녕~}
+
+\begin{document}
+%\makelettertitle
+%\blindtext
+%\makeletterclosing
+%\newpage
+
+\maketitle
+\cventry{vkSurface(WSI)}{$\leftarrow$ PresentQueue}{$\leftarrow$ Swapchain Images}{$\leftarrow$ Swapchain ImageView}{$\leftarrow$ Framebuffer}{}
+\section{window surface}
+\subsection{WSI}
+\cvitem{}{use WSI(window system intergration)}
+\cvlistitem{VK\_KHR\_surface}
+\cvlistitem{VK\_KHR\_win32\_surface}
+\cvlistitem{VK\_KHR\_xcb\_surface}
+\cvlistitem{VK\_KHR\_android\_surface}
+\section{present Queue}
+\cventry{image}{make renderring}{}{}{}{}
+\cventry{check by}{vkGEtPhysicalDeviceSurfaceSupportKHR()}{}{}{}{}
+\cventry{submit}{present queque}{from rederred image}{}{}{}
+\subsection{graphics queue family}
+\section{Swapchain}
+\cvlistitem{출력장치에 연속으로 표시 할 수 있는 하나 이상의 image collection}
+\cvlistitem{Refresh rate sync 에 맞춰서 rendering 된 결과들을 화면에 출력하는 역할}
+\cvlistitem{Swapchain 에 연결된 image 에게 graphics queue 에 기록된 operation 들로 rendering 을 수행하고 present queue 에 submit}
+\cventry{swapchain image}{image resource}{swapchain 에 연결되는 실체}{}{}{}
+\cventry{swapchain image view}{meta data about swapchain}{ex) RGBA component}{surface format}{mipmap}{image array}
+\subsection{querying for swapchain support}
+\cventry{}{swapchain 을 만들기 위해서 필요한 것들}{}{}{}{}
+\cventry{}{vkGetPhysicalDeviceSurface\_KHR}{gpu,surface}{}{}{}
+\cvlistitem{Surface Capabilities}
+\cvlistitem{Surface Format}
+\cvlistitem{Surface Present Modes}
+\subsection{Surface Capabilities}
+\cvlistitem{capabilities 값들중 extent값을 사용}
+\subsection{Presenttaion Mode}
+\cvlistitem{화면에 이미지를 표하는 조건을 설정}
+\cventry{}{VK\_PRESENT\_MODE\_FOIFO\_KHR}{wait when queue full}{}{}{}
+\cventry{}{VK\_PRESENT\_MODE\_FOIFO\_RELAXED\_KHR}{no wait when queue empty}{}{}{}
+\cventry{}{VK\_PRESENT\_MODE\_MAILBOX\_KHR}{no wait when queue full}{}{}{}
+
+\section{Framebuffer}
+\cventry{:=}{Color,depth,stencil target 이 되는 buffer}{}{}{}{}
+\cventry{}{each swapchain image view 를 연결하여 frame buffer 를 생성}{}{}{}{}
+\cventry{how to create}{swapchain image view(color,detpth,stencil imag view) + rneder pass + swapchain extent, number of swapchains}{}{}{}{}
+\section{Terms}
+\cventry{}{agnostic}{중립적}{}{}{}
+\end{document}
